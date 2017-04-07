@@ -4,10 +4,13 @@
 #include "solution/header/ConstraintSatisfactionProblem.h"
 
 void runMenu();
-
 int getNumberFromInput(std::string choice);
-
 void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> shared_ptr, int choice);
+
+int getGraphSize();
+int getBinarySize();
+int getNumberOfFilledFields(int size);
+int getSizeFor(std::string);
 
 int main()
 {
@@ -24,12 +27,10 @@ void runMenu()
     std::cout << "It implements backtracking and forward-checking methods." << std::endl;
 
     std::string choice = "";
-    short int numberChoice = -2;
+    int numberChoice;
+
     do
     {
-        if (numberChoice == -1)
-            std::cout << "\nOoops! Number wasn't correct. Try again." << std::endl;
-
         std::cout << "\nWhat would you like to do? (choose correct number)" << std::endl;
 
         std::cout << "0. Exit Program." << std::endl;
@@ -49,26 +50,95 @@ int getNumberFromInput(std::string choice)
     int numberChoice = 0;
     std::stringstream myStream(choice);
 
-    return myStream >> numberChoice
+    return (myStream >> numberChoice) && (numberChoice >= 0)
            ? numberChoice
            : -1;
 }
 
 void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> csp, int choice)
 {
+    std::cout << std::endl;
+
     switch (choice)
     {
         case 0:
-            std::cout << "You chose to exit program." << std::endl;
+        {
+            std::cout << "You have chosen to exit program." << std::endl;
             break;
+        }
         case 1:
-            std::cout << "You chose to solve harmonious graph coloring." << std::endl;
+        {
+            std::cout << "You have chosen to solve harmonious graph coloring." << std::endl;
+            int size = getGraphSize();
             break;
+        }
         case 2:
-            std::cout << "You chose to solve binary game." << std::endl;
+        {
+            std::cout << "You have chosen to solve binary game." << std::endl;
+            int size = getBinarySize();
+            int filledFields = getNumberOfFilledFields(size);
             break;
+        }
         default:
-            std::cout << "You chose option that doesn't exist." << std::endl;
+        {
+            std::cout << "Ooops! Number wasn't correct. Try again." << std::endl;
             break;
+        }
     }
 }
+
+int getGraphSize()
+{
+    int binarySize = getSizeFor("graph");
+    return binarySize;
+}
+
+int getBinarySize()
+{
+    int binarySize = getSizeFor("binary");
+    return binarySize;
+}
+
+int getNumberOfFilledFields(int size)
+{
+    int fields = size * size;
+    int filledFields;
+    bool isCorrect = false;
+
+    do
+    {
+        filledFields = getSizeFor("filled fields");
+
+        if (filledFields > fields)
+            std::cout << "\nFilled fields size can not be greater than number of fields, which is " << fields << "." << std::endl;
+        else
+            isCorrect = true;
+
+    } while (! isCorrect);
+
+    return filledFields;
+}
+
+int getSizeFor(std::string whatFor)
+{
+    std::string choice = "";
+    int size;
+    bool isCorrect = false;
+
+    do
+    {
+        std::cout << "\nWhat should be the size of " << whatFor << "? (give number)" << std::endl;
+
+        getline(std::cin, choice);
+        size = getNumberFromInput(choice);
+
+        if (size <= 0)
+            std::cout << "\nOoops! Number wasn't correct. Try again." << std::endl;
+        else
+            isCorrect = true;
+    } while (! isCorrect);
+
+    return size;
+}
+
+
