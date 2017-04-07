@@ -1,0 +1,13 @@
+//
+// Created by Dom on 2017-04-07.
+//
+
+#ifndef SI_LAB_2_ICONSTRAINTSATISFACTIONPROBLEM_H
+#define SI_LAB_2_ICONSTRAINTSATISFACTIONPROBLEM_H
+
+class IConstraintSatisfactionProblem
+{
+
+};
+
+#endif //SI_LAB_2_ICONSTRAINTSATISFACTIONPROBLEM_H
