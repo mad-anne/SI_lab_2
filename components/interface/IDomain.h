@@ -1,5 +1,5 @@
     //
-// Created by Dom on 2017-04-08.
+// Created by Anna Siwik on 2017-04-08.
 //
 
 #ifndef SI_LAB_2_IDOMAIN_H
