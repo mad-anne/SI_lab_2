@@ -13,7 +13,11 @@ class ISolution
         IProblem* solution;
 
     public:
-        virtual ~ISolution() { if (solution != nullptr) delete solution; }
+        virtual ~ISolution()
+        {
+            if (solution != nullptr)
+                delete solution;
+        }
 
         virtual void printHarmoniousGraph() = 0;
         virtual void printBinaryGame() = 0;

@@ -1,11 +1,11 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <algorithm>
 #include "problems/interface/IProblem.h"
 #include "solution/header/Backtracking.h"
 #include "solution/header/ForwardChecking.h"
 #include "problems/header/HarmoniousGraph.h"
-#include "solution/header/Solution.h"
 
 void runMenu();
 int getNumberFromInput(std::string choice);
@@ -17,6 +17,7 @@ int getGraphSize();
 int getBinarySize();
 int getNumberOfFilledFields(int size);
 int getSizeFor(std::string);
+void printAllSolutions(std::vector<ISolution*>*);
 
 int main()
 {
@@ -80,16 +81,13 @@ void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
             std::cout << "You have chosen to solve harmonious graph coloring." << std::endl;
             int size = getGraphSize();
             IProblem* graph = new HarmoniousGraph(size);
-            ISolution* solution = new Solution(graph);
-            solution->printHarmoniousGraph();
 
-//            std::unique_ptr<ISolution> backtrackingSolution = backtracking->solveProblem(graph);
-//            std::unique_ptr<ISolution> forwardCheckingSolution = forwardChecking->solveProblem(graph);
+            // PAMIETAJ O USUNIECIU GRAFU!!! POD WARUNKIEM, ZE NOWE ROZWIAZANIA BEDA TWORZONE PRZEZ KOPIOWANIE I NIE TRAFIA DO SOLUTIONS
+            std::vector<ISolution*>* backtrackingSolutions = backtracking->solveProblem(graph);
+            printAllSolutions(backtrackingSolutions);
 
-//            backtrackingSolution->printHarmoniousGraph();
-//            forwardCheckingSolution->printHarmoniousGraph();
-
-            delete graph;
+//            std::vector<ISolution*>* forwardCheckingSolutions = forwardChecking->solveProblem(graph);
+//            printAllSolutions(forwardCheckingSolutions);
             break;
         }
         case 2:
@@ -105,6 +103,12 @@ void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
             break;
         }
     }
+}
+
+void printAllSolutions(std::vector<ISolution*>* solutions)
+{
+    for (int index = 0; index < solutions->size(); ++index)
+        solutions->at(index)->printHarmoniousGraph();
 }
 
 int getGraphSize()

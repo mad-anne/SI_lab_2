@@ -14,11 +14,37 @@ class IConstraintSatisfactionProblem
 {
     protected:
         IProblem* problem;
+        std::vector<ISolution*> solutions;
 
     public:
-        virtual ~IConstraintSatisfactionProblem() {}
+        IConstraintSatisfactionProblem()
+        {
+            problem = nullptr;
+        }
 
-        virtual std::unique_ptr<ISolution> solveProblem(IProblem*) = 0;
+        virtual ~IConstraintSatisfactionProblem()
+        {
+            clearProblem();
+            clearSolutions();
+        }
+
+        virtual std::vector<ISolution*>* solveProblem(IProblem*) = 0;
+
+    protected:
+        void clearSolutions()
+        {
+            for (int index = 0; index < solutions.size(); ++index)
+                delete solutions[index];
+
+            solutions.clear();
+        }
+
+        void clearProblem()
+        {
+            if (problem != nullptr)
+                delete problem;
+
+        }
 };
 
 #endif //SI_LAB_2_ICONSTRAINTSATISFACTIONPROBLEM_H

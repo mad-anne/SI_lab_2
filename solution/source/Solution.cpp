@@ -6,32 +6,20 @@
 #include "../header/Solution.h"
 #include "../../problems/header/HarmoniousGraph.h"
 
-Solution::Solution()
-{
-    solution = nullptr;
-}
-
 Solution::Solution(IProblem* solution)
 {
     this->solution = solution;
 }
 
 Solution::~Solution()
-{
-    if (solution != nullptr)
-        delete solution;
-}
+{}
 
 void Solution::printHarmoniousGraph()
 {
     if (solution == nullptr)
         return;
 
-    std::cout << "Hi! I'm printing harmonious graph solution." << std::endl;
-
     int width = solution->getWidth();
-
-    std::cout << "It's size: " << width << std::endl;
 
     for (int row = 0; row < width; ++row)
     {

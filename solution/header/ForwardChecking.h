@@ -14,7 +14,7 @@ class ForwardChecking : public IConstraintSatisfactionProblem
         ~ForwardChecking();
 
     public:
-        std::unique_ptr<ISolution> solveProblem(IProblem* problem) override;
+        std::vector<ISolution*>* solveProblem(IProblem* problem) override;
 };
 
 

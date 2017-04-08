@@ -10,7 +10,6 @@
 class Solution : public ISolution
 {
     public:
-        Solution();
         Solution(IProblem*);
         ~Solution();
 
