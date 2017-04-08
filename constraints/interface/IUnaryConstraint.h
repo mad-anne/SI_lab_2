@@ -6,8 +6,8 @@
 #define SI_LAB_2_ISINGLEVARIABLECONSTRAINT_H
 
 #include <map>
-#include "../../IVariable.h"
-#include "../../IValue.h"
+#include "../../components/interface/IVariable.h"
+#include "../../components/interface/IValue.h"
 
 class ISingleVariableConstraint
 {
