@@ -7,10 +7,12 @@
 
 class IValue
 {
-    private:
+    int value;
 
     public:
-
+        virtual int getValue() = 0;
+        virtual int setValue(int) = 0;
+        virtual int resetValue() = 0;
 };
 
 #endif //SI_LAB_2_IVALUE_H

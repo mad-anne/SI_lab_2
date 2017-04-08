@@ -1,11 +1,16 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
-#include "solution/header/ConstraintSatisfactionProblem.h"
+#include "problems/interface/IProblem.h"
+#include "solution/header/Backtracking.h"
+#include "solution/header/ForwardChecking.h"
+#include "problems/header/HarmoniousGraph.h"
 
 void runMenu();
 int getNumberFromInput(std::string choice);
-void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> shared_ptr, int choice);
+void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
+                   std::shared_ptr<IConstraintSatisfactionProblem> forwardChecking,
+                   int choice);
 
 int getGraphSize();
 int getBinarySize();
@@ -20,7 +25,8 @@ int main()
 
 void runMenu()
 {
-    std::shared_ptr<IConstraintSatisfactionProblem> csp = std::make_shared<ConstraintSatisfactionProblem>();
+    std::shared_ptr<IConstraintSatisfactionProblem> backtracking = std::make_shared<Backtracking>();
+    std::shared_ptr<IConstraintSatisfactionProblem> forwardChecking = std::make_shared<ForwardChecking>();
 
     std::cout << "Hi! Welcome in program that solves Constraint Satisfaction Problem." << std::endl;
     std::cout << "It can solve Harmonious Graph Coloring and Binary Game." << std::endl;
@@ -39,7 +45,7 @@ void runMenu()
 
         getline(std::cin, choice);
         numberChoice = getNumberFromInput(choice);
-        processChoice(csp, numberChoice);
+        processChoice(backtracking, forwardChecking, numberChoice);
     } while (numberChoice);
 
     std::cout << "\nThank you for using my program!" << std::endl;
@@ -55,7 +61,9 @@ int getNumberFromInput(std::string choice)
            : -1;
 }
 
-void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> csp, int choice)
+void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
+                   std::shared_ptr<IConstraintSatisfactionProblem> forwardChecking,
+                   int choice)
 {
     std::cout << std::endl;
 
@@ -70,6 +78,10 @@ void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> csp, int choi
         {
             std::cout << "You have chosen to solve harmonious graph coloring." << std::endl;
             int size = getGraphSize();
+            IProblem* graph = new HarmoniousGraph(size);
+            backtracking->solveProblem(graph);
+            forwardChecking->solveProblem(graph);
+            delete graph;
             break;
         }
         case 2:
@@ -140,5 +152,3 @@ int getSizeFor(std::string whatFor)
 
     return size;
 }
-
-
