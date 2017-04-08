@@ -9,6 +9,7 @@
 
 class IProblem
 {
+<<<<<<< HEAD
     protected:
         int width;
 
@@ -27,6 +28,11 @@ class IProblem
         {
             return width;
         }
+=======
+    public:
+        virtual const IVariable* getVariable(int row, int column) = 0;
+        virtual const IVariable* setVariableValue(int row, int column, IValue* value) = 0;
+>>>>>>> 8e927268749581ebfa7dbdd3c68afe7a0c154d50
 };
 
 #endif //SI_LAB_2_IGRAPH_H

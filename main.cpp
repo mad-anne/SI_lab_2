@@ -5,7 +5,10 @@
 #include "solution/header/Backtracking.h"
 #include "solution/header/ForwardChecking.h"
 #include "problems/header/HarmoniousGraph.h"
+<<<<<<< HEAD
 #include "solution/header/Solution.h"
+=======
+>>>>>>> 8e927268749581ebfa7dbdd3c68afe7a0c154d50
 
 void runMenu();
 int getNumberFromInput(std::string choice);
@@ -80,6 +83,7 @@ void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
             std::cout << "You have chosen to solve harmonious graph coloring." << std::endl;
             int size = getGraphSize();
             IProblem* graph = new HarmoniousGraph(size);
+<<<<<<< HEAD
             ISolution* solution = new Solution(graph);
             solution->printHarmoniousGraph();
 
@@ -89,6 +93,10 @@ void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
 //            backtrackingSolution->printHarmoniousGraph();
 //            forwardCheckingSolution->printHarmoniousGraph();
 
+=======
+            backtracking->solveProblem(graph);
+            forwardChecking->solveProblem(graph);
+>>>>>>> 8e927268749581ebfa7dbdd3c68afe7a0c154d50
             delete graph;
             break;
         }
