@@ -19,8 +19,8 @@ class IVariable
     public:
         virtual ~IVariable() {}
 
-        virtual const IValue* getValue() = 0;
-        virtual const IDomain* getDomain() = 0;
+        virtual const IValue* getValue() const = 0;
+        virtual const IDomain* getDomain() const = 0;
 };
 
 #endif //SI_LAB_2_IVARIABLE_H

@@ -9,15 +9,13 @@
 
 class Color : public IValue
 {
-    int value;
-
     public:
         Color();
         ~Color();
 
-        int getValue() override;
-        int setValue(int) override;
-        int resetValue() override;
+        const int getValue() const override;
+        const int setValue(int) override;
+        const int resetValue() override;
 };
 
 #endif //SI_LAB_2_COLOR_H

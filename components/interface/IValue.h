@@ -13,9 +13,9 @@ class IValue
     public:
         virtual ~IValue() {}
 
-        virtual int getValue() = 0;
-        virtual int setValue(int) = 0;
-        virtual int resetValue() = 0;
+        virtual const int getValue() const = 0;
+        virtual const int setValue(int) = 0;
+        virtual const int resetValue() = 0;
 };
 
 #endif //SI_LAB_2_IVALUE_H

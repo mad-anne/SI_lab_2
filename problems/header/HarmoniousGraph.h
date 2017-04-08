@@ -10,9 +10,8 @@
 
 class HarmoniousGraph : public IProblem
 {
-    int width;
     int colors;
-    IVariable** nodes;
+    IVariable*** nodes;
 
     public:
         HarmoniousGraph(int width);
@@ -21,7 +20,7 @@ class HarmoniousGraph : public IProblem
         const IVariable* getVariable(int row, int column) override;
         const IVariable* setVariableValue(int row, int column, IValue* value) override;
 
-private:
+    private:
         void generateEmptyGraph();
         void removeGraph();
 };

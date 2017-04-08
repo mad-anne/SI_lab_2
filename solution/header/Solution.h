@@ -11,10 +11,12 @@ class Solution : public ISolution
 {
     public:
         Solution();
+        Solution(IProblem*);
         ~Solution();
 
         void printHarmoniousGraph() override;
         void printBinaryGame() override;
+        void setSolution(IProblem* problem) override;
 };
 
 #endif //SI_LAB_2_SOLUTION_H

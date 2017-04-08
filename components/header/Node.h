@@ -13,8 +13,8 @@ class Node : public IVariable
         Node();
         ~Node();
 
-        const IValue* getValue() override;
-        const IDomain* getDomain() override;
+        const IValue* getValue() const override;
+        const IDomain* getDomain() const override;
 };
 
 #endif //SI_LAB_2_NODE_H

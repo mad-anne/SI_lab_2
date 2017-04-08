@@ -2,6 +2,7 @@
 // Created by Anna Siwik on 2017-04-07.
 //
 
+#include <iostream>
 #include "../header/Color.h"
 
 Color::Color()
@@ -12,17 +13,17 @@ Color::Color()
 Color::~Color()
 { }
 
-int Color::getValue()
+const int Color::getValue() const
 {
     return value;
 }
 
-int Color::setValue(int value)
+const int Color::setValue(int value)
 {
     return this->value = value;
 }
 
-int Color::resetValue()
+const int Color::resetValue()
 {
     return this->value = -1;
 }
