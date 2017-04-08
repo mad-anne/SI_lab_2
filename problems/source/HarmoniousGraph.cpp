@@ -2,7 +2,6 @@
 // Created by Anna Siwik on 2017-04-07.
 //
 
-#include <iostream>
 #include "../header/HarmoniousGraph.h"
 #include "../../components/header/Node.h"
 
@@ -30,7 +29,6 @@ void HarmoniousGraph::generateEmptyGraph()
         for (int col = 0; col < width; ++col)
             nodes[row][col] = new Node();
     }
-
 }
 
 void HarmoniousGraph::removeGraph()
@@ -54,11 +52,7 @@ const IVariable* HarmoniousGraph::getVariable(int row, int column)
            : nullptr;
 }
 
-const IVariable* HarmoniousGraph::setVariableValue(int row, int column, IValue *value)
+const IVariable* HarmoniousGraph::setVariableValue(int row, int column, IValue* value)
 {
-//    IVariable* node = (row < width) && (column < width)
-//                    ? & nodes[row][column]
-//                    : nullptr;
-
     return nullptr;
 }

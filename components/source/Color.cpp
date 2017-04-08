@@ -2,7 +2,6 @@
 // Created by Anna Siwik on 2017-04-07.
 //
 
-#include <iostream>
 #include "../header/Color.h"
 
 Color::Color()
