@@ -10,6 +10,9 @@
 Node::Node()
 {}
 
+Node::~Node()
+{}
+
 const IValue* Node::getValue()
 {
     return value;

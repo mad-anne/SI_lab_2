@@ -13,6 +13,7 @@ class Color : public IValue
 
     public:
         Color();
+        ~Color();
 
         int getValue() override;
         int setValue(int) override;

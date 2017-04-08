@@ -14,6 +14,8 @@ class IDomain
         std::vector<IValue*> values;
 
     public:
+        virtual ~IDomain() {}
+
         virtual void addValue(IValue*) = 0;
         virtual const IValue* getValue(int) = 0;
         virtual const int getDomainSize() = 0;

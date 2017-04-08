@@ -9,13 +9,10 @@
 #include "../../components/interface/IVariable.h"
 #include "../../components/interface/IValue.h"
 
-class ISingleVariableConstraint
+class IUnaryConstraint
 {
-    private:
-        std::map<IVariable, IValue> constraints;
-
     public:
-        virtual bool canHasValue(IVariable, IValue) = 0;
+        virtual ~IUnaryConstraint() {}
 };
 
 #endif //SI_LAB_2_ISINGLEVARIABLECONSTRAINT_H

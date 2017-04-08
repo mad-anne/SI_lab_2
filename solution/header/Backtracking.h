@@ -14,7 +14,7 @@ class Backtracking : public IConstraintSatisfactionProblem
         ~Backtracking();
 
     public:
-        void solveProblem(IProblem* problem) override;
+        std::unique_ptr<ISolution> solveProblem(IProblem* problem) override;
 };
 
 #endif //SI_LAB_2_BACKTRACKING_H

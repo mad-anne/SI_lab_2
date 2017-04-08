@@ -11,6 +11,7 @@ class Node : public IVariable
 {
     public:
         Node();
+        ~Node();
 
         const IValue* getValue() override;
         const IDomain* getDomain() override;

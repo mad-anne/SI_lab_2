@@ -17,6 +17,8 @@ class IVariable
         IDomain* domain;
 
     public:
+        virtual ~IVariable() {}
+
         virtual const IValue* getValue() = 0;
         virtual const IDomain* getDomain() = 0;
 };

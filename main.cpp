@@ -79,8 +79,13 @@ void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
             std::cout << "You have chosen to solve harmonious graph coloring." << std::endl;
             int size = getGraphSize();
             IProblem* graph = new HarmoniousGraph(size);
-            backtracking->solveProblem(graph);
-            forwardChecking->solveProblem(graph);
+
+            std::unique_ptr<ISolution> backtrackingSolution = backtracking->solveProblem(graph);
+            std::unique_ptr<ISolution> forwardCheckingSolution = forwardChecking->solveProblem(graph);
+
+            backtrackingSolution->printHarmoniousGraph();
+            forwardCheckingSolution->printHarmoniousGraph();
+
             delete graph;
             break;
         }

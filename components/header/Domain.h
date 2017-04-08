@@ -11,10 +11,11 @@ class Domain : public IDomain
 {
     public:
         Domain();
+        ~Domain();
 
-    void addValue(IValue* value) override;
-    const IValue* getValue(int) override;
-    const int getDomainSize() override;
+        void addValue(IValue* value) override;
+        const IValue* getValue(int) override;
+        const int getDomainSize() override;
 };
 
 #endif //SI_LAB_2_DOMAIN_H

@@ -7,9 +7,12 @@
 
 class IValue
 {
-    int value;
+    protected:
+        int value;
 
     public:
+        virtual ~IValue() {}
+
         virtual int getValue() = 0;
         virtual int setValue(int) = 0;
         virtual int resetValue() = 0;

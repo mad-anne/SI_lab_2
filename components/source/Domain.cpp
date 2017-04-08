@@ -5,7 +5,10 @@
 #include "../header/Domain.h"
 
 Domain::Domain()
-{}
+{ }
+
+Domain::~Domain()
+{ }
 
 void Domain::addValue(IValue* value)
 {

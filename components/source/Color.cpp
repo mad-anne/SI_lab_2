@@ -9,6 +9,9 @@ Color::Color()
     value = -1;
 }
 
+Color::~Color()
+{ }
+
 int Color::getValue()
 {
     return value;

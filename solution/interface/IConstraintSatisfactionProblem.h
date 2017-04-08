@@ -6,6 +6,7 @@
 #define SI_LAB_2_ICONSTRAINTSATISFACTIONPROBLEM_H
 
 #include <vector>
+#include <memory>
 #include "ISolution.h"
 #include "../../problems/interface/IProblem.h"
 
@@ -15,7 +16,9 @@ class IConstraintSatisfactionProblem
         IProblem* problem;
 
     public:
-        virtual void solveProblem(IProblem*) = 0;
+        virtual ~IConstraintSatisfactionProblem() {}
+
+        virtual std::unique_ptr<ISolution> solveProblem(IProblem*) = 0;
 };
 
 #endif //SI_LAB_2_ICONSTRAINTSATISFACTIONPROBLEM_H
