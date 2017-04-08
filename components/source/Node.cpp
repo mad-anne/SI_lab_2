@@ -27,3 +27,9 @@ const IDomain* Node::getDomain() const
 {
     return domain;
 }
+
+const IValue* Node::setValue(const IValue* value)
+{
+    this->value = value;
+    return this->value;
+}

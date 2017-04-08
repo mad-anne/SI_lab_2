@@ -15,14 +15,15 @@ void Domain::addValue(IValue* value)
     values.push_back(value);
 }
 
-const IValue* Domain::getValue(int index)
+const IValue* Domain::getValue(int index) const
 {
     return index < values.size()
-           ? values.at(index)
+           ? values[index]
            : nullptr;
 }
 
-const int Domain::getDomainSize()
+const int Domain::getDomainSize() const
 {
     return values.size();
 }
+

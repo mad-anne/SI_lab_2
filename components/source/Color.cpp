@@ -4,14 +4,21 @@
 
 #include "../header/Color.h"
 
-Color::Color()
-{
-    value = -1;
-}
+Color::Color() :
+    IValue(-1)
+{ }
+
+Color::Color(int value) :
+    IValue(value)
+{ }
 
 Color::~Color()
 { }
 
+IValue* Color::deepCopy() const
+{
+    return new Color(value);
+}
 const int Color::getValue() const
 {
     return value;

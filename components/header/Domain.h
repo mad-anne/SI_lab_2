@@ -14,8 +14,8 @@ class Domain : public IDomain
         ~Domain();
 
         void addValue(IValue* value) override;
-        const IValue* getValue(int) override;
-        const int getDomainSize() override;
+        const IValue* getValue(int) const override;
+        const int getDomainSize() const override;
 };
 
 #endif //SI_LAB_2_DOMAIN_H

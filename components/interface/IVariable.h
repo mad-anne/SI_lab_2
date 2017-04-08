@@ -13,13 +13,14 @@
 class IVariable
 {
     protected:
-        IValue* value;
+        const IValue* value;
         IDomain* domain;
 
     public:
         virtual ~IVariable() {}
 
         virtual const IValue* getValue() const = 0;
+        virtual const IValue* setValue(const IValue*) = 0;
         virtual const IDomain* getDomain() const = 0;
 };
 

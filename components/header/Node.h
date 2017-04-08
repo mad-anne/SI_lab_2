@@ -15,6 +15,7 @@ class Node : public IVariable
 
         const IValue* getValue() const override;
         const IDomain* getDomain() const override;
+        const IValue* setValue(const IValue*) override;
 };
 
 #endif //SI_LAB_2_NODE_H
