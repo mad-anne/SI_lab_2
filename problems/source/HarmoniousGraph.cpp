@@ -80,6 +80,11 @@ bool HarmoniousGraph::isComplete() const
     return true;
 }
 
+bool HarmoniousGraph::checkConstraints() const
+{
+    return true;
+}
+
 IVariable* HarmoniousGraph::getUnassignedVariable() const
 {
     for (int row = 0; row < width; ++row)

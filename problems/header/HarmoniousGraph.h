@@ -20,6 +20,7 @@ class HarmoniousGraph : public IProblem
         const IVariable* getVariable(int row, int column) override;
         const IVariable* setVariableValue(int row, int column, IValue* value) override;
         const IValue* setVariableValue(const IVariable*, const IValue*) override;
+        bool checkConstraints() const override;
 
         bool isComplete() const override;
         IVariable* getUnassignedVariable() const override;
