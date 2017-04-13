@@ -36,7 +36,7 @@ const bool HarmoniousGraphConstraint::checkConstraints()
 
 const bool HarmoniousGraphConstraint::checkConstraints(int row, int col)
 {
-    return checkConstraints();
+    return checkNeighbours(row, col) && checkConnection(row, col);
 }
 
 void HarmoniousGraphConstraint::setProblem(IProblem* problem)

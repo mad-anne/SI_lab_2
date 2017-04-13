@@ -28,6 +28,8 @@ class IVariable
         virtual void resetValue() = 0;
         virtual void addValueToDomain(const IValue*) = 0;
         virtual void addDomain(const IDomain*) = 0;
+        virtual const int getRow() const = 0;
+        virtual const int getColumn() const = 0;
 };
 
 #endif //SI_LAB_2_IVARIABLE_H

@@ -2,7 +2,6 @@
 // Created by Anna Siwik on 2017-04-07.
 //
 
-#include <algorithm>
 #include "../header/HarmoniousGraph.h"
 #include "../../components/header/Node.h"
 #include "../../components/header/Color.h"
@@ -11,13 +10,31 @@ HarmoniousGraph::HarmoniousGraph(int width) :
     IProblem(width),
     colors(2 * width + (width % 2 == 1 ? 1 : 0))
 {
-    generateEmptyGraph();
     generateDomain();
+    generateEmptyGraph();
 }
 
 HarmoniousGraph::~HarmoniousGraph()
 {
     removeGraph();
+}
+
+IProblem* HarmoniousGraph::deepCopy() const
+{
+    IProblem* copy = new HarmoniousGraph(width);
+    const IDomain* domain = copy->getDomain();
+
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            int index = nodes[row][col]->getValue()->getValue();
+            const IValue* value = domain->getValue(index);
+            copy->setVariableValue(row, col, value);
+        }
+    }
+
+    return copy;
 }
 
 void HarmoniousGraph::generateDomain()
@@ -36,7 +53,10 @@ void HarmoniousGraph::generateEmptyGraph()
     for (int row = 0; row < width; ++row)
     {
         for (int col = 0; col < width; ++col)
-            nodes[row][col] = new Node();
+        {
+            nodes[row][col] = new Node(row, col);
+            nodes[row][col]->addDomain(domain);
+        }
     }
 }
 
@@ -61,7 +81,7 @@ const IVariable* HarmoniousGraph::getVariable(int row, int column)
            : nullptr;
 }
 
-const IVariable* HarmoniousGraph::setVariableValue(int row, int column, IValue* value)
+const IVariable* HarmoniousGraph::setVariableValue(int row, int column, const IValue* value)
 {
     nodes[row][column]->setValue(value);
     return nodes[row][column];
@@ -73,7 +93,7 @@ bool HarmoniousGraph::isComplete() const
     {
         for (int col = 0; col < width; ++col)
         {
-            if (nodes[row][col]->getValue()->getValue() == -1)
+            if (nodes[row][col]->getValue() == nullptr)
                 return false;
         }
     }
@@ -92,7 +112,7 @@ IVariable* HarmoniousGraph::getUnassignedVariable() const
     {
         for (int col = 0; col < width; ++col)
         {
-            if (nodes[row][col]->getValue()->getValue() == -1)
+            if (nodes[row][col]->getValue() == nullptr)
                 return nodes[row][col];
         }
     }

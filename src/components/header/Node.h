@@ -9,8 +9,11 @@
 
 class Node : public IVariable
 {
+    int row;
+    int col;
+
     public:
-        Node();
+        Node(int, int);
         ~Node();
 
         const IValue* getValue() const override;
@@ -19,6 +22,9 @@ class Node : public IVariable
         void addValueToDomain(const IValue*) override;
         void resetValue() override;
         void addDomain(const IDomain*) override;
+
+        const int getRow() const override;
+        const int getColumn() const override;
 };
 
 #endif //SI_LAB_2_NODE_H

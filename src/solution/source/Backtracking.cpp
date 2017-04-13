@@ -2,10 +2,9 @@
 // Created by Anna Siwik on 2017-04-08.
 //
 
-#include <iostream>
+#include <constraints/header/HarmoniousGraphConstraint.h>
 #include "../header/Backtracking.h"
 #include "../header/Solution.h"
-#include "../../components/header/Color.h"
 
 Backtracking::Backtracking() :
     IConstraintSatisfactionProblem()
@@ -18,18 +17,17 @@ std::vector<ISolution*>* Backtracking::solveProblem(IProblem* problem)
 {
     clearSolutions();
 
-    std::cout << "You have chosen to solve problem by backtracking." << std::endl;
-    std::cout << "Here we're solving problem." << std::endl;
-    std::cout << "..." << std::endl;
-
-    return recursive(problem);
+    IConstraint* constraint = new HarmoniousGraphConstraint(problem);
+    std::vector<ISolution*>* solutions = recursive(problem, constraint);
+    delete constraint;
+    return solutions;
 }
 
-std::vector<ISolution*>* Backtracking::recursive(IProblem* problem)
+std::vector<ISolution*>* Backtracking::recursive(IProblem* problem, IConstraint* constraint)
 {
-    if (problem->isComplete())
+    if (problem->isComplete() && (HarmoniousGraphConstraint(problem).checkConstraints()))
     {
-        solutions.push_back(new Solution(problem));
+        solutions.push_back(new Solution(problem->deepCopy()));
         return & solutions;
     }
 
@@ -38,20 +36,23 @@ std::vector<ISolution*>* Backtracking::recursive(IProblem* problem)
     if (variable == nullptr)
         return & solutions;
 
-//    const IDomain* domain = variable->getDomain();
-//
-//    for (int i = 0; i < domain->getDomainSize(); ++i)
-//    {
-//        const IValue* value = domain->getValue(i);
-//
-//        problem->setVariableValue(variable, value);
-//
-//        if (problem->checkConstraints()) // TODO: check constraints
-//            recursive(problem); // TODO: if correct, solve problem again
-//        else
-//            problem->setVariableValue(variable, new Color(-1)); // TODO: if not correct, try to assign another value
-//    }
+    const IDomain* domain = variable->getDomain();
+
+    for (int i = 0; i < domain->getDomainSize(); ++i)
+    {
+        const IValue* value = domain->getValue(i);
+
+        problem->setVariableValue(variable, value);
+        // TODO: algorithm should go every path, check it
+        // TODO: checking constraints should be done for variable, which has row and col
+        // TODO: should be option to reverse adding constraints
+        // TODO: checking constraints should NOT affect repetition from the past
+//        if (constraint->checkConstraints(variable->getRow(), variable->getColumn()))
+        if ((HarmoniousGraphConstraint(problem).checkConstraints()))
+            recursive(problem, constraint);
+        else
+            problem->setVariableValue(variable, nullptr);
+    }
 
     return & solutions;
-    // TODO: if not correct and cannot assign another value, assign value -1 and return
 }

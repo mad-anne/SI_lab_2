@@ -17,7 +17,7 @@ class NodeTestSuite : public  ::testing::Test
 };
 
 NodeTestSuite::NodeTestSuite() :
-    sut(new Node())
+    sut(new Node(-1, -1))
 { }
 
 NodeTestSuite::~NodeTestSuite()

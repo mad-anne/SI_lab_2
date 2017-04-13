@@ -6,6 +6,7 @@
 #define SI_LAB_2_BACKTRACKING_H
 
 #include "../interface/IConstraintSatisfactionProblem.h"
+#include "../../constraints/interface/IConstraint.h"
 
 class Backtracking : public IConstraintSatisfactionProblem
 {
@@ -16,7 +17,7 @@ class Backtracking : public IConstraintSatisfactionProblem
         std::vector<ISolution*>* solveProblem(IProblem*) override;
 
     private:
-        std::vector<ISolution*>* recursive(IProblem*);
+        std::vector<ISolution*>* recursive(IProblem*, IConstraint*);
 };
 
 #endif //SI_LAB_2_BACKTRACKING_H

@@ -13,6 +13,7 @@ class ISolution
         IProblem* solution;
 
     public:
+        ISolution() {}
         virtual ~ISolution()
         {
             if (solution != nullptr)

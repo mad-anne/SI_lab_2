@@ -17,8 +17,9 @@ class HarmoniousGraph : public IProblem
         HarmoniousGraph(int width);
         ~HarmoniousGraph();
 
+        IProblem* deepCopy() const;
         const IVariable* getVariable(int row, int column) override;
-        const IVariable* setVariableValue(int row, int column, IValue* value) override;
+        const IVariable* setVariableValue(int row, int column, const IValue* value) override;
         const IValue* setVariableValue(const IVariable*, const IValue*) override;
         bool checkConstraints() const override;
 
