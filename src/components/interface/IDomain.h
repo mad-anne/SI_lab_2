@@ -11,7 +11,7 @@
 class IDomain
 {
     protected:
-        std::vector<IValue*> values;
+        std::vector<const IValue*> values;
 
     public:
         IDomain() {}
@@ -21,23 +21,11 @@ class IDomain
                 this->values.push_back(domain->getValue(i)->deepCopy());
         }
 
-        virtual ~IDomain()
-        {
-            clearValues();
-        }
+        virtual ~IDomain() = default;
 
-        virtual void addValue(IValue*) = 0;
+        virtual void addValue(const IValue*) = 0;
         virtual const IValue* getValue(int) const = 0;
-        virtual const int getDomainSize() const = 0;
-
-    protected:
-        void clearValues()
-        {
-            for (int index = 0; index < values.size(); ++index)
-                delete values[index];
-
-            values.clear();
-        }
+        virtual const unsigned long int getDomainSize() const = 0;
 };
 
 #endif //SI_LAB_2_IDOMAIN_H

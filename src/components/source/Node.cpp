@@ -4,18 +4,16 @@
 
 #include "../interface/IValue.h"
 #include "../interface/IDomain.h"
-#include "../../constraints/interface/IUnaryConstraint.h"
 #include "../header/Node.h"
-#include "../header/Color.h"
 
-Node::Node()
+Node::Node() :
+    IVariable()
 {
-    value = new Color();
 }
 
 Node::~Node()
 {
-    delete value;
+    delete domain;
 }
 
 const IValue* Node::getValue() const
@@ -28,8 +26,23 @@ const IDomain* Node::getDomain() const
     return domain;
 }
 
-const IValue* Node::setValue(const IValue* value)
+void Node::setValue(const IValue* value)
 {
     this->value = value;
-    return this->value;
+}
+
+void Node::addValueToDomain(const IValue* value)
+{
+    domain->addValue(value);
+}
+
+void Node::resetValue()
+{
+    this->value = nullptr;
+}
+
+void Node::addDomain(const IDomain* domain)
+{
+    for (int i = 0; i < domain->getDomainSize(); ++i)
+        this->domain->addValue(domain->getValue(i));
 }

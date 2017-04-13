@@ -3,6 +3,7 @@
 //
 
 #include "../header/Domain.h"
+#include <algorithm>
 
 Domain::Domain()
 {}
@@ -10,9 +11,10 @@ Domain::Domain()
 Domain::~Domain()
 {}
 
-void Domain::addValue(IValue* value)
+void Domain::addValue(const IValue* value)
 {
-    values.push_back(value);
+    if (! hasValue(value))
+        values.push_back(value);
 }
 
 const IValue* Domain::getValue(int index) const
@@ -22,8 +24,13 @@ const IValue* Domain::getValue(int index) const
            : nullptr;
 }
 
-const int Domain::getDomainSize() const
+const unsigned long int Domain::getDomainSize() const
 {
     return values.size();
+}
+
+bool Domain::hasValue(const IValue* value)
+{
+    return std::find(values.begin(), values.end(), value) != values.end();
 }
 

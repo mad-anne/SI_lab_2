@@ -6,7 +6,7 @@
 #define SI_LAB_2_IGRAPH_H
 
 #include "../../components/interface/IVariable.h"
-#include "../../components/header/Domain.h"
+#include "../../components/header/MainDomain.h"
 
 class IProblem
 {
@@ -18,14 +18,12 @@ class IProblem
         IProblem(int width)
         {
             this->width = width;
-            domain = new Domain();
+            domain = new MainDomain();
         }
 
         virtual ~IProblem()
         {
-            if (domain != nullptr)
-                delete domain;
-
+            delete domain;
         }
 
         virtual bool isComplete() const = 0;

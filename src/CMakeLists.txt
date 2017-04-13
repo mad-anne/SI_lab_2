@@ -6,14 +6,11 @@ set(SOURCE_FILES
         components/source/Domain.cpp
         components/source/Node.cpp
 
-        constraints/source/BinaryConstraint.cpp
-        constraints/source/UnaryConstraint.cpp
-
         problems/source/HarmoniousGraph.cpp
 
         solution/source/Backtracking.cpp
         solution/source/ForwardChecking.cpp
-        solution/source/Solution.cpp)
+        solution/source/Solution.cpp components/header/MainDomain.h components/source/MainDomain.cpp constraints/interface/IConstraint.h constraints/header/HarmoniousGraphConstraint.h constraints/source/HarmoniousGraphConstraint.cpp)
 
 add_library (sourcelib ${SOURCE_FILES})
 

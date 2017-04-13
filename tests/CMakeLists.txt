@@ -9,7 +9,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 set(SOURCE_FILES
         gtest.cpp
-        tests/components/ColorTests.cpp)
+        tests/components/ColorTestSuite.cpp tests/components/DomainTestSuite.cpp tests/components/NodeTestSuite.cpp)
 
 add_executable(tests_run ${SOURCE_FILES})
 
