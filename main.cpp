@@ -2,10 +2,10 @@
 #include <memory>
 #include <sstream>
 #include <algorithm>
-#include "problems/interface/IProblem.h"
-#include "solution/header/Backtracking.h"
-#include "solution/header/ForwardChecking.h"
-#include "problems/header/HarmoniousGraph.h"
+#include "src/problems/interface/IProblem.h"
+#include "src/solution/header/Backtracking.h"
+#include "src/solution/header/ForwardChecking.h"
+#include "src/problems/header/HarmoniousGraph.h"
 
 void runMenu();
 int getNumberFromInput(std::string choice);

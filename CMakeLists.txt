@@ -2,20 +2,10 @@ cmake_minimum_required(VERSION 3.7)
 project(SI_lab_2)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 
-set(SOURCE_FILES main.cpp
-        components/source/Color.cpp
-        components/source/Domain.cpp
-        components/source/Node.cpp
+include_directories(src)
+include_directories(tests)
 
-        constraints/source/BinaryConstraint.cpp
-        constraints/source/UnaryConstraint.cpp
-
-        problems/source/HarmoniousGraph.cpp
-
-        solution/source/Backtracking.cpp
-        solution/source/ForwardChecking.cpp
-        solution/source/Solution.cpp
-
-        main.cpp)
-add_executable(csp_run ${SOURCE_FILES})
+add_subdirectory(src)
+add_subdirectory(tests)
