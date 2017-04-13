@@ -3,15 +3,23 @@
 //
 
 #include <gtest/gtest.h>
+#include <components/header/Color.h>
 
-
-
-TEST(ColorTests, noteq)
+class ColorTestSuite
 {
-    EXPECT_NE(1, 0);
-}
+    public:
+        ColorTestSuite();
 
-TEST(ColorTests, eq)
+    private:
+        Color sut;
+};
+
+ColorTestSuite::ColorTestSuite() :
+    sut()
+{ }
+
+
+TEST(ColorTestSuite, classCreates)
 {
-    EXPECT_EQ(1, 0);
+
 }

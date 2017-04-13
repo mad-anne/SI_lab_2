@@ -5,7 +5,7 @@ add_subdirectory(lib/googletest)
 
 enable_testing()
 
-include_directories(${gtest_SOURCE_DIR_}/include ${gtest_SOURCE_DIR_})
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 set(SOURCE_FILES
         gtest.cpp
@@ -13,4 +13,4 @@ set(SOURCE_FILES
 
 add_executable(tests_run ${SOURCE_FILES})
 
-target_link_libraries(tests_run gtest gtest_main)
+target_link_libraries(tests_run gtest gtest_main sourcelib)
