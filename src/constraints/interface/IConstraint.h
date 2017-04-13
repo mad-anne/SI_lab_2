@@ -19,7 +19,8 @@ class IConstraint
 
         virtual ~IConstraint() = default;
 
-        virtual const bool checkConstraints() const = 0;
+        virtual const bool checkConstraints() = 0;
+        virtual const bool checkConstraints(int row, int col) = 0;
         virtual void setProblem(IProblem*) = 0;
 };
 

@@ -63,7 +63,8 @@ const IVariable* HarmoniousGraph::getVariable(int row, int column)
 
 const IVariable* HarmoniousGraph::setVariableValue(int row, int column, IValue* value)
 {
-    return nullptr;
+    nodes[row][column]->setValue(value);
+    return nodes[row][column];
 }
 
 bool HarmoniousGraph::isComplete() const

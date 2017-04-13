@@ -18,6 +18,7 @@ class IValue
         IValue(int value) :
             value(value)
         { }
+
         virtual ~IValue() {}
 
         virtual IValue* deepCopy() const = 0;
