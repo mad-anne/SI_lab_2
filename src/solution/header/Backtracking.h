@@ -1,5 +1,5 @@
 //
-// Created by Anna on 2017-04-08.
+// Created by Anna Siwik on 2017-04-08.
 //
 
 #ifndef SI_LAB_2_BACKTRACKING_H
@@ -7,9 +7,12 @@
 
 #include "../interface/IConstraintSatisfactionProblem.h"
 #include "../../constraints/interface/IConstraint.h"
+#include "../../accessors/interface/IVariableGetter.h"
 
 class Backtracking : public IConstraintSatisfactionProblem
 {
+    IVariableGetter* getter;
+
     public:
         Backtracking();
         ~Backtracking();
@@ -17,7 +20,7 @@ class Backtracking : public IConstraintSatisfactionProblem
         std::vector<ISolution*>* solveProblem(IProblem*) override;
 
     private:
-        std::vector<ISolution*>* recursive(IProblem*, IConstraint*);
+        void recursive(IProblem*, IConstraint*);
 };
 
 #endif //SI_LAB_2_BACKTRACKING_H

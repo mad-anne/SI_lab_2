@@ -3,11 +3,13 @@
 //
 
 #include <constraints/header/HarmoniousGraphConstraint.h>
+#include <accessors/header/NextVariableGetter.h>
 #include "../header/Backtracking.h"
 #include "../header/Solution.h"
 
 Backtracking::Backtracking() :
-    IConstraintSatisfactionProblem()
+    IConstraintSatisfactionProblem(),
+    getter(new NextVariableGetter(nullptr))
 {}
 
 Backtracking::~Backtracking()
@@ -17,24 +19,25 @@ std::vector<ISolution*>* Backtracking::solveProblem(IProblem* problem)
 {
     clearSolutions();
 
+    getter->setProblem(problem);
     IConstraint* constraint = new HarmoniousGraphConstraint(problem);
-    std::vector<ISolution*>* solutions = recursive(problem, constraint);
+    recursive(problem, constraint);
     delete constraint;
-    return solutions;
+    return & solutions;
 }
 
-std::vector<ISolution*>* Backtracking::recursive(IProblem* problem, IConstraint* constraint)
+void Backtracking::recursive(IProblem* problem, IConstraint* constraint)
 {
     if (problem->isComplete() && (HarmoniousGraphConstraint(problem).checkConstraints()))
     {
         solutions.push_back(new Solution(problem->deepCopy()));
-        return & solutions;
+        return;
     }
 
-    IVariable* variable = problem->getUnassignedVariable();
+    const IVariable* variable = getter->getNext();
 
     if (variable == nullptr)
-        return & solutions;
+        return;
 
     const IDomain* domain = variable->getDomain();
 
@@ -53,6 +56,4 @@ std::vector<ISolution*>* Backtracking::recursive(IProblem* problem, IConstraint*
         else
             problem->setVariableValue(variable, nullptr);
     }
-
-    return & solutions;
 }

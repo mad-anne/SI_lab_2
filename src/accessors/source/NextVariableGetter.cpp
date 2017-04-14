@@ -5,7 +5,7 @@
 #include <problems/interface/IProblem.h>
 #include <accessors/header/NextVariableGetter.h>
 
-NextVariableGetter::NextVariableGetter(const IProblem *problem)
+NextVariableGetter::NextVariableGetter(const IProblem* problem)
         : IVariableGetter(problem)
 {}
 

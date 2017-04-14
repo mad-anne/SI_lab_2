@@ -13,7 +13,7 @@ class IVariableGetter
         const IProblem* problem;
 
     private:
-        IVariableGetter() {};
+        IVariableGetter() {}
 
     public:
         IVariableGetter(const IProblem* problem)
@@ -23,7 +23,7 @@ class IVariableGetter
 
         virtual const IVariable* getNext() = 0;
     
-        virtual void setProblem(const IProblem* problem) = 0;
+        virtual void setProblem(const IProblem*) = 0;
         virtual const IProblem* getProblem() = 0;
 };
 
