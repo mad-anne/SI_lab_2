@@ -10,7 +10,7 @@ set(SOURCE_FILES
 
         solution/source/Backtracking.cpp
         solution/source/ForwardChecking.cpp
-        solution/source/Solution.cpp components/header/MainDomain.h components/source/MainDomain.cpp constraints/interface/IConstraint.h constraints/header/HarmoniousGraphConstraint.h constraints/source/HarmoniousGraphConstraint.cpp constraints/interface/IConnection.h constraints/header/Connection.h constraints/source/Connection.cpp)
+        solution/source/Solution.cpp components/header/MainDomain.h components/source/MainDomain.cpp constraints/interface/IConstraint.h constraints/header/HarmoniousGraphConstraint.h constraints/source/HarmoniousGraphConstraint.cpp constraints/interface/IConnection.h constraints/header/Connection.h constraints/source/Connection.cpp accessors/interface/IVariableGetter.h accessors/header/NextVariableGetter.h accessors/source/NextVariableGetter.cpp)
 
 add_library (sourcelib ${SOURCE_FILES})
 

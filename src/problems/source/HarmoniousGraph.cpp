@@ -74,7 +74,7 @@ void HarmoniousGraph::removeGraph()
     delete [] nodes;
 }
 
-const IVariable* HarmoniousGraph::getVariable(int row, int column)
+const IVariable* HarmoniousGraph::getVariable(int row, int column) const
 {
     return (row < width) && (column < width)
            ? nodes[row][column]
