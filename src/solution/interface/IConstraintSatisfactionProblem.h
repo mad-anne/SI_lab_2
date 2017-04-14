@@ -18,9 +18,8 @@ class IConstraintSatisfactionProblem
 
     public:
         IConstraintSatisfactionProblem()
-        {
-            problem = nullptr;
-        }
+                : problem(nullptr)
+        {}
 
         virtual ~IConstraintSatisfactionProblem()
         {
@@ -30,8 +29,8 @@ class IConstraintSatisfactionProblem
 
         virtual std::vector<ISolution*>* solveProblem(IProblem*) = 0;
 
-    protected:
-        void clearSolutions()
+    private:
+        void clearSolutions() // TODO: clearSolutions after each algorithm performance
         {
             for (int index = 0; index < solutions.size(); ++index)
                 delete solutions[index];
@@ -43,7 +42,6 @@ class IConstraintSatisfactionProblem
         {
             if (problem != nullptr)
                 delete problem;
-
         }
 };
 
