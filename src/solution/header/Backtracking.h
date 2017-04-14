@@ -12,6 +12,7 @@
 class Backtracking : public IConstraintSatisfactionProblem
 {
     IVariableGetter* getter;
+    IConstraint* constraint;
 
     public:
         Backtracking();
@@ -20,7 +21,7 @@ class Backtracking : public IConstraintSatisfactionProblem
         std::vector<ISolution*>* solveProblem(IProblem*) override;
 
     private:
-        void recursive(IProblem*, IConstraint*);
+        void recursive(IProblem*);
 };
 
 #endif //SI_LAB_2_BACKTRACKING_H

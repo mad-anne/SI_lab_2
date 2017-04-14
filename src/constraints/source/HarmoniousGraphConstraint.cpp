@@ -134,17 +134,19 @@ void HarmoniousGraphConstraint::removeConnection(const IValue* value, const IVal
     if (value == nullptr || neighbour == nullptr)
         return;
 
-    for (unsigned long int i = 0; i < connections.size(); ++i)
+    unsigned long int index = 0;
+    while (index < connections.size())
     {
-        const IValue* first = connections[i]->getFirstValue();
-        const IValue* second = connections[i]->getSecondValue();
+        const IValue* first = connections[index]->getFirstValue();
+        const IValue* second = connections[index]->getSecondValue();
 
         if ((value == first && neighbour == second) || (value == second && neighbour == first))
         {
-            delete connections[i];
-            connections.erase(connections.begin() + i);
-            return;
+            delete connections[index];
+            connections.erase(connections.begin() + index);
         }
+        else
+            ++index;
     }
 }
 
