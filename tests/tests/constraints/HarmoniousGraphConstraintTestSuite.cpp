@@ -115,7 +115,7 @@ TEST_F(HarmoniousGraphConstraintTestSuite, returnsTrueIfAssigningAgainTheSameVal
     sut->undoConstraints(problem->getVariable(0, 1));
 
     problem->setVariableValue(0, 1, value2);
-    ASSERT_FALSE(sut->updateConstraints(problem->getVariable(0, 1)));
+    ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 1)));
 
     delete value1;
     delete value2;

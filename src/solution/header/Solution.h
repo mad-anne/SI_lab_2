@@ -15,7 +15,9 @@ class Solution : public ISolution
 
         void printHarmoniousGraph() override;
         void printBinaryGame() override;
-        void setSolution(IProblem* problem) override;
+
+    private:
+        void readProblem(IProblem*);
 };
 
 #endif //SI_LAB_2_SOLUTION_H

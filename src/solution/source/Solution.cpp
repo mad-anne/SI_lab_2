@@ -8,7 +8,7 @@
 
 Solution::Solution(IProblem* solution)
 {
-    this->solution = solution;
+    readProblem(solution);
 }
 
 Solution::~Solution()
@@ -17,17 +17,13 @@ Solution::~Solution()
 void Solution::printHarmoniousGraph()
 {
     if (solution == nullptr)
-        return;
-
-    int width = solution->getWidth();
+        std::cout << "Solution is empty." << std::endl;
 
     for (int row = 0; row < width; ++row)
     {
         for (int col = 0; col < width; ++col)
-        {
-            const IValue* val = solution->getVariable(row, col)->getValue();
-            printf( "| %3d ", val->getValue());
-        }
+            printf( "| %3d ", solution[row][col]);
+
         std::cout << "|" << std::endl;
     }
 
@@ -40,8 +36,19 @@ void Solution::printBinaryGame()
     std::cout << "Hi! I'm printing binary game solution." << std::endl;
 }
 
-void Solution::setSolution(IProblem* problem)
+void Solution::readProblem(IProblem* problem)
 {
-    solution = problem;
-}
+    width = problem->getWidth();
+    solution = new int*[width];
 
+    for (int row = 0; row < width; ++row)
+    {
+        solution[row] = new int[width];
+
+        for (int col = 0; col < width; ++col)
+        {
+            int value = problem->getVariable(row, col)->getValue()->getValue();
+            solution[row][col] = value;
+        }
+    }
+}

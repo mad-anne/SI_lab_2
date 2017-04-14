@@ -10,19 +10,24 @@
 class ISolution
 {
     protected:
-        IProblem* solution;
+        int** solution;
+        int width;
 
     public:
         ISolution() {}
         virtual ~ISolution()
         {
-            if (solution != nullptr)
-                delete solution;
+            if (solution != nullptr && width > 0)
+            {
+                for (int row = 0; row < width; ++row)
+                    delete[] solution[row];
+
+                delete[] solution;
+            }
         }
 
         virtual void printHarmoniousGraph() = 0;
         virtual void printBinaryGame() = 0;
-        virtual void setSolution(IProblem*) = 0;
 };
 
 #endif //SI_LAB_2_ISOLUTION_H

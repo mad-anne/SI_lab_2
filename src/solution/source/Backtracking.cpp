@@ -36,7 +36,7 @@ void Backtracking::recursive(IProblem* problem)
 
     if (variable == nullptr)
     {
-        solutions.push_back(new Solution(problem->deepCopy()));
+        solutions.push_back(new Solution(problem));
         return;
     }
 

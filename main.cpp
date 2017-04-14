@@ -84,7 +84,7 @@ void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
 
             // PAMIETAJ O USUNIECIU GRAFU!!! POD WARUNKIEM, ZE NOWE ROZWIAZANIA BEDA TWORZONE PRZEZ KOPIOWANIE I NIE TRAFIA DO SOLUTIONS
             std::vector<ISolution*>* backtrackingSolutions = backtracking->solveProblem(graph);
-//            printAllSolutions(backtrackingSolutions);
+            printAllSolutions(backtrackingSolutions);
             std::cout << "Number of solutions: " << backtrackingSolutions->size() << std::endl;
 
 //            std::vector<ISolution*>* forwardCheckingSolutions = forwardChecking->solveProblem(graph);
