@@ -19,9 +19,11 @@ class IConstraint
 
         virtual ~IConstraint() = default;
 
-        virtual const bool checkConstraints() = 0;
-        virtual const bool checkConstraints(int row, int col) = 0;
+        virtual const bool updateConstraints(const IVariable*) = 0;
+        virtual void undoConstraints(const IVariable*) = 0;
+
         virtual void setProblem(IProblem*) = 0;
+        virtual const IProblem* getProblem(IProblem*) const = 0;
 };
 
 #endif //SI_LAB_2_ICONSTRAINT_H

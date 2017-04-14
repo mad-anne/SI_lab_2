@@ -11,32 +11,23 @@ HarmoniousGraphConstraint::HarmoniousGraphConstraint(IProblem* problem)
 
 HarmoniousGraphConstraint::~HarmoniousGraphConstraint()
 {
-    for (int i = 0; i < connections.size(); ++i)
-        delete connections[i];
-
-    connections.clear();
+    clearConnections();
 }
 
-const bool HarmoniousGraphConstraint::checkConstraints()
+const bool HarmoniousGraphConstraint::updateConstraints(const IVariable* variable)
 {
-    bool isCorrect = true;
-    int width = problem->getWidth();
-
-    for (int i = 0; isCorrect && i < width; ++i)
+    if (checkConstraints(variable))
     {
-        for (int j = 0; isCorrect && j < width; ++j)
-        {
-            if (! checkNeighbours(i, j) || ! checkConnection(i, j))
-                isCorrect = false;
-        }
+        addConnections(variable);
+        return true;
     }
 
-    return isCorrect;
+    return false;
 }
 
-const bool HarmoniousGraphConstraint::checkConstraints(int row, int col)
+void HarmoniousGraphConstraint::undoConstraints(const IVariable* variable)
 {
-    return checkNeighbours(row, col) && checkConnection(row, col);
+    removeConnections(variable);
 }
 
 void HarmoniousGraphConstraint::setProblem(IProblem* problem)
@@ -44,87 +35,47 @@ void HarmoniousGraphConstraint::setProblem(IProblem* problem)
     this->problem = problem;
 }
 
-const bool HarmoniousGraphConstraint::checkNeighbours(int row, int col) const
+const IProblem* HarmoniousGraphConstraint::getProblem(IProblem* problem) const
 {
-    int width = problem->getWidth();
-    const IValue* valueObj = problem->getVariable(row, col)->getValue();
-
-    if (valueObj == nullptr)
-        return true;
-
-    const int value = valueObj->getValue();
-
-    const IValue* valueLeft = nullptr;
-    const IValue* valueRight = nullptr;
-    const IValue* valueUp = nullptr;
-    const IValue* valueDown = nullptr;
-
-    if (col > 0)
-        valueLeft = problem->getVariable(row, col - 1)->getValue();
-
-    if (col < width - 1)
-        valueRight = problem->getVariable(row, col + 1)->getValue();
-
-    if (row > 0)
-        valueUp = problem->getVariable(row - 1, col)->getValue();
-
-    if (row < width - 1)
-        valueDown = problem->getVariable(row + 1, col)->getValue();
-
-    return  (valueLeft != nullptr ? valueLeft->getValue() != value : true)
-            && (valueRight != nullptr ? valueRight->getValue() != value : true)
-            && (valueUp != nullptr ? valueUp->getValue() != value : true)
-            && (valueDown != nullptr ? valueDown->getValue() != value : true);
+    return problem;
 }
 
-const bool HarmoniousGraphConstraint::checkConnection(int row, int col)
+const bool HarmoniousGraphConstraint::checkConstraints(const IVariable* variable) const
 {
-    int width = problem->getWidth();
-    const IValue* value = problem->getVariable(row, col)->getValue();
-
-    if (value == nullptr)
+    if (variable == nullptr)
         return true;
 
-    bool correctConnection = false;
+    return checkNeighbours(variable) && checkConnections(variable);
+}
 
-    const IValue* valueLeft = nullptr;
-    const IValue* valueRight = nullptr;
-    const IValue* valueUp = nullptr;
-    const IValue* valueDown = nullptr;
+const bool HarmoniousGraphConstraint::checkNeighbours(const IVariable* variable) const
+{
+    const IValue* value = getValue(variable);
 
-    if (col > 0)
-        valueLeft = problem->getVariable(row, col - 1)->getValue();
+    const IValue* valueUp = getValue(getUpNeighbour(variable));
+    const IValue* valueRight = getValue(getRightNeighbour(variable));
+    const IValue* valueDown = getValue(getDownNeighbour(variable));
+    const IValue* valueLeft = getValue(getLeftNeighbour(variable));
 
-    if (col < width - 1)
-        valueRight = problem->getVariable(row, col + 1)->getValue();
+    return  value != valueUp
+            && value != valueRight
+            && value != valueDown
+            && value != valueLeft;
+}
 
-    if (row > 0)
-        valueUp = problem->getVariable(row - 1, col)->getValue();
+const bool HarmoniousGraphConstraint::checkConnections(const IVariable* variable) const
+{
+    const IValue* value = getValue(variable);
 
-    if (row < width - 1)
-        valueDown = problem->getVariable(row + 1, col)->getValue();
+    const IValue* valueUp = getValue(getUpNeighbour(variable));
+    const IValue* valueRight = getValue(getRightNeighbour(variable));
+    const IValue* valueDown = getValue(getDownNeighbour(variable));
+    const IValue* valueLeft = getValue(getLeftNeighbour(variable));
 
-    if (! existsConnection(value, valueLeft)
-        && ! existsConnection(value, valueRight)
-        && ! existsConnection(value, valueUp)
-        && ! existsConnection(value, valueDown))
-    {
-        correctConnection = true;
-
-        if (valueLeft != nullptr)
-            connections.push_back(new Connection(value, valueLeft));
-
-        if (valueRight != nullptr)
-            connections.push_back(new Connection(value, valueRight));
-
-        if (valueUp != nullptr)
-            connections.push_back(new Connection(value, valueUp));
-
-        if (valueDown != nullptr)
-            connections.push_back(new Connection(value, valueDown));
-    }
-
-    return correctConnection;
+    return  ! existsConnection(value, valueUp)
+            && ! existsConnection(value, valueRight)
+            && ! existsConnection(value, valueDown)
+            && ! existsConnection(value, valueLeft);
 }
 
 const bool HarmoniousGraphConstraint::existsConnection(const IValue* value, const IValue* neighbour) const
@@ -139,9 +90,103 @@ const bool HarmoniousGraphConstraint::existsConnection(const IValue* value, cons
         const IValue* first = connections[i]->getFirstValue();
         const IValue* second = connections[i]->getSecondValue();
 
-        if (value == first && neighbour == second)
+        if ((value == first && neighbour == second) || (value == second && neighbour == first))
             exists = true;
     }
 
     return exists;
+}
+
+void HarmoniousGraphConstraint::addConnections(const IVariable* variable)
+{
+    if (variable == nullptr)
+        return;
+
+    const IValue* value = getValue(variable);
+
+    addConnection(value, getValue(getUpNeighbour(variable)));
+    addConnection(value, getValue(getRightNeighbour(variable)));
+    addConnection(value, getValue(getDownNeighbour(variable)));
+    addConnection(value, getValue(getLeftNeighbour(variable)));
+}
+
+void HarmoniousGraphConstraint::addConnection(const IValue* value1, const IValue* value2)
+{
+    if (value1 == nullptr || value2 == nullptr)
+        return;
+
+    connections.push_back(new Connection(value1, value2));
+    connections.push_back(new Connection(value2, value1));
+}
+
+void HarmoniousGraphConstraint::removeConnections(const IVariable* variable)
+{
+    const IValue* value = getValue(variable);
+
+    removeConnection(value, getValue(getUpNeighbour(variable)));
+    removeConnection(value, getValue(getRightNeighbour(variable)));
+    removeConnection(value, getValue(getDownNeighbour(variable)));
+    removeConnection(value, getValue(getLeftNeighbour(variable)));
+}
+
+void HarmoniousGraphConstraint::removeConnection(const IValue* value, const IValue* neighbour)
+{
+    if (value == nullptr || neighbour == nullptr)
+        return;
+
+    for (unsigned long int i = 0; i < connections.size(); ++i)
+    {
+        const IValue* first = connections[i]->getFirstValue();
+        const IValue* second = connections[i]->getSecondValue();
+
+        if ((value == first && neighbour == second) || (value == second && neighbour == first))
+        {
+            delete connections[i];
+            connections.erase(connections.begin() + i);
+            return;
+        }
+    }
+}
+
+const IVariable* HarmoniousGraphConstraint::getUpNeighbour(const IVariable* variable) const
+{
+    return (variable != nullptr && variable->getRow() > 0)
+           ? problem->getVariable(variable->getRow() - 1, variable->getColumn())
+           : nullptr;
+}
+
+const IVariable* HarmoniousGraphConstraint::getRightNeighbour(const IVariable* variable) const
+{
+    return (variable != nullptr && variable->getColumn() < problem->getWidth() - 1)
+           ? problem->getVariable(variable->getRow(), variable->getColumn() + 1)
+           : nullptr;
+}
+
+const IVariable* HarmoniousGraphConstraint::getDownNeighbour(const IVariable* variable) const
+{
+    return (variable != nullptr && variable->getRow() < problem->getWidth() - 1)
+           ? problem->getVariable(variable->getRow() + 1, variable->getColumn())
+           : nullptr;
+}
+
+const IVariable* HarmoniousGraphConstraint::getLeftNeighbour(const IVariable* variable) const
+{
+    return (variable != nullptr && variable->getColumn() > 0)
+           ? problem->getVariable(variable->getRow(), variable->getColumn() - 1)
+           : nullptr;
+}
+
+const IValue *HarmoniousGraphConstraint::getValue(const IVariable* variable) const
+{
+    return  variable == nullptr
+            ? nullptr
+            : variable->getValue();
+}
+
+void HarmoniousGraphConstraint::clearConnections()
+{
+    for (int i = 0; i < connections.size(); ++i)
+        delete connections[i];
+
+    connections.clear();
 }

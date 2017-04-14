@@ -28,7 +28,7 @@ std::vector<ISolution*>* Backtracking::solveProblem(IProblem* problem)
 
 void Backtracking::recursive(IProblem* problem, IConstraint* constraint)
 {
-    if (problem->isComplete() && (HarmoniousGraphConstraint(problem).checkConstraints()))
+    if (problem->isComplete())
     {
         solutions.push_back(new Solution(problem->deepCopy()));
         return;
@@ -50,8 +50,7 @@ void Backtracking::recursive(IProblem* problem, IConstraint* constraint)
         // TODO: checking constraints should be done for variable, which has row and col
         // TODO: should be option to reverse adding constraints
         // TODO: checking constraints should NOT affect repetition from the past
-//        if (constraint->checkConstraints(variable->getRow(), variable->getColumn()))
-        if ((HarmoniousGraphConstraint(problem).checkConstraints()))
+        if (constraint->updateConstraints(variable))
             recursive(problem, constraint);
         else
             problem->setVariableValue(variable, nullptr);
