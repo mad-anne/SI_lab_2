@@ -7,15 +7,15 @@
 #include "../header/Node.h"
 
 Node::Node(int row, int col) :
-    IVariable(),
-    row(row),
-    col(col)
-{
-}
+    IVariable(row, col)
+{}
 
 Node::~Node()
+{}
+
+void Node::setValue(const IValue* value)
 {
-    delete domain;
+    this->value = value;
 }
 
 const IValue* Node::getValue() const
@@ -23,14 +23,20 @@ const IValue* Node::getValue() const
     return value;
 }
 
+void Node::resetValue()
+{
+    this->value = nullptr;
+}
+
 const IDomain* Node::getDomain() const
 {
     return domain;
 }
 
-void Node::setValue(const IValue* value)
+void Node::addDomain(const IDomain* domain)
 {
-    this->value = value;
+    for (int i = 0; i < domain->getSize(); ++i)
+        this->domain->addValue(domain->getValue(i));
 }
 
 void Node::addValueToDomain(const IValue* value)
@@ -38,15 +44,9 @@ void Node::addValueToDomain(const IValue* value)
     domain->addValue(value);
 }
 
-void Node::resetValue()
+void Node::removeValueFromDomain(const IValue* value)
 {
-    this->value = nullptr;
-}
-
-void Node::addDomain(const IDomain* domain)
-{
-    for (int i = 0; i < domain->getDomainSize(); ++i)
-        this->domain->addValue(domain->getValue(i));
+    domain->removeValue(value);
 }
 
 const int Node::getRow() const

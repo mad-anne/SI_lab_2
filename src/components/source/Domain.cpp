@@ -17,6 +17,11 @@ void Domain::addValue(const IValue* value)
         values.push_back(value);
 }
 
+void Domain::removeValue(const IValue* value)
+{
+    values.erase(std::find(values.begin(), values.end(), value));
+}
+
 const IValue* Domain::getValue(int index) const
 {
     return index < values.size()
@@ -24,12 +29,12 @@ const IValue* Domain::getValue(int index) const
            : nullptr;
 }
 
-const unsigned long int Domain::getDomainSize() const
+const unsigned long int Domain::getSize() const
 {
     return values.size();
 }
 
-bool Domain::hasValue(const IValue* value)
+bool Domain::hasValue(const IValue* value) const
 {
     return std::find(values.begin(), values.end(), value) != values.end();
 }

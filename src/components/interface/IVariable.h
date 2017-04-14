@@ -12,22 +12,33 @@
 class IVariable
 {
     protected:
+        int row;
+        int col;
         const IValue* value;
         IDomain* domain;
 
     public:
-        IVariable() :
-            value(nullptr),
-            domain(new Domain())
-        {}
-        virtual ~IVariable() {}
+        IVariable(int row, int col)
+                : row(row),
+                  col(col),
+                  value(nullptr),
+                  domain(new Domain())
 
-        virtual const IValue* getValue() const = 0;
+        {}
+        virtual ~IVariable()
+        {
+            delete domain;
+        }
+
         virtual void setValue(const IValue*) = 0;
-        virtual const IDomain* getDomain() const = 0;
+        virtual const IValue* getValue() const = 0;
         virtual void resetValue() = 0;
-        virtual void addValueToDomain(const IValue*) = 0;
+
+        virtual const IDomain* getDomain() const = 0;
         virtual void addDomain(const IDomain*) = 0;
+        virtual void addValueToDomain(const IValue*) = 0;
+        virtual void removeValueFromDomain(const IValue*) = 0;
+
         virtual const int getRow() const = 0;
         virtual const int getColumn() const = 0;
 };

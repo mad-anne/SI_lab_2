@@ -14,11 +14,12 @@ class Domain : public IDomain
         ~Domain();
 
         void addValue(const IValue* value) override;
+        void removeValue(const IValue*) override;
         const IValue* getValue(int) const override;
-        const unsigned long int getDomainSize() const override;
+        const unsigned long int getSize() const override;
 
     private:
-        bool hasValue(const IValue*);
+        bool hasValue(const IValue*) const;
 };
 
 #endif //SI_LAB_2_DOMAIN_H

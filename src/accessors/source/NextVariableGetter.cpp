@@ -22,7 +22,7 @@ void NextVariableGetter::setProblem(const IProblem* problem)
     this->problem = problem;
 }
 
-const IProblem* NextVariableGetter::getProblem()
+const IProblem* NextVariableGetter::getProblem() const
 {
     return problem;
 }

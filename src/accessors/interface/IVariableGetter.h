@@ -24,7 +24,7 @@ class IVariableGetter
         virtual const IVariable* getNext() = 0;
     
         virtual void setProblem(const IProblem*) = 0;
-        virtual const IProblem* getProblem() = 0;
+        virtual const IProblem* getProblem() const = 0;
 };
 
 #endif //SI_LAB_2_IVARIABLEGETTER_H

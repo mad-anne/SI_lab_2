@@ -9,19 +9,18 @@
 
 class Node : public IVariable
 {
-    int row;
-    int col;
-
     public:
         Node(int, int);
         ~Node();
 
-        const IValue* getValue() const override;
-        const IDomain* getDomain() const override;
         void setValue(const IValue*) override;
-        void addValueToDomain(const IValue*) override;
+        const IValue* getValue() const override;
         void resetValue() override;
+
+        const IDomain* getDomain() const override;
         void addDomain(const IDomain*) override;
+        void addValueToDomain(const IValue*) override;
+        void removeValueFromDomain(const IValue*) override;
 
         const int getRow() const override;
         const int getColumn() const override;

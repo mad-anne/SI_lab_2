@@ -20,12 +20,13 @@ class IValueGetter
         IValueGetter(const IVariable* variable)
                 : variable(variable)
         {}
-    virtual ~IValueGetter() = default;
 
-    virtual const IValue* getNext() = 0;
+        virtual ~IValueGetter() = default;
 
-    virtual void setVariable(const IVariable*) = 0;
-    virtual const IVariable* getVariable() = 0;
+        virtual const IValue* getNext() = 0;
+
+        virtual void setVariable(const IVariable*) = 0;
+        virtual const IVariable* getVariable() const = 0;
 
 };
 

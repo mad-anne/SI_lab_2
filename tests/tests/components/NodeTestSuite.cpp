@@ -53,7 +53,7 @@ TEST_F(NodeTestSuite, returnsValueThatHasBeenSet)
 
 TEST_F(NodeTestSuite, domainIsEmptyAsDefault)
 {
-    ASSERT_EQ(sut->getDomain()->getDomainSize(), 0);
+    ASSERT_EQ(sut->getDomain()->getSize(), 0);
 }
 
 TEST_F(NodeTestSuite, domainConsistsOfValuesThatHasBeenAdded)
@@ -66,7 +66,7 @@ TEST_F(NodeTestSuite, domainConsistsOfValuesThatHasBeenAdded)
 
     const IDomain* domain = sut->getDomain();
 
-    ASSERT_EQ(domain->getDomainSize(), 2);
+    ASSERT_EQ(domain->getSize(), 2);
     ASSERT_EQ(domain->getValue(0), value1);
     ASSERT_EQ(domain->getValue(1), value2);
 
@@ -89,7 +89,7 @@ TEST_F(NodeTestSuite, copyValuesFromOtherDomain)
 
     ASSERT_NE(sut->getDomain(), domain);
 
-    ASSERT_EQ(domain->getDomainSize(), 2);
+    ASSERT_EQ(domain->getSize(), 2);
     ASSERT_EQ(sutDomain->getValue(0), value1);
     ASSERT_EQ(sutDomain->getValue(1), value2);
 

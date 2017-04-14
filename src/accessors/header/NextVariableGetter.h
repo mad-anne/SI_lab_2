@@ -16,7 +16,7 @@ class NextVariableGetter : public IVariableGetter
         const IVariable* getNext() override;
 
         void setProblem(const IProblem*) override;
-        const IProblem* getProblem() override;
+        const IProblem* getProblem() const override;
 
     private:
         const IVariable* findUnassignedVariable();

@@ -49,7 +49,7 @@ TEST_F(DomainTestSuite, returnsDomainSizeCorrectly)
     sut->addValue(value1);
     sut->addValue(value2);
 
-    ASSERT_EQ(sut->getDomainSize(), 2);
+    ASSERT_EQ(sut->getSize(), 2);
 
     delete value1;
     delete value2;
@@ -67,7 +67,7 @@ TEST_F(DomainTestSuite, cannotAddTwoTheSameValues)
     sut->addValue(value3);
     sut->addValue(value2);
 
-    ASSERT_EQ(sut->getDomainSize(), 3);
+    ASSERT_EQ(sut->getSize(), 3);
 
     delete value1;
     delete value2;

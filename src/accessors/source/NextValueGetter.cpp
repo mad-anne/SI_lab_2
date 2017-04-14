@@ -16,7 +16,7 @@ NextValueGetter::~NextValueGetter()
 
 const IValue* NextValueGetter::getNext()
 {
-    return currentIndex < domain->getDomainSize()
+    return currentIndex < domain->getSize()
            ? domain->getValue(currentIndex++)
            : nullptr;
 }
@@ -28,7 +28,7 @@ void NextValueGetter::setVariable(const IVariable* variable)
     currentIndex = 0;
 }
 
-const IVariable* NextValueGetter::getVariable()
+const IVariable* NextValueGetter::getVariable() const
 {
     return variable;
 }

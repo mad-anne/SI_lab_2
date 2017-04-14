@@ -16,7 +16,7 @@ class ColorTestSuite : public ::testing::Test
 };
 
 ColorTestSuite::ColorTestSuite() :
-    sut(new Color())
+    sut(new Color(0))
 { }
 
 ColorTestSuite::~ColorTestSuite()
@@ -24,32 +24,8 @@ ColorTestSuite::~ColorTestSuite()
     delete sut;
 }
 
-TEST_F(ColorTestSuite, setsValueToMinusOneAsDefault)
-{
-    ASSERT_EQ(sut->getValue(), -1);
-}
-
-TEST_F(ColorTestSuite, returnsValueThatHasBeenSet)
-{
-    int value = 6;
-    sut->setValue(value);
-
-    ASSERT_EQ(sut->getValue(), 6);
-}
-
-TEST_F(ColorTestSuite, resetsValueToMinusOneAsDefault)
-{
-    int value = 6;
-    sut->setValue(value);
-    sut->resetValue();
-
-    ASSERT_EQ(sut->getValue(), -1);
-}
-
 TEST_F(ColorTestSuite, returnsDeepCopyObject)
 {
-    int value = 6;
-    sut->setValue(value);
     IValue* copy = sut->deepCopy();
 
     ASSERT_NE(copy, sut);

@@ -20,8 +20,7 @@ class NextValueGetter : public IValueGetter
         const IValue* getNext() override;
 
         void setVariable(const IVariable*) override;
-        const IVariable *getVariable() override;
-
+        const IVariable* getVariable() const override;
 };
 
 
