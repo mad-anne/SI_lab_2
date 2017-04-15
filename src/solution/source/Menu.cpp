@@ -7,6 +7,7 @@
 #include <sstream>
 #include <factories/header/HarmoniousGraphFactory.h>
 #include "solution/header/Menu.h"
+#include <factories/header/BinaryGameFactory.h>
 
 Menu::Menu()
     : cspFactory(std::make_shared<CSPFactory>())
@@ -100,7 +101,14 @@ int Menu::getGraphSize() const
 
 int Menu::getBinarySize() const
 {
-    return getSizeFor("binary");
+    int size;
+
+    while ((size = getSizeFor("binary")) % 2 == 1)
+    {
+        std::cout << "Binary size must be even number." << std::endl;
+    }
+
+    return size;
 }
 
 int Menu::getNumberOfFilledFields(int size) const
@@ -146,7 +154,7 @@ int Menu::getSizeFor(std::string whatFor) const
 
 void Menu::printFirstTenSolutions(std::vector<ISolution*>* solutions) const
 {
-    for (int index = 0; index < 10; ++index)
+    for (int index = 0; index < 10 && index < solutions->size(); ++index)
         solutions->at(index)->print();
 }
 
@@ -163,9 +171,11 @@ void Menu::processHarmoniousGraphColoring() const
 void Menu::processBinaryGameSolving() const
 {
     std::cout << "You have chosen to solve binary game." << std::endl;
-    int size = getBinarySize();
-    int filledFields = getNumberOfFilledFields(size);
-    std::cout << "I'm sorry, it's not implemented yet." << std::endl;
+
+    int method = getSolvingMethod();
+    int resultType = getResultTypeOptions();
+
+    performBinaryGameSolving(method, resultType);
 }
 
 void Menu::printSolvingOptions() const
@@ -293,6 +303,8 @@ IValueGetter* Menu::getValueGetter() const
 
 void Menu::performHarmoniousGraphColoring(int method, int type) const
 {
+    clock_t startTime = 0;
+    clock_t endTime = 0;
     IProblemFactory* hgFactory = new HarmoniousGraphFactory(getGraphSize(), getVariableGetter(), getValueGetter());
 
     switch (method)
@@ -303,19 +315,25 @@ void Menu::performHarmoniousGraphColoring(int method, int type) const
             {
                 case 1:
                 {
+                    startTime = clock();
                     const ISolution* solution = cspFactory->getFirstSolutionByBacktracking(hgFactory);
+                    endTime = clock();
                     solution->print();
                     break;
                 }
                 case 2:
                 {
+                    startTime = clock();
                     long long int numberOfSolutions = cspFactory->getNumberOfSolutionsByBacktracking(hgFactory);
+                    endTime = clock();
                     std::cout << "Number of solutions is " << numberOfSolutions << "." << std::endl;
                     break;
                 }
                 case 3:
                 {
+                    startTime = clock();
                     std::vector<ISolution*>* solutions = cspFactory->getAllSolutionsByBacktracking(hgFactory);
+                    endTime = clock();
                     std::cout << "Printing first ten solutions:" << std::endl;
                     printFirstTenSolutions(solutions);
                     break;
@@ -334,19 +352,25 @@ void Menu::performHarmoniousGraphColoring(int method, int type) const
             switch (type) {
                 case 1:
                 {
+                    startTime = clock();
                     const ISolution* solution = cspFactory->getFirstSolutionByForwardChecking(hgFactory);
+                    endTime = clock();
                     solution->print();
                     break;
                 }
                 case 2:
                 {
+                    startTime = clock();
                     long long int numberOfSolutions = cspFactory->getNumberOfSolutionsByForwardChecking(hgFactory);
+                    endTime = clock();
                     std::cout << "Number of solutions is " << numberOfSolutions << "." << std::endl;
                     break;
                 }
                 case 3:
                 {
+                    startTime = clock();
                     std::vector<ISolution *> *solutions = cspFactory->getAllSolutionsByForwardChecking(hgFactory);
+                    endTime = clock();
                     std::cout << "Printing first ten solutions:" << std::endl;
                     printFirstTenSolutions(solutions);
                     break;
@@ -367,5 +391,105 @@ void Menu::performHarmoniousGraphColoring(int method, int type) const
         }
     }
 
+    printf("Time taken: %.100fms\n", (double) (endTime - startTime));
+
     delete hgFactory;
+}
+
+void Menu::performBinaryGameSolving(int method, int type) const
+{
+    clock_t startTime = 0;
+    clock_t endTime = 0;
+
+    int size = getBinarySize();
+    int filledFields = getNumberOfFilledFields(size);
+    IProblemFactory* bgFactory = new BinaryGameFactory(size, filledFields, getVariableGetter(), getValueGetter());
+
+    switch (method)
+    {
+        case 1:
+        {
+            switch (type)
+            {
+                case 1:
+                {
+                    startTime = clock();
+                    const ISolution* solution = cspFactory->getFirstSolutionByBacktracking(bgFactory);
+                    endTime = clock();
+                    solution->print();
+                    break;
+                }
+                case 2:
+                {
+                    startTime = clock();
+                    long long int numberOfSolutions = cspFactory->getNumberOfSolutionsByBacktracking(bgFactory);
+                    endTime = clock();
+                    std::cout << "Number of solutions is " << numberOfSolutions << "." << std::endl;
+                    break;
+                }
+                case 3:
+                {
+                    startTime = clock();
+                    std::vector<ISolution*>* solutions = cspFactory->getAllSolutionsByBacktracking(bgFactory);
+                    endTime = clock();
+                    std::cout << "Printing first ten solutions:" << std::endl;
+                    printFirstTenSolutions(solutions);
+                    break;
+                }
+                default:
+                {
+                    std::cout << "Ooops! Something went wrong." << std::endl;
+                    break;
+                }
+
+            }
+            break;
+        }
+
+        case 2: {
+            switch (type) {
+                case 1:
+                {
+                    startTime = clock();
+                    const ISolution* solution = cspFactory->getFirstSolutionByForwardChecking(bgFactory);
+                    endTime = clock();
+                    solution->print();
+                    break;
+                }
+                case 2:
+                {
+                    startTime = clock();
+                    long long int numberOfSolutions = cspFactory->getNumberOfSolutionsByForwardChecking(bgFactory);
+                    endTime = clock();
+                    std::cout << "Number of solutions is " << numberOfSolutions << "." << std::endl;
+                    break;
+                }
+                case 3:
+                {
+                    startTime = clock();
+                    std::vector<ISolution *> *solutions = cspFactory->getAllSolutionsByForwardChecking(bgFactory);
+                    endTime = clock();
+                    std::cout << "Printing first ten solutions:" << std::endl;
+                    printFirstTenSolutions(solutions);
+                    break;
+                }
+                default:
+                {
+                    std::cout << "Ooops! Something went wrong." << std::endl;
+                    break;
+                }
+            }
+            break;
+        }
+
+        default:
+        {
+            std::cout << "Ooops! Something went wrong." << std::endl;
+            break;
+        }
+    }
+
+    printf("Time taken: %.100fms\n", (double) (endTime - startTime));
+
+    delete bgFactory;
 }

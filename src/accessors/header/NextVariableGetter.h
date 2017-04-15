@@ -13,13 +13,13 @@ class NextVariableGetter : public IVariableGetter
         NextVariableGetter(const IProblem*);
         ~NextVariableGetter();
 
-        const IVariable* getNext() override;
+        IVariable* getNext() override;
 
         void setProblem(const IProblem*) override;
         const IProblem* getProblem() const override;
 
     private:
-        const IVariable* findUnassignedVariable();
+        IVariable* findUnassignedVariable();
 };
 
 #endif //SI_LAB_2_NEXTVARIABLEGETTER_H

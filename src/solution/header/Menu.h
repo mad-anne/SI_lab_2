@@ -47,7 +47,8 @@ class Menu : public IMenu
         IVariableGetter* getVariableGetter() const;
         IValueGetter* getValueGetter() const;
 
-    void performHarmoniousGraphColoring(int method, int type) const;
+        void performHarmoniousGraphColoring(int method, int type) const;
+        void performBinaryGameSolving(int method, int type) const;
 };
 
 

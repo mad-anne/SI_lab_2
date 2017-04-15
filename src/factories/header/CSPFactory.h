@@ -21,8 +21,6 @@ class CSPFactory : public ICSPFactory
 
         std::vector<ISolution*>* getAllSolutionsByBacktracking(IProblemFactory*) const override;
         std::vector<ISolution*>* getAllSolutionsByForwardChecking(IProblemFactory*) const override;
-
-
 };
 
 #endif //SI_LAB_2_CSPFACTORY_H

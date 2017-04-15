@@ -16,24 +16,16 @@ class IProblem
 
     public:
         IProblem(int width)
-        {
-            this->width = width;
-            domain = new MainDomain();
-        }
+            : width(width),
+              domain(new MainDomain())
+        {}
 
         virtual ~IProblem()
         {
             delete domain;
         }
 
-        virtual IProblem* deepCopy() const = 0;
-        virtual bool isComplete() const = 0;
-        virtual IVariable* getUnassignedVariable() const = 0;
-        virtual bool checkConstraints() const = 0;
-
-        virtual const IVariable* getVariable(int row, int column) const = 0;
-        virtual const IVariable* setVariableValue(int row, int column, const IValue* value) = 0;
-        virtual const IValue* setVariableValue(const IVariable*, const IValue*) = 0;
+        virtual IVariable* getVariable(int row, int column) const = 0;
 
         virtual const int getWidth() const
         {

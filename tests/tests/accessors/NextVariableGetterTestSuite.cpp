@@ -36,24 +36,24 @@ void NextVariableGetterTestSuite::completeProblem()
 {
     const IDomain* domain = problem->getDomain();
 
-    problem->setVariableValue(0, 0, domain->getValue(0));
-    problem->setVariableValue(0, 1, domain->getValue(1));
-    problem->setVariableValue(0, 2, domain->getValue(2));
-    problem->setVariableValue(1, 0, domain->getValue(3));
-    problem->setVariableValue(1, 1, domain->getValue(4));
-    problem->setVariableValue(1, 2, domain->getValue(5));
-    problem->setVariableValue(2, 0, domain->getValue(6));
-    problem->setVariableValue(2, 1, domain->getValue(2));
-    problem->setVariableValue(2, 2, domain->getValue(0));
+    problem->getVariable(0, 0)->setValue(domain->getValue(0));
+    problem->getVariable(0, 1)->setValue(domain->getValue(1));
+    problem->getVariable(0, 2)->setValue(domain->getValue(2));
+    problem->getVariable(1, 0)->setValue(domain->getValue(3));
+    problem->getVariable(1, 1)->setValue(domain->getValue(4));
+    problem->getVariable(1, 2)->setValue(domain->getValue(5));
+    problem->getVariable(2, 0)->setValue(domain->getValue(6));
+    problem->getVariable(2, 1)->setValue(domain->getValue(2));
+    problem->getVariable(2, 2)->setValue(domain->getValue(0));
 }
 
 void NextVariableGetterTestSuite::completeFirstRow()
 {
     const IDomain* domain = problem->getDomain();
 
-    problem->setVariableValue(0, 0, domain->getValue(0));
-    problem->setVariableValue(0, 1, domain->getValue(1));
-    problem->setVariableValue(0, 2, domain->getValue(2));
+    problem->getVariable(0, 0)->setValue(domain->getValue(0));
+    problem->getVariable(0, 1)->setValue(domain->getValue(1));
+    problem->getVariable(0, 2)->setValue(domain->getValue(2));
 }
 
 TEST_F(NextVariableGetterTestSuite, canSetProblem)
@@ -81,6 +81,5 @@ TEST_F(NextVariableGetterTestSuite, returnsFirstVariableInSecondRowIfFirstRowIsC
 TEST_F(NextVariableGetterTestSuite, returnsNullptrIfProblemIsCompleted)
 {
     completeProblem();
-
     ASSERT_EQ(sut->getNext(), nullptr);
 }

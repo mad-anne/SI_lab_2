@@ -23,7 +23,7 @@ class IConstraint
         virtual void undoConstraints(const IVariable*) = 0;
 
         virtual void setProblem(IProblem*) = 0;
-        virtual const IProblem* getProblem(IProblem*) const = 0;
+        virtual const IProblem* getProblem() const = 0;
 };
 
 #endif //SI_LAB_2_ICONSTRAINT_H

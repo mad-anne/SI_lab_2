@@ -21,7 +21,7 @@ class IVariableGetter
         {}
         virtual ~IVariableGetter() = default;
 
-        virtual const IVariable* getNext() = 0;
+        virtual IVariable* getNext() = 0;
     
         virtual void setProblem(const IProblem*) = 0;
         virtual const IProblem* getProblem() const = 0;

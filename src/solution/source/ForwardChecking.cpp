@@ -47,7 +47,7 @@ std::vector<ISolution*>* ForwardChecking::getAllSolutions(IProblemFactory* probl
 
 void ForwardChecking::recursive()
 {
-    const IVariable* variable = varGetter->getNext();
+    IVariable* variable = varGetter->getNext();
 
     if (variable == nullptr)
     {
@@ -60,15 +60,17 @@ void ForwardChecking::recursive()
 
     while ((value = valueGetter.getNext()) != nullptr)
     {
-        problem->setVariableValue(variable, value);
-
+        variable->setValue(value);
+        // TODO: EVERY assign should be correct (?), cause domains are corrrect
+        // TODO: after assigning a value, delete from neighbours domains this value, also watching on constraints (delete value if it causes to exists wrong connection)
+        // TODO: must implements inversing putting constraints OMG
         if (constraint->updateConstraints(variable))
         {
             recursive();
             constraint->undoConstraints(variable);
-            problem->setVariableValue(variable, nullptr);
+            variable->setValue(nullptr);
         }
         else
-            problem->setVariableValue(variable, nullptr);
+            variable->setValue(nullptr);
     }
 }

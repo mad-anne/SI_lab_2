@@ -42,10 +42,10 @@ TEST_F(HarmoniousGraphConstraintTestSuite, returnsTrueWhenNeighboursHaveDifferen
     IValue* value1 = new Color(1);
     IValue* value2 = new Color(2);
 
-    problem->setVariableValue(0, 0, value1);
+    problem->getVariable(0, 0)->setValue(value1);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 0)));
 
-    problem->setVariableValue(0, 1, value2);
+    problem->getVariable(0, 1)->setValue(value2);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 1)));
 
     delete value1;
@@ -56,10 +56,10 @@ TEST_F(HarmoniousGraphConstraintTestSuite, returnsFalseIfNeighboursHaveTheSameVa
 {
     IValue* value = new Color(1);
 
-    problem->setVariableValue(0, 0, value);
+    problem->getVariable(0, 0)->setValue(value);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 0)));
 
-    problem->setVariableValue(0, 1, value);
+    problem->getVariable(0, 1)->setValue(value);
     ASSERT_FALSE(sut->updateConstraints(problem->getVariable(0, 1)));
 
     delete value;
@@ -70,13 +70,13 @@ TEST_F(HarmoniousGraphConstraintTestSuite, returnsFalseIfAlreadyExistsTheSameCon
     IValue* value1 = new Color(1);
     IValue* value2 = new Color(2);
 
-    problem->setVariableValue(0, 0, value1);
+    problem->getVariable(0, 0)->setValue(value1);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 0)));
 
-    problem->setVariableValue(0, 1, value2);
+    problem->getVariable(0, 1)->setValue(value2);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 1)));
 
-    problem->setVariableValue(0, 2, value1);
+    problem->getVariable(0, 2)->setValue(value1);
     ASSERT_FALSE(sut->updateConstraints(problem->getVariable(0, 2)));
 
     delete value1;
@@ -88,13 +88,13 @@ TEST_F(HarmoniousGraphConstraintTestSuite, returnsFalseIfAssigningAgainTheSameVa
     IValue* value1 = new Color(1);
     IValue* value2 = new Color(2);
 
-    problem->setVariableValue(0, 0, value1);
+    problem->getVariable(0, 0)->setValue(value1);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 0)));
 
-    problem->setVariableValue(0, 1, value2);
+    problem->getVariable(0, 1)->setValue(value2);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 1)));
 
-    problem->setVariableValue(0, 1, value2);
+    problem->getVariable(0, 2)->setValue(value2);
     ASSERT_FALSE(sut->updateConstraints(problem->getVariable(0, 1)));
 
     delete value1;
@@ -106,15 +106,15 @@ TEST_F(HarmoniousGraphConstraintTestSuite, returnsTrueIfAssigningAgainTheSameVal
     IValue* value1 = new Color(1);
     IValue* value2 = new Color(2);
 
-    problem->setVariableValue(0, 0, value1);
+    problem->getVariable(0, 0)->setValue(value1);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 0)));
 
-    problem->setVariableValue(0, 1, value2);
+    problem->getVariable(0, 1)->setValue(value2);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 1)));
 
     sut->undoConstraints(problem->getVariable(0, 1));
 
-    problem->setVariableValue(0, 1, value2);
+    problem->getVariable(0, 1)->setValue(value2);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 1)));
 
     delete value1;

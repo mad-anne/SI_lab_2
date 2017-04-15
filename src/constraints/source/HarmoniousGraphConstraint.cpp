@@ -35,7 +35,7 @@ void HarmoniousGraphConstraint::setProblem(IProblem* problem)
     this->problem = problem;
 }
 
-const IProblem* HarmoniousGraphConstraint::getProblem(IProblem* problem) const
+const IProblem* HarmoniousGraphConstraint::getProblem() const
 {
     return problem;
 }

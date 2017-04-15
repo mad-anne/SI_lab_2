@@ -43,13 +43,14 @@ std::vector<ISolution*>* Backtracking::getAllSolutions(IProblemFactory* problemF
     clearSolutions();
     setAttributes(problemFactory);
     recursiveFindAll();
+
     return & solutions;
 }
 
 ISolution* Backtracking::recursive()
 {
     ISolution* solution = nullptr;
-    const IVariable* variable = varGetter->getNext();
+    IVariable* variable = varGetter->getNext();
 
     if (variable == nullptr)
         return new Solution(problem);
@@ -59,20 +60,20 @@ ISolution* Backtracking::recursive()
 
     while ((value = valueGetter.getNext()) != nullptr)
     {
-        problem->setVariableValue(variable, value);
+        variable->setValue(value);
 
         if (constraint->updateConstraints(variable))
         {
             if ((solution = recursive()) == nullptr)
             {
                 constraint->undoConstraints(variable);
-                problem->setVariableValue(variable, nullptr);
+                variable->setValue(nullptr);
             }
             else
                 break;
         }
         else
-            problem->setVariableValue(variable, nullptr);
+            variable->setValue(nullptr);
     }
 
     return solution;
@@ -80,7 +81,7 @@ ISolution* Backtracking::recursive()
 
 void Backtracking::recursiveFindAll()
 {
-    const IVariable *variable = varGetter->getNext();
+    IVariable* variable = varGetter->getNext();
 
     if (variable == nullptr)
     {
@@ -93,22 +94,22 @@ void Backtracking::recursiveFindAll()
 
     while ((value = valueGetter.getNext()) != nullptr)
     {
-        problem->setVariableValue(variable, value);
+        variable->setValue(value);
 
         if (constraint->updateConstraints(variable))
         {
-            recursive();
+            recursiveFindAll();
             constraint->undoConstraints(variable);
-            problem->setVariableValue(variable, nullptr);
+            variable->setValue(nullptr);
         }
         else
-            problem->setVariableValue(variable, nullptr);
+            variable->setValue(nullptr);
     }
 }
 
 void Backtracking::recursiveFindNumberOfAll()
 {
-    const IVariable* variable = varGetter->getNext();
+    IVariable* variable = varGetter->getNext();
 
     if (variable == nullptr)
     {
@@ -121,14 +122,14 @@ void Backtracking::recursiveFindNumberOfAll()
 
     while ((value = valueGetter.getNext()) != nullptr)
     {
-        problem->setVariableValue(variable, value);
+        variable->setValue(value);
 
         if (constraint->updateConstraints(variable))
         {
             recursiveFindNumberOfAll();
             constraint->undoConstraints(variable);
-            problem->setVariableValue(variable, nullptr);
+            variable->setValue(nullptr);
         } else
-            problem->setVariableValue(variable, nullptr);
+            variable->setValue(nullptr);
     }
 }

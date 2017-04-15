@@ -12,7 +12,7 @@ NextVariableGetter::NextVariableGetter(const IProblem* problem)
 NextVariableGetter::~NextVariableGetter()
 {}
 
-const IVariable* NextVariableGetter::getNext()
+IVariable* NextVariableGetter::getNext()
 {
     return findUnassignedVariable();
 }
@@ -27,9 +27,9 @@ const IProblem* NextVariableGetter::getProblem() const
     return problem;
 }
 
-const IVariable* NextVariableGetter::findUnassignedVariable()
+IVariable* NextVariableGetter::findUnassignedVariable()
 {
-    const IVariable* unassignedVar = nullptr;
+    IVariable* unassignedVar = nullptr;
     int width = problem->getWidth();
 
     for (int row = 0; unassignedVar == nullptr && row < width; ++row)

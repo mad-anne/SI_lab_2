@@ -19,11 +19,11 @@ class HarmoniousGraphConstraint : public IConstraint
         HarmoniousGraphConstraint(IProblem*);
         ~HarmoniousGraphConstraint();
 
-        const bool updateConstraints(const IVariable *variable) override;
-        void undoConstraints(const IVariable *variable) override;
+        const bool updateConstraints(const IVariable*) override;
+        void undoConstraints(const IVariable*) override;
 
         void setProblem(IProblem*) override;
-        const IProblem* getProblem(IProblem*) const override;
+        const IProblem* getProblem() const override;
 
     private:
         const bool checkConstraints(const IVariable*) const;
