@@ -1,5 +1,5 @@
 //
-// Created by Dom on 2017-04-15.
+// Created by Anna Siwik on 2017-04-15.
 //
 
 #include <problems/header/HarmoniousGraph.h>
@@ -8,13 +8,23 @@
 #include <accessors/header/NextValueGetter.h>
 #include "factories/header/HarmoniousGraphFactory.h"
 
-HarmoniousGraphFactory::HarmoniousGraphFactory(int width)
-
+HarmoniousGraphFactory::HarmoniousGraphFactory(int width, IVariableGetter* variableGetter, IValueGetter* valueGetter)
 {
     problem = new HarmoniousGraph(width);
     constraint = new HarmoniousGraphConstraint(problem);
-    varGetter = new NextVariableGetter(problem);
-    valGetter = new NextValueGetter(nullptr);
+
+    if (variableGetter != nullptr)
+    {
+        variableGetter->setProblem(problem);
+        varGetter = variableGetter;
+    }
+    else
+        varGetter = new NextVariableGetter(problem);
+
+    if (valGetter != nullptr)
+        valGetter = valueGetter;
+    else
+        valGetter = new NextValueGetter(nullptr);
 }
 
 HarmoniousGraphFactory::~HarmoniousGraphFactory()

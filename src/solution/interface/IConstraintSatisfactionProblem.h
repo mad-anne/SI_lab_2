@@ -20,13 +20,15 @@ class IConstraintSatisfactionProblem
         IValueGetter* valGetter;
 
         std::vector<ISolution*> solutions;
+        int totalNumberOfSolutions;
 
     public:
         IConstraintSatisfactionProblem() :
             problem(nullptr),
             constraint(nullptr),
             varGetter(nullptr),
-            valGetter(nullptr)
+            valGetter(nullptr),
+            totalNumberOfSolutions(0)
         {}
         virtual ~IConstraintSatisfactionProblem()
         {
@@ -34,7 +36,7 @@ class IConstraintSatisfactionProblem
         }
 
         virtual const ISolution* getFirstSolution(IProblemFactory*) = 0;
-        virtual int getNumberOfSolutions(IProblemFactory*) = 0;
+        virtual long long int getNumberOfSolutions(IProblemFactory*) = 0;
         virtual std::vector<ISolution*>* getAllSolutions(IProblemFactory*) = 0;
 
     protected:
@@ -47,6 +49,8 @@ class IConstraintSatisfactionProblem
                 delete *it;
                 it = solutions.erase(it);
             }
+
+            totalNumberOfSolutions = 0;
         }
 };
 

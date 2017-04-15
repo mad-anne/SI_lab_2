@@ -16,11 +16,13 @@ class Backtracking : public IConstraintSatisfactionProblem
         virtual ~Backtracking();
 
         virtual const ISolution* getFirstSolution(IProblemFactory*) override;
-        virtual int getNumberOfSolutions(IProblemFactory*) override;
+        virtual long long int getNumberOfSolutions(IProblemFactory*) override;
         virtual std::vector<ISolution*>* getAllSolutions(IProblemFactory*) override;
 
     private:
-        void recursive();
+        ISolution* recursive();
+        void recursiveFindAll();
+        void recursiveFindNumberOfAll();
         void setAttributes(IProblemFactory*);
 };
 

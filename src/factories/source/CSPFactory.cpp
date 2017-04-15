@@ -22,56 +22,25 @@ const ISolution* CSPFactory::getFirstSolutionByBacktracking(IProblemFactory* pro
 
 const ISolution* CSPFactory::getFirstSolutionByForwardChecking(IProblemFactory* problemFactory) const
 {
-//   TODO: forwardChecking->getSolution(problem, varGetter, valGetter);
-    return nullptr;
+    return forwardChecking->getFirstSolution(problemFactory);
 }
 
-int CSPFactory::getNumberOfSolutionsByBacktracking(IProblemFactory* problemFactory) const
+long long int CSPFactory::getNumberOfSolutionsByBacktracking(IProblemFactory* problemFactory) const
 {
-    return 0;
+    return backtracking->getNumberOfSolutions(problemFactory);
 }
 
-int CSPFactory::getNumberOfSolutionsByForwardChecking(IProblemFactory* problemFactory) const
+long long int CSPFactory::getNumberOfSolutionsByForwardChecking(IProblemFactory* problemFactory) const
 {
-    return 0;
+    return forwardChecking->getNumberOfSolutions(problemFactory);
 }
 
 std::vector<ISolution*>* CSPFactory::getAllSolutionsByBacktracking(IProblemFactory* problemFactory) const
 {
-//   TODO: backtracking->getAllSolutions(problem, varGetter, valGetter);
-    return nullptr;
+    return backtracking->getAllSolutions(problemFactory);
 }
 
 std::vector<ISolution*>* CSPFactory::getAllSolutionsByForwardChecking(IProblemFactory* problemFactory) const
 {
-//   TODO: forwardChecking->getAllSolutions(problem, varGetter, valGetter);
-    return nullptr;
-}
-
-void CSPFactory::setVariableGetter(IVariableGetter* getter)
-{
-    if (varGetter != nullptr)
-        delete varGetter;
-    varGetter = getter;
-}
-
-void CSPFactory::setValueGetter(IValueGetter* getter)
-{
-    if (valGetter != nullptr)
-        delete valGetter;
-    valGetter = getter;
-}
-
-void CSPFactory::setDefaultVariableGetter()
-{
-    if (varGetter != nullptr)
-        delete varGetter;
-    varGetter = new NextVariableGetter(nullptr);
-}
-
-void CSPFactory::setDefaultValueGetter()
-{
-    if (valGetter != nullptr)
-        delete valGetter;
-    valGetter = new NextValueGetter(nullptr);
+    return forwardChecking->getAllSolutions(problemFactory);
 }

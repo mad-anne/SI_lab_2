@@ -11,7 +11,7 @@
 class HarmoniousGraphFactory : public IProblemFactory
 {
     public:
-        HarmoniousGraphFactory(int width);
+        HarmoniousGraphFactory(int width, IVariableGetter*, IValueGetter*);
         ~HarmoniousGraphFactory() override;
 
         IProblem* getProblem() const override;

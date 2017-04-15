@@ -1,5 +1,5 @@
 //
-// Created by Dom on 2017-04-15.
+// Created by Anna Siwik on 2017-04-15.
 //
 
 #ifndef SI_LAB_2_IPROBLEMFACTORY_H
