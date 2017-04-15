@@ -489,7 +489,7 @@ void Menu::performBinaryGameSolving(int method, int type) const
         }
     }
 
-    printf("Time taken: %.100fms\n", (double) (endTime - startTime));
+    std::cout<< "Time taken: " << (endTime - startTime) << std::endl;
 
     delete bgFactory;
 }
