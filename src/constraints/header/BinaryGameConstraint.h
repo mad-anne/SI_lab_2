@@ -34,6 +34,10 @@ class BinaryGameConstraint : public IConstraint
 
         bool existsRow(const IRow*) const;
         bool existsColumn(const IRow*) const;
+
+    void removeRow(IRow *pRow);
+
+    void removeColumn(IRow *pRow);
 };
 
 

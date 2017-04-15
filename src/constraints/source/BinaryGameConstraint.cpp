@@ -4,7 +4,6 @@
 
 #include <constraints/header/Row.h>
 #include <constraints/header/Column.h>
-#include <algorithm>
 #include "constraints/header/BinaryGameConstraint.h"
 
 BinaryGameConstraint::BinaryGameConstraint(IProblem* problem) :
@@ -29,9 +28,13 @@ const bool BinaryGameConstraint::updateConstraints(const IVariable* variable)
     {
         if (row->isCompleted())
             rows.push_back(row);
+        else
+            delete row;
 
         if (col->isCompleted())
             columns.push_back(col);
+        else
+            delete col;
 
         return true;
     }
@@ -44,7 +47,16 @@ const bool BinaryGameConstraint::updateConstraints(const IVariable* variable)
 }
 
 void BinaryGameConstraint::undoConstraints(const IVariable* variable)
-{}
+{
+    IRow* row = new Row(problem, variable);
+    IRow* col = new Column(problem, variable);
+
+    removeRow(row);
+    removeColumn(col);
+
+    delete row;
+    delete col;
+}
 
 bool BinaryGameConstraint::checkConstraints(const IRow* row, const IRow* col) const
 {
@@ -125,4 +137,34 @@ bool BinaryGameConstraint::existsColumn(const IRow* col) const
             return true;
 
     return false;
+}
+
+void BinaryGameConstraint::removeRow(IRow* row)
+{
+    std::vector<IRow*>::const_iterator it;
+
+    for (it = rows.begin(); it != rows.end(); ++it)
+    {
+        if (row->compareWith(*it))
+        {
+            delete *it;
+            it = rows.erase(it);
+            return;
+        }
+    }
+}
+
+void BinaryGameConstraint::removeColumn(IRow* col)
+{
+    std::vector<IRow*>::const_iterator it;
+
+    for (it = columns.begin(); it != columns.end(); ++it)
+    {
+        if (col->compareWith(*it))
+        {
+            delete *it;
+            it = columns.erase(it);
+            return;
+        }
+    }
 }
