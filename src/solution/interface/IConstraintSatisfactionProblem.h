@@ -9,39 +9,44 @@
 #include <memory>
 #include "ISolution.h"
 #include "../../problems/interface/IProblem.h"
+#include "../../factories/interface/IProblemFactory.h"
 
 class IConstraintSatisfactionProblem
 {
     protected:
         IProblem* problem;
+        IConstraint* constraint;
+        IVariableGetter* varGetter;
+        IValueGetter* valGetter;
+
         std::vector<ISolution*> solutions;
 
     public:
-        IConstraintSatisfactionProblem()
-                : problem(nullptr)
+        IConstraintSatisfactionProblem() :
+            problem(nullptr),
+            constraint(nullptr),
+            varGetter(nullptr),
+            valGetter(nullptr)
         {}
-
         virtual ~IConstraintSatisfactionProblem()
         {
-            clearProblem();
             clearSolutions();
         }
 
-        virtual std::vector<ISolution*>* solveProblem(IProblem*) = 0;
+        virtual const ISolution* getFirstSolution(IProblemFactory*) = 0;
+        virtual int getNumberOfSolutions(IProblemFactory*) = 0;
+        virtual std::vector<ISolution*>* getAllSolutions(IProblemFactory*) = 0;
 
-    private:
-        void clearSolutions() // TODO: clearSolutions after each algorithm performance
+    protected:
+        void clearSolutions()
         {
-            for (int index = 0; index < solutions.size(); ++index)
-                delete solutions[index];
+            std::vector<ISolution*>::const_iterator it = solutions.begin();
 
-            solutions.clear();
-        }
-
-        void clearProblem()
-        {
-            if (problem != nullptr)
-                delete problem;
+            while (it != solutions.end())
+            {
+                delete *it;
+                it = solutions.erase(it);
+            }
         }
 };
 

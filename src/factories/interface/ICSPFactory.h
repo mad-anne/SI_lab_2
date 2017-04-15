@@ -11,7 +11,7 @@
 #include <solution/header/ForwardChecking.h>
 #include <accessors/header/NextVariableGetter.h>
 #include <accessors/header/NextValueGetter.h>
-#include "IConstraintSatisfactionProblem.h"
+#include "solution/interface/IConstraintSatisfactionProblem.h"
 
 class ICSPFactory
 {
@@ -19,13 +19,13 @@ class ICSPFactory
         IConstraintSatisfactionProblem* backtracking;
         IConstraintSatisfactionProblem* forwardChecking;
 
-        IVariableGetter* varGetter; //defaultowo powinien być nextVarGetter
-        IValueGetter* valGetter; //defaultowo nextvalgetter
+        IVariableGetter* varGetter;
+        IValueGetter* valGetter;
 
     public:
         ICSPFactory()
                 : backtracking(new Backtracking()),
-                  forwardChecking(new ForwardChecking()),
+                  forwardChecking(nullptr),
                   varGetter(new NextVariableGetter(nullptr)),
                   valGetter(new NextValueGetter(nullptr))
         {}
@@ -42,12 +42,14 @@ class ICSPFactory
             delete forwardChecking;
         };
 
-        virtual ISolution* getFirstSolutionByBacktracking(IProblem*) const = 0;
-        virtual ISolution* getFirstSolutionByForwardChecking(IProblem*) const = 0;
+        virtual const ISolution* getFirstSolutionByBacktracking(IProblemFactory*) const = 0;
+        virtual const ISolution* getFirstSolutionByForwardChecking(IProblemFactory*) const = 0;
 
-    //TODO: po każdym algorytmie należy usuwać dane!
-        virtual std::vector<ISolution*>* getAllSolutionsByBacktracking(IProblem*) const = 0;
-        virtual std::vector<ISolution*>* getAllSolutionsByForwardChecking(IProblem*) const = 0;
+        virtual int getNumberOfSolutionsByBacktracking(IProblemFactory*) const = 0;
+        virtual int getNumberOfSolutionsByForwardChecking(IProblemFactory*) const = 0;
+
+        virtual std::vector<ISolution*>* getAllSolutionsByBacktracking(IProblemFactory*) const = 0;
+        virtual std::vector<ISolution*>* getAllSolutionsByForwardChecking(IProblemFactory*) const = 0;
 
         virtual void setVariableGetter(IVariableGetter*) = 0;
         virtual void setValueGetter(IValueGetter*) = 0;

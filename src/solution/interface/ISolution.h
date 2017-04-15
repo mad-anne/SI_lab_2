@@ -26,8 +26,7 @@ class ISolution
             }
         }
 
-        virtual void printHarmoniousGraph() = 0;
-        virtual void printBinaryGame() = 0;
+        virtual void print() const = 0;
 };
 
 #endif //SI_LAB_2_ISOLUTION_H

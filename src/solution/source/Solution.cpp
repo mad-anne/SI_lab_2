@@ -14,7 +14,7 @@ Solution::Solution(IProblem* solution)
 Solution::~Solution()
 {}
 
-void Solution::printHarmoniousGraph()
+void Solution::print() const
 {
     if (solution == nullptr)
         std::cout << "Solution is empty." << std::endl;
@@ -29,11 +29,6 @@ void Solution::printHarmoniousGraph()
 
     std::cout << std::endl << std::endl;
 
-}
-
-void Solution::printBinaryGame()
-{
-    std::cout << "Hi! I'm printing binary game solution." << std::endl;
 }
 
 void Solution::readProblem(IProblem* problem)

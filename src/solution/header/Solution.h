@@ -13,8 +13,7 @@ class Solution : public ISolution
         Solution(IProblem*);
         ~Solution();
 
-        void printHarmoniousGraph() override;
-        void printBinaryGame() override;
+        void print() const override;
 
     private:
         void readProblem(IProblem*);

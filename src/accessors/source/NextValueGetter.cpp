@@ -8,7 +8,8 @@ NextValueGetter::NextValueGetter(const IVariable* variable)
         : IValueGetter(variable),
           currentIndex(0)
 {
-    this->domain = variable->getDomain();
+    if (variable != nullptr)
+        this->domain = variable->getDomain();
 }
 
 NextValueGetter::~NextValueGetter()

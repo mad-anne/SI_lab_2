@@ -2,15 +2,13 @@
 #include <memory>
 #include <sstream>
 #include <algorithm>
-#include "src/problems/interface/IProblem.h"
-#include "src/solution/header/Backtracking.h"
-#include "src/solution/header/ForwardChecking.h"
-#include "src/problems/header/HarmoniousGraph.h"
+#include <factories/header/CSPFactory.h>
+#include <problems/header/HarmoniousGraph.h>
+#include <factories/header/HarmoniousGraphFactory.h>
 
 void runMenu();
 int getNumberFromInput(std::string choice);
-void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
-                   std::shared_ptr<IConstraintSatisfactionProblem> forwardChecking,
+void processChoice(std::shared_ptr<ICSPFactory> cspFactory,
                    int choice);
 
 int getGraphSize();
@@ -27,8 +25,7 @@ int main()
 
 void runMenu()
 {
-    std::shared_ptr<IConstraintSatisfactionProblem> backtracking = std::make_shared<Backtracking>();
-    std::shared_ptr<IConstraintSatisfactionProblem> forwardChecking = std::make_shared<ForwardChecking>();
+    std::shared_ptr<ICSPFactory> csp = std::make_shared<CSPFactory>();
 
     std::cout << "Hi! Welcome in program that solves Constraint Satisfaction Problem." << std::endl;
     std::cout << "It can solve Harmonious Graph Coloring and Binary Game." << std::endl;
@@ -47,7 +44,7 @@ void runMenu()
 
         getline(std::cin, choice);
         numberChoice = getNumberFromInput(choice);
-        processChoice(backtracking, forwardChecking, numberChoice);
+        processChoice(csp, numberChoice);
     } while (numberChoice);
 
     std::cout << "\nThank you for using my program!" << std::endl;
@@ -63,9 +60,7 @@ int getNumberFromInput(std::string choice)
            : -1;
 }
 
-void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
-                   std::shared_ptr<IConstraintSatisfactionProblem> forwardChecking,
-                   int choice)
+void processChoice(std::shared_ptr<ICSPFactory> cspFactory, int choice)
 {
     std::cout << std::endl;
 
@@ -80,15 +75,10 @@ void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
         {
             std::cout << "You have chosen to solve harmonious graph coloring." << std::endl;
             int size = getGraphSize();
-            IProblem* graph = new HarmoniousGraph(size);
-
-            // PAMIETAJ O USUNIECIU GRAFU!!! POD WARUNKIEM, ZE NOWE ROZWIAZANIA BEDA TWORZONE PRZEZ KOPIOWANIE I NIE TRAFIA DO SOLUTIONS
-            std::vector<ISolution*>* backtrackingSolutions = backtracking->solveProblem(graph);
-            printAllSolutions(backtrackingSolutions);
-            std::cout << "Number of solutions: " << backtrackingSolutions->size() << std::endl;
-
-//            std::vector<ISolution*>* forwardCheckingSolutions = forwardChecking->solveProblem(graph);
-//            printAllSolutions(forwardCheckingSolutions);
+            IProblemFactory* problemFactory = new HarmoniousGraphFactory(size);
+            const ISolution* solution = cspFactory->getFirstSolutionByBacktracking(problemFactory);
+            solution->print();
+            delete problemFactory;
             break;
         }
         case 2:
@@ -109,7 +99,7 @@ void processChoice(std::shared_ptr<IConstraintSatisfactionProblem> backtracking,
 void printAllSolutions(std::vector<ISolution*>* solutions)
 {
     for (int index = 0; index < solutions->size(); ++index)
-        solutions->at(index)->printHarmoniousGraph();
+        solutions->at(index)->print();
 }
 
 int getGraphSize()

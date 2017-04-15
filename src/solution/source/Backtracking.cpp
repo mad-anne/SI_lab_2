@@ -9,30 +9,43 @@
 #include "../header/Solution.h"
 
 Backtracking::Backtracking() :
-    IConstraintSatisfactionProblem(),
-    getter(new NextVariableGetter(nullptr)),
-    constraint(new HarmoniousGraphConstraint(nullptr))
+    IConstraintSatisfactionProblem()
 {}
 
 Backtracking::~Backtracking()
+{}
+
+void Backtracking::setAttributes(IProblemFactory* problemFactory)
 {
-    delete getter;
-    delete constraint;
+    problem = problemFactory->getProblem();
+    constraint = problemFactory->getConstraint();
+    varGetter = problemFactory->getVariableGetter();
+    valGetter = problemFactory->getValueGetter();
 }
 
-std::vector<ISolution*>* Backtracking::solveProblem(IProblem* problem)
+const ISolution* Backtracking::getFirstSolution(IProblemFactory* problemFactory)
 {
     clearSolutions();
-
-    getter->setProblem(problem);
-    constraint->setProblem(problem);
-    recursive(problem);
-    return & solutions;
+    setAttributes(problemFactory);
+    recursive();
+    return solutions.size() > 0
+           ? solutions[0]
+           : nullptr;
 }
 
-void Backtracking::recursive(IProblem* problem)
+int Backtracking::getNumberOfSolutions(IProblemFactory* problemFactory)
 {
-    const IVariable* variable = getter->getNext();
+
+}
+
+std::vector<ISolution*>* Backtracking::getAllSolutions(IProblemFactory* problemFactory)
+{
+
+}
+
+void Backtracking::recursive()
+{
+    const IVariable* variable = varGetter->getNext();
 
     if (variable == nullptr)
     {
@@ -49,7 +62,7 @@ void Backtracking::recursive(IProblem* problem)
 
         if (constraint->updateConstraints(variable))
         {
-            recursive(problem);
+            recursive();
             constraint->undoConstraints(variable);
             problem->setVariableValue(variable, nullptr);
         }
