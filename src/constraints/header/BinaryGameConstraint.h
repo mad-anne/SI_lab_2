@@ -42,6 +42,20 @@ private:
     void removeRow(IRow *pRow);
 
     void removeColumn(IRow *pRow);
+
+    void limitDomainsByRepetitions(const IVariable*);
+
+    void limitDomainsByEqualSplit(const IVariable*);
+
+    const IValue *getValueWithMaxOccurrence(IRow *pRow);
+
+    void removeValueFromDomainsInColumn(const IVariable *pVariable, const IValue *pValue);
+
+    void removeValueFromDomainsInRow(const IVariable *pVariable, const IValue *pValue);
+
+    void limitDomainsByExistingRow(const IVariable*);
+
+    void limitDomainsByExistingColumn(const IVariable *pVariable);
 };
 
 

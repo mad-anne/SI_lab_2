@@ -31,7 +31,10 @@ const ISolution* ForwardChecking::getFirstSolution(IProblemFactory* problemFacto
 
 long long int ForwardChecking::getNumberOfSolutions(IProblemFactory* problemFactory)
 {
-    return 0;
+    clearSolutions();
+    setAttributes(problemFactory);
+    recursiveFindNumberOfAll();
+    return totalNumberOfSolutions;
 }
 
 std::vector<ISolution*>* ForwardChecking::getAllSolutions(IProblemFactory* problemFactory)
@@ -69,4 +72,30 @@ ISolution* ForwardChecking::recursive()
     }
 
     return solution;
+}
+
+
+void ForwardChecking::recursiveFindNumberOfAll()
+{
+    IVariable* variable = varGetter->getNext();
+
+    if (variable == nullptr)
+    {
+        ++totalNumberOfSolutions;
+        return;
+    }
+
+    NextValueGetter valueGetter(variable);
+    const IValue* value;
+
+    while ((value = valueGetter.getNext()) != nullptr)
+    {
+        variable->setValue(value);
+
+        constraint->putForwardConstraints(variable);
+        recursiveFindNumberOfAll();
+
+        constraint->undoForwardConstraints(variable);
+        variable->setValue(nullptr);
+    }
 }

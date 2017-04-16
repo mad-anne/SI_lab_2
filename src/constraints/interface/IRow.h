@@ -76,6 +76,13 @@ class IRow
 
             return true;
         }
+
+        virtual const IValue* getValueAfterPair(unsigned long int index)
+        {
+            return (index < 0 || index >= values.size())
+                    ? nullptr
+                    : values[index];
+        }
 };
 
 #endif //SI_LAB_2_IROW_H

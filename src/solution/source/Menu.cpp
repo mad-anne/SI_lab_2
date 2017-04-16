@@ -453,7 +453,11 @@ void Menu::performBinaryGameSolving(int method, int type) const
                     startTime = clock();
                     const ISolution* solution = cspFactory->getFirstSolutionByForwardChecking(bgFactory);
                     endTime = clock();
-                    solution->print();
+
+                    if (solution != nullptr)
+                        solution->print();
+                    else
+                        std::cout << "\nSolution was not found." << std::endl;
                     break;
                 }
                 case 2:

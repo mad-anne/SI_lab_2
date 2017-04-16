@@ -21,7 +21,7 @@ BinaryGame::~BinaryGame()
 
 IVariable* BinaryGame::getVariable(int row, int column) const
 {
-    return (row < width) && (column < width)
+    return (row < width && row >= 0) && (column < width && column >= 0)
            ? nodes[row][column]
            : nullptr;
 }
