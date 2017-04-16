@@ -18,7 +18,7 @@ class ForwardChecking : public IConstraintSatisfactionProblem
         virtual std::vector<ISolution*>* getAllSolutions(IProblemFactory*) override;
 
     private:
-        void recursive();
+        ISolution* recursive();
         void setAttributes(IProblemFactory*);
 };
 

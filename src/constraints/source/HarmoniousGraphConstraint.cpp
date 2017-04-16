@@ -150,30 +150,30 @@ void HarmoniousGraphConstraint::removeConnection(const IValue* value, const IVal
     }
 }
 
-const IVariable* HarmoniousGraphConstraint::getUpNeighbour(const IVariable* variable) const
+IVariable* HarmoniousGraphConstraint::getUpNeighbour(const IVariable* variable) const
 {
-    return (variable != nullptr && variable->getRow() > 0)
+    return variable != nullptr
            ? problem->getVariable(variable->getRow() - 1, variable->getColumn())
            : nullptr;
 }
 
-const IVariable* HarmoniousGraphConstraint::getRightNeighbour(const IVariable* variable) const
+IVariable* HarmoniousGraphConstraint::getRightNeighbour(const IVariable* variable) const
 {
-    return (variable != nullptr && variable->getColumn() < problem->getWidth() - 1)
+    return variable != nullptr
            ? problem->getVariable(variable->getRow(), variable->getColumn() + 1)
            : nullptr;
 }
 
-const IVariable* HarmoniousGraphConstraint::getDownNeighbour(const IVariable* variable) const
+IVariable* HarmoniousGraphConstraint::getDownNeighbour(const IVariable* variable) const
 {
-    return (variable != nullptr && variable->getRow() < problem->getWidth() - 1)
+    return variable != nullptr
            ? problem->getVariable(variable->getRow() + 1, variable->getColumn())
            : nullptr;
 }
 
-const IVariable* HarmoniousGraphConstraint::getLeftNeighbour(const IVariable* variable) const
+IVariable* HarmoniousGraphConstraint::getLeftNeighbour(const IVariable* variable) const
 {
-    return (variable != nullptr && variable->getColumn() > 0)
+    return variable != nullptr
            ? problem->getVariable(variable->getRow(), variable->getColumn() - 1)
            : nullptr;
 }
@@ -192,3 +192,217 @@ void HarmoniousGraphConstraint::clearConnections()
 
     connections.clear();
 }
+
+const void HarmoniousGraphConstraint::putForwardConstraints(const IVariable* variable)
+{
+    removeValueFromEmptyNeighbours(variable, variable->getValue());
+    limitDomainsOnConnections(variable);
+}
+
+const void HarmoniousGraphConstraint::undoForwardConstraints(const IVariable* variable)
+{
+    addValueToEmptyNeighbours(variable, variable->getValue());
+    removeLimitsOnConnections(variable);
+}
+
+void HarmoniousGraphConstraint::removeValueFromEmptyNeighbours(const IVariable* variable, const IValue* value)
+{
+    IVariable* varLeft = getLeftNeighbour(variable);
+    IVariable* varRight = getRightNeighbour(variable);
+    IVariable* varUp = getUpNeighbour(variable);
+    IVariable* varDown = getDownNeighbour(variable);
+
+    if (varLeft != nullptr && varLeft->getValue() == nullptr)
+        varLeft->removeValueFromDomain(value);
+
+    if (varRight != nullptr && varRight->getValue() == nullptr)
+        varRight->removeValueFromDomain(value);
+
+    if (varUp != nullptr && varUp->getValue() == nullptr)
+        varUp->removeValueFromDomain(value);
+
+    if (varDown != nullptr && varDown->getValue() == nullptr)
+        varDown->removeValueFromDomain(value);
+}
+
+void HarmoniousGraphConstraint::limitDomainsOnConnections(const IVariable* variable)
+{
+    std::vector<IConnection*> cons;
+
+    const IValue* value = variable->getValue();
+
+    IVariable* varLeft = getLeftNeighbour(variable);
+    IVariable* varRight = getRightNeighbour(variable);
+    IVariable* varUp = getUpNeighbour(variable);
+    IVariable* varDown = getDownNeighbour(variable);
+
+    if (varLeft != nullptr && varLeft->getValue() != nullptr)
+        cons.push_back(new Connection(value, varLeft->getValue()));
+
+    if (varRight != nullptr && varRight->getValue() != nullptr)
+        cons.push_back(new Connection(value, varRight->getValue()));
+
+    if (varUp != nullptr && varUp->getValue() != nullptr)
+        cons.push_back(new Connection(value, varUp->getValue()));
+
+    if (varDown != nullptr && varDown->getValue() != nullptr)
+        cons.push_back(new Connection(value, varDown->getValue()));
+
+    std::vector<IConnection*>::iterator it;
+
+    for (it = cons.begin(); it != cons.end(); ++it)
+    {
+        limitDomainsOnConnection(*it);
+        connections.push_back(*it);
+    }
+
+    const IDomain* domain = problem->getDomain();
+    for (int i = 0; i < domain->getSize(); ++i)
+    {
+        if (existsConnection(domain->getValue(i), value))
+        {
+            if (varLeft != nullptr && varLeft->getValue() == nullptr)
+                varLeft->removeValueFromDomain(domain->getValue(i));
+
+            if (varRight != nullptr && varRight->getValue() == nullptr)
+                varRight->removeValueFromDomain(domain->getValue(i));
+
+            if (varUp != nullptr && varUp->getValue() == nullptr)
+                varUp->removeValueFromDomain(domain->getValue(i));
+
+            if (varDown != nullptr && varDown->getValue() == nullptr)
+                varDown->removeValueFromDomain(domain->getValue(i));
+        }
+    }
+}
+
+void HarmoniousGraphConstraint::limitDomainsOnConnection(const IConnection* connection)
+{
+    int width = problem->getWidth();
+    IVariable* variable;
+    const IValue* first = connection->getFirstValue();
+    const IValue* second = connection->getSecondValue();
+
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            variable = problem->getVariable(row, col);
+            const IValue* value = variable->getValue();
+
+            if (value == first)
+                removeValueFromEmptyNeighbours(variable, second);
+            else if (value == second)
+                removeValueFromEmptyNeighbours(variable, first);
+        }
+    }
+}
+
+void HarmoniousGraphConstraint::addValueToEmptyNeighbours(const IVariable* variable, const IValue* value)
+{
+    IVariable* varLeft = getLeftNeighbour(variable);
+    IVariable* varRight = getRightNeighbour(variable);
+    IVariable* varUp = getUpNeighbour(variable);
+    IVariable* varDown = getDownNeighbour(variable);
+
+    if (varLeft != nullptr && varLeft->getValue() == nullptr)
+        varLeft->addValueToDomain(value);
+
+    if (varRight != nullptr && varRight->getValue() == nullptr)
+        varRight->addValueToDomain(value);
+
+    if (varUp != nullptr && varUp->getValue() == nullptr)
+        varUp->addValueToDomain(value);
+
+    if (varDown != nullptr && varDown->getValue() == nullptr)
+        varDown->addValueToDomain(value);
+}
+
+void HarmoniousGraphConstraint::removeLimitsOnConnections(const IVariable* variable)
+{
+    std::vector<IConnection*> cons;
+
+    const IValue* value = variable->getValue();
+
+    IVariable* varLeft = getLeftNeighbour(variable);
+    IVariable* varRight = getRightNeighbour(variable);
+    IVariable* varUp = getUpNeighbour(variable);
+    IVariable* varDown = getDownNeighbour(variable);
+
+    if (varLeft != nullptr && varLeft->getValue() != nullptr)
+        cons.push_back(new Connection(value, varLeft->getValue()));
+
+    if (varRight != nullptr && varRight->getValue() != nullptr)
+        cons.push_back(new Connection(value, varRight->getValue()));
+
+    if (varUp != nullptr && varUp->getValue() != nullptr)
+        cons.push_back(new Connection(value, varUp->getValue()));
+
+    if (varDown != nullptr && varDown->getValue() != nullptr)
+        cons.push_back(new Connection(value, varDown->getValue()));
+
+
+    std::vector<IConnection*>::iterator it = cons.begin();
+
+    while (it != cons.end())
+    {
+        removeFromConnections(*it);
+        removeLimitsOnConnection(variable, *it);
+        delete *it;
+        it = cons.erase(it);
+    }
+}
+
+void HarmoniousGraphConstraint::removeLimitsOnConnection(const IVariable* variable, IConnection* connection)
+{
+    int width = problem->getWidth();
+    IVariable* tempVariable;
+
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            tempVariable = problem->getVariable(row, col);
+
+            if (tempVariable == nullptr)
+                addValueToDomainIfPossible(tempVariable, variable, connection);
+        }
+    }
+}
+
+void HarmoniousGraphConstraint::removeFromConnections(IConnection* connection)
+{
+    std::vector<IConnection*>::const_iterator it;
+
+    for (it = connections.begin(); it != connections.end(); ++it)
+    {
+        if ((*it)->getFirstValue() == connection->getFirstValue()
+            && (*it)->getSecondValue() == connection->getSecondValue()
+            ||( (*it)->getFirstValue() == connection->getSecondValue()
+               && (*it)->getSecondValue() == connection->getFirstValue()))
+        {
+            it = connections.erase(it);
+            return;
+        }
+    }
+}
+
+void HarmoniousGraphConstraint::addValueToDomainIfPossible(IVariable* variable, const IVariable* removed,
+                                                           IConnection* connection)
+{
+    if (notExistsConstraintOnValues(getLeftNeighbour(variable), variable, removed)
+        && notExistsConstraintOnValues(getRightNeighbour(variable), variable, removed)
+        && notExistsConstraintOnValues(getUpNeighbour(variable), variable, removed)
+        && notExistsConstraintOnValues(getDownNeighbour(variable), variable, removed))
+    {
+        variable->addValueToDomain(removed->getValue());
+    }
+}
+
+bool HarmoniousGraphConstraint::notExistsConstraintOnValues(IVariable* neighbour, IVariable* variable,
+                                                         const IVariable* removed)
+{
+    return (neighbour == nullptr || neighbour->getValue() != removed->getValue() || neighbour == removed)
+            && (neighbour == nullptr || neighbour == removed || ! existsConnection(neighbour->getValue(), removed->getValue()));
+}
+

@@ -13,7 +13,7 @@
 
 class HarmoniousGraphConstraint : public IConstraint
 {
-    std::vector<Connection*> connections;
+    std::vector<IConnection*> connections;
 
     public:
         HarmoniousGraphConstraint(IProblem*);
@@ -25,7 +25,10 @@ class HarmoniousGraphConstraint : public IConstraint
         void setProblem(IProblem*) override;
         const IProblem* getProblem() const override;
 
-    private:
+        const void putForwardConstraints(const IVariable *variable) override;
+        const void undoForwardConstraints(const IVariable *variable) override;
+
+private:
         const bool checkConstraints(const IVariable*) const;
         const bool checkNeighbours(const IVariable*) const;
         const bool checkConnections(const IVariable*) const;
@@ -38,13 +41,26 @@ class HarmoniousGraphConstraint : public IConstraint
         void removeConnections(const IVariable*);
         void removeConnection(const IValue*, const IValue*);
 
-        const IVariable* getUpNeighbour(const IVariable*) const;
-        const IVariable* getRightNeighbour(const IVariable*) const;
-        const IVariable* getDownNeighbour(const IVariable*) const;
-        const IVariable* getLeftNeighbour(const IVariable*) const;
+        IVariable* getUpNeighbour(const IVariable*) const;
+        IVariable* getRightNeighbour(const IVariable*) const;
+        IVariable* getDownNeighbour(const IVariable*) const;
+        IVariable* getLeftNeighbour(const IVariable*) const;
 
         const IValue* getValue(const IVariable*) const;
         void clearConnections();
+
+    void removeValueFromEmptyNeighbours(const IVariable*, const IValue*);
+    void limitDomainsOnConnection(const IConnection*);
+    void limitDomainsOnConnections(const IVariable*);
+    void addValueToEmptyNeighbours(const IVariable*, const IValue*);
+
+    void removeLimitsOnConnections(const IVariable*);
+    void removeLimitsOnConnection(const IVariable* variable, IConnection*);
+    void removeFromConnections(IConnection*);
+
+    void addValueToDomainIfPossible(IVariable *pVariable, const IVariable *pIVariable, IConnection *pConnection);
+
+    bool notExistsConstraintOnValues(IVariable *neighbour, IVariable *variable, const IVariable *removed);
 };
 
 #endif //SI_LAB_2_HARMONIOUSGRAPHCONSTRAINT_H

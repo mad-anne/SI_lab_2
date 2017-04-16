@@ -26,10 +26,7 @@ const ISolution* ForwardChecking::getFirstSolution(IProblemFactory* problemFacto
 {
     clearSolutions();
     setAttributes(problemFactory);
-    recursive();
-    return solutions.size() > 0
-           ? solutions[0]
-           : nullptr;
+    return recursive();
 }
 
 long long int ForwardChecking::getNumberOfSolutions(IProblemFactory* problemFactory)
@@ -45,15 +42,13 @@ std::vector<ISolution*>* ForwardChecking::getAllSolutions(IProblemFactory* probl
     return & solutions;
 }
 
-void ForwardChecking::recursive()
+ISolution* ForwardChecking::recursive()
 {
+    ISolution* solution = nullptr;
     IVariable* variable = varGetter->getNext();
 
     if (variable == nullptr)
-    {
-        solutions.push_back(new Solution(problem));
-        return;
-    }
+        return new Solution(problem);
 
     NextValueGetter valueGetter(variable);
     const IValue* value;
@@ -61,16 +56,17 @@ void ForwardChecking::recursive()
     while ((value = valueGetter.getNext()) != nullptr)
     {
         variable->setValue(value);
-        // TODO: EVERY assign should be correct (?), cause domains are corrrect
-        // TODO: after assigning a value, delete from neighbours domains this value, also watching on constraints (delete value if it causes to exists wrong connection)
-        // TODO: must implements inversing putting constraints OMG
-        if (constraint->updateConstraints(variable))
+
+        constraint->putForwardConstraints(variable);
+
+        if ((solution = recursive()) == nullptr)
         {
-            recursive();
-            constraint->undoConstraints(variable);
+            constraint->undoForwardConstraints(variable);
             variable->setValue(nullptr);
         }
         else
-            variable->setValue(nullptr);
+            break;
     }
+
+    return solution;
 }

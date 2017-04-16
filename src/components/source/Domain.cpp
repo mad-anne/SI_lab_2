@@ -19,7 +19,10 @@ void Domain::addValue(const IValue* value)
 
 void Domain::removeValue(const IValue* value)
 {
-    values.erase(std::find(values.begin(), values.end(), value));
+    std::vector<const IValue*>::const_iterator it = std::find(values.begin(), values.end(), value);
+
+    if (it != values.end())
+        values.erase(it);
 }
 
 const IValue* Domain::getValue(int index) const

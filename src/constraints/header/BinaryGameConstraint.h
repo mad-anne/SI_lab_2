@@ -24,7 +24,11 @@ class BinaryGameConstraint : public IConstraint
         void setProblem(IProblem*) override;
         const IProblem* getProblem() const override;
 
-    private:
+    const void putForwardConstraints(const IVariable *variable) override;
+
+    const void undoForwardConstraints(const IVariable *variable) override;
+
+private:
         bool checkConstraints(const IRow*, const IRow*) const;
         bool checkRepetitions(const IRow*, const IRow*) const;
         bool checkEqualValueSplit(const IRow*, const IRow*) const;

@@ -168,3 +168,17 @@ void BinaryGameConstraint::removeColumn(IRow* col)
         }
     }
 }
+
+const void BinaryGameConstraint::putForwardConstraints(const IVariable* variable)
+{
+
+}
+
+const void BinaryGameConstraint::undoForwardConstraints(const IVariable* variable)
+{
+
+}
+
+// TODO: limit number of each value and inverse
+// TODO: limit neighbours to have the same value as last two
+// TODO: limit the same column repetition

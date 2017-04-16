@@ -7,7 +7,7 @@
 
 #include <constraints/interface/IConnection.h>
 
-class Connection : IConnection
+class Connection : public IConnection
 {
     public:
         Connection(const IValue*, const IValue*);
