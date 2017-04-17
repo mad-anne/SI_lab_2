@@ -5,19 +5,19 @@
 #ifndef SI_LAB_2_HARMONIOUSGRAPHCONSTRAINT_H
 #define SI_LAB_2_HARMONIOUSGRAPHCONSTRAINT_H
 
-#include <constraints/interface/IConstraint.h>
+#include <constraints/interface/IConstraintChecker.h>
 #include <components/header/Color.h>
 #include <vector>
 #include "Connection.h"
 
 
-class HarmoniousGraphConstraint : public IConstraint
+class HarmoniousGraphConstraintChecker : public IConstraintChecker
 {
     std::vector<IConnection*> connections;
 
     public:
-        HarmoniousGraphConstraint(IProblem*);
-        ~HarmoniousGraphConstraint();
+        HarmoniousGraphConstraintChecker(IProblem*);
+        ~HarmoniousGraphConstraintChecker();
 
         const bool updateConstraints(const IVariable*) override;
         void undoConstraints(const IVariable*) override;

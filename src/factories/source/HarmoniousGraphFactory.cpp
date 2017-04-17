@@ -3,7 +3,7 @@
 //
 
 #include <problems/header/HarmoniousGraph.h>
-#include <constraints/header/HarmoniousGraphConstraint.h>
+#include <constraints/header/HarmoniousGraphConstraintChecker.h>
 #include <accessors/header/NextVariableGetter.h>
 #include <accessors/header/NextValueGetter.h>
 #include "factories/header/HarmoniousGraphFactory.h"
@@ -11,7 +11,7 @@
 HarmoniousGraphFactory::HarmoniousGraphFactory(int width, IVariableGetter* variableGetter, IValueGetter* valueGetter)
 {
     problem = new HarmoniousGraph(width);
-    constraint = new HarmoniousGraphConstraint(problem);
+    constraint = new HarmoniousGraphConstraintChecker(problem);
 
     if (variableGetter != nullptr)
     {
@@ -40,7 +40,7 @@ IProblem* HarmoniousGraphFactory::getProblem() const
     return problem;
 }
 
-IConstraint* HarmoniousGraphFactory::getConstraint() const
+IConstraintChecker* HarmoniousGraphFactory::getConstraint() const
 {
     return constraint;
 }

@@ -3,18 +3,18 @@
 //
 
 #include <problems/interface/IProblem.h>
-#include <constraints/header/HarmoniousGraphConstraint.h>
+#include <constraints/header/HarmoniousGraphConstraintChecker.h>
 
-HarmoniousGraphConstraint::HarmoniousGraphConstraint(IProblem* problem)
-        : IConstraint(problem)
+HarmoniousGraphConstraintChecker::HarmoniousGraphConstraintChecker(IProblem* problem)
+        : IConstraintChecker(problem)
 {}
 
-HarmoniousGraphConstraint::~HarmoniousGraphConstraint()
+HarmoniousGraphConstraintChecker::~HarmoniousGraphConstraintChecker()
 {
     clearConnections();
 }
 
-const bool HarmoniousGraphConstraint::updateConstraints(const IVariable* variable)
+const bool HarmoniousGraphConstraintChecker::updateConstraints(const IVariable* variable)
 {
     if (checkConstraints(variable))
     {
@@ -25,22 +25,22 @@ const bool HarmoniousGraphConstraint::updateConstraints(const IVariable* variabl
     return false;
 }
 
-void HarmoniousGraphConstraint::undoConstraints(const IVariable* variable)
+void HarmoniousGraphConstraintChecker::undoConstraints(const IVariable* variable)
 {
     removeConnections(variable);
 }
 
-void HarmoniousGraphConstraint::setProblem(IProblem* problem)
+void HarmoniousGraphConstraintChecker::setProblem(IProblem* problem)
 {
     this->problem = problem;
 }
 
-const IProblem* HarmoniousGraphConstraint::getProblem() const
+const IProblem* HarmoniousGraphConstraintChecker::getProblem() const
 {
     return problem;
 }
 
-const bool HarmoniousGraphConstraint::checkConstraints(const IVariable* variable) const
+const bool HarmoniousGraphConstraintChecker::checkConstraints(const IVariable* variable) const
 {
     if (variable == nullptr)
         return true;
@@ -48,7 +48,7 @@ const bool HarmoniousGraphConstraint::checkConstraints(const IVariable* variable
     return checkNeighbours(variable) && checkConnections(variable);
 }
 
-const bool HarmoniousGraphConstraint::checkNeighbours(const IVariable* variable) const
+const bool HarmoniousGraphConstraintChecker::checkNeighbours(const IVariable* variable) const
 {
     const IValue* value = getValue(variable);
 
@@ -63,7 +63,7 @@ const bool HarmoniousGraphConstraint::checkNeighbours(const IVariable* variable)
             && value != valueLeft;
 }
 
-const bool HarmoniousGraphConstraint::checkConnections(const IVariable* variable) const
+const bool HarmoniousGraphConstraintChecker::checkConnections(const IVariable* variable) const
 {
     const IValue* value = getValue(variable);
 
@@ -78,7 +78,7 @@ const bool HarmoniousGraphConstraint::checkConnections(const IVariable* variable
             && ! existsConnection(value, valueLeft);
 }
 
-const bool HarmoniousGraphConstraint::existsConnection(const IValue* value, const IValue* neighbour) const
+const bool HarmoniousGraphConstraintChecker::existsConnection(const IValue* value, const IValue* neighbour) const
 {
     if (value == nullptr || neighbour == nullptr)
         return false;
@@ -97,7 +97,7 @@ const bool HarmoniousGraphConstraint::existsConnection(const IValue* value, cons
     return exists;
 }
 
-void HarmoniousGraphConstraint::addConnections(const IVariable* variable)
+void HarmoniousGraphConstraintChecker::addConnections(const IVariable* variable)
 {
     if (variable == nullptr)
         return;
@@ -110,7 +110,7 @@ void HarmoniousGraphConstraint::addConnections(const IVariable* variable)
     addConnection(value, getValue(getLeftNeighbour(variable)));
 }
 
-void HarmoniousGraphConstraint::addConnection(const IValue* value1, const IValue* value2)
+void HarmoniousGraphConstraintChecker::addConnection(const IValue* value1, const IValue* value2)
 {
     if (value1 == nullptr || value2 == nullptr)
         return;
@@ -119,7 +119,7 @@ void HarmoniousGraphConstraint::addConnection(const IValue* value1, const IValue
     connections.push_back(new Connection(value2, value1));
 }
 
-void HarmoniousGraphConstraint::removeConnections(const IVariable* variable)
+void HarmoniousGraphConstraintChecker::removeConnections(const IVariable* variable)
 {
     const IValue* value = getValue(variable);
 
@@ -129,7 +129,7 @@ void HarmoniousGraphConstraint::removeConnections(const IVariable* variable)
     removeConnection(value, getValue(getLeftNeighbour(variable)));
 }
 
-void HarmoniousGraphConstraint::removeConnection(const IValue* value, const IValue* neighbour)
+void HarmoniousGraphConstraintChecker::removeConnection(const IValue* value, const IValue* neighbour)
 {
     if (value == nullptr || neighbour == nullptr)
         return;
@@ -150,42 +150,42 @@ void HarmoniousGraphConstraint::removeConnection(const IValue* value, const IVal
     }
 }
 
-IVariable* HarmoniousGraphConstraint::getUpNeighbour(const IVariable* variable) const
+IVariable* HarmoniousGraphConstraintChecker::getUpNeighbour(const IVariable* variable) const
 {
     return variable != nullptr
            ? problem->getVariable(variable->getRow() - 1, variable->getColumn())
            : nullptr;
 }
 
-IVariable* HarmoniousGraphConstraint::getRightNeighbour(const IVariable* variable) const
+IVariable* HarmoniousGraphConstraintChecker::getRightNeighbour(const IVariable* variable) const
 {
     return variable != nullptr
            ? problem->getVariable(variable->getRow(), variable->getColumn() + 1)
            : nullptr;
 }
 
-IVariable* HarmoniousGraphConstraint::getDownNeighbour(const IVariable* variable) const
+IVariable* HarmoniousGraphConstraintChecker::getDownNeighbour(const IVariable* variable) const
 {
     return variable != nullptr
            ? problem->getVariable(variable->getRow() + 1, variable->getColumn())
            : nullptr;
 }
 
-IVariable* HarmoniousGraphConstraint::getLeftNeighbour(const IVariable* variable) const
+IVariable* HarmoniousGraphConstraintChecker::getLeftNeighbour(const IVariable* variable) const
 {
     return variable != nullptr
            ? problem->getVariable(variable->getRow(), variable->getColumn() - 1)
            : nullptr;
 }
 
-const IValue *HarmoniousGraphConstraint::getValue(const IVariable* variable) const
+const IValue *HarmoniousGraphConstraintChecker::getValue(const IVariable* variable) const
 {
     return  variable == nullptr
             ? nullptr
             : variable->getValue();
 }
 
-void HarmoniousGraphConstraint::clearConnections()
+void HarmoniousGraphConstraintChecker::clearConnections()
 {
     for (int i = 0; i < connections.size(); ++i)
         delete connections[i];
@@ -193,19 +193,19 @@ void HarmoniousGraphConstraint::clearConnections()
     connections.clear();
 }
 
-const void HarmoniousGraphConstraint::putForwardConstraints(const IVariable* variable)
+const void HarmoniousGraphConstraintChecker::putForwardConstraints(const IVariable* variable)
 {
     removeValueFromEmptyNeighbours(variable, variable->getValue());
     limitDomainsOnConnections(variable);
 }
 
-const void HarmoniousGraphConstraint::undoForwardConstraints(const IVariable* variable)
+const void HarmoniousGraphConstraintChecker::undoForwardConstraints(const IVariable* variable)
 {
     addValueToEmptyNeighbours(variable, variable->getValue());
     removeLimitsOnConnections(variable);
 }
 
-void HarmoniousGraphConstraint::removeValueFromEmptyNeighbours(const IVariable* variable, const IValue* value)
+void HarmoniousGraphConstraintChecker::removeValueFromEmptyNeighbours(const IVariable* variable, const IValue* value)
 {
     IVariable* varLeft = getLeftNeighbour(variable);
     IVariable* varRight = getRightNeighbour(variable);
@@ -225,7 +225,7 @@ void HarmoniousGraphConstraint::removeValueFromEmptyNeighbours(const IVariable* 
         varDown->removeValueFromDomain(value);
 }
 
-void HarmoniousGraphConstraint::limitDomainsOnConnections(const IVariable* variable)
+void HarmoniousGraphConstraintChecker::limitDomainsOnConnections(const IVariable* variable)
 {
     std::vector<IConnection*> cons;
 
@@ -276,7 +276,7 @@ void HarmoniousGraphConstraint::limitDomainsOnConnections(const IVariable* varia
     }
 }
 
-void HarmoniousGraphConstraint::limitDomainsOnConnection(const IConnection* connection)
+void HarmoniousGraphConstraintChecker::limitDomainsOnConnection(const IConnection* connection)
 {
     int width = problem->getWidth();
     IVariable* variable;
@@ -298,7 +298,7 @@ void HarmoniousGraphConstraint::limitDomainsOnConnection(const IConnection* conn
     }
 }
 
-void HarmoniousGraphConstraint::addValueToEmptyNeighbours(const IVariable* variable, const IValue* value)
+void HarmoniousGraphConstraintChecker::addValueToEmptyNeighbours(const IVariable* variable, const IValue* value)
 {
     IVariable* varLeft = getLeftNeighbour(variable);
     IVariable* varRight = getRightNeighbour(variable);
@@ -318,7 +318,7 @@ void HarmoniousGraphConstraint::addValueToEmptyNeighbours(const IVariable* varia
         varDown->addValueToDomain(value);
 }
 
-void HarmoniousGraphConstraint::removeLimitsOnConnections(const IVariable* variable)
+void HarmoniousGraphConstraintChecker::removeLimitsOnConnections(const IVariable* variable)
 {
     std::vector<IConnection*> cons;
 
@@ -353,7 +353,7 @@ void HarmoniousGraphConstraint::removeLimitsOnConnections(const IVariable* varia
     }
 }
 
-void HarmoniousGraphConstraint::removeLimitsOnConnection(const IVariable* variable, IConnection* connection)
+void HarmoniousGraphConstraintChecker::removeLimitsOnConnection(const IVariable* variable, IConnection* connection)
 {
     int width = problem->getWidth();
     IVariable* tempVariable;
@@ -370,7 +370,7 @@ void HarmoniousGraphConstraint::removeLimitsOnConnection(const IVariable* variab
     }
 }
 
-void HarmoniousGraphConstraint::removeFromConnections(IConnection* connection)
+void HarmoniousGraphConstraintChecker::removeFromConnections(IConnection* connection)
 {
     std::vector<IConnection*>::const_iterator it;
 
@@ -387,7 +387,7 @@ void HarmoniousGraphConstraint::removeFromConnections(IConnection* connection)
     }
 }
 
-void HarmoniousGraphConstraint::addValueToDomainIfPossible(IVariable* variable, const IVariable* removed,
+void HarmoniousGraphConstraintChecker::addValueToDomainIfPossible(IVariable* variable, const IVariable* removed,
                                                            IConnection* connection)
 {
     if (notExistsConstraintOnValues(getLeftNeighbour(variable), variable, removed)
@@ -399,7 +399,7 @@ void HarmoniousGraphConstraint::addValueToDomainIfPossible(IVariable* variable, 
     }
 }
 
-bool HarmoniousGraphConstraint::notExistsConstraintOnValues(IVariable* neighbour, IVariable* variable,
+bool HarmoniousGraphConstraintChecker::notExistsConstraintOnValues(IVariable* neighbour, IVariable* variable,
                                                          const IVariable* removed)
 {
     return (neighbour == nullptr || neighbour->getValue() != removed->getValue() || neighbour == removed)

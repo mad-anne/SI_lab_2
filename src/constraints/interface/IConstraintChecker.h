@@ -7,17 +7,17 @@
 
 #include <problems/interface/IProblem.h>
 
-class IConstraint
+class IConstraintChecker
 {
     protected:
         IProblem* problem;
 
     public:
-        IConstraint(IProblem* problem) :
+        IConstraintChecker(IProblem* problem) :
             problem(problem)
         {}
 
-        virtual ~IConstraint() = default;
+        virtual ~IConstraintChecker() = default;
 
         virtual const bool updateConstraints(const IVariable*) = 0;
         virtual void undoConstraints(const IVariable*) = 0;

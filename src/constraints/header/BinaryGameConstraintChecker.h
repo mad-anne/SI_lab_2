@@ -6,17 +6,17 @@
 #define SI_LAB_2_BINARYGAMECONSTRAINT_H
 
 
-#include <constraints/interface/IConstraint.h>
+#include <constraints/interface/IConstraintChecker.h>
 #include "../interface/IRow.h"
 
-class BinaryGameConstraint : public IConstraint
+class BinaryGameConstraintChecker : public IConstraintChecker
 {
     std::vector<IRow*> rows;
     std::vector<IRow*> columns;
 
     public:
-        BinaryGameConstraint(IProblem*);
-        ~BinaryGameConstraint() override;
+        BinaryGameConstraintChecker(IProblem*);
+        ~BinaryGameConstraintChecker() override;
 
         const bool updateConstraints(const IVariable*) override;
         void undoConstraints(const IVariable*) override;
@@ -56,6 +56,10 @@ private:
     void limitDomainsByExistingRow(const IVariable*);
 
     void limitDomainsByExistingColumn(const IVariable *pVariable);
+
+    void limitDomainsInRowByExistingRows(const IVariable *pVariable);
+
+    void limitDomainsInColumnByExistingColumns(const IVariable *pVariable);
 };
 
 

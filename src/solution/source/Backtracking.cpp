@@ -2,7 +2,7 @@
 // Created by Anna Siwik on 2017-04-08.
 //
 
-#include <constraints/header/HarmoniousGraphConstraint.h>
+#include <constraints/header/HarmoniousGraphConstraintChecker.h>
 #include <accessors/header/NextVariableGetter.h>
 #include <accessors/header/NextValueGetter.h>
 #include "../header/Backtracking.h"

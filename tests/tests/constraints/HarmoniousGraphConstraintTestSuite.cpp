@@ -3,8 +3,8 @@
 //
 
 #include <gtest/gtest.h>
-#include <constraints/interface/IConstraint.h>
-#include <constraints/header/HarmoniousGraphConstraint.h>
+#include <constraints/interface/IConstraintChecker.h>
+#include <constraints/header/HarmoniousGraphConstraintChecker.h>
 #include <problems/header/HarmoniousGraph.h>
 #include <components/header/Color.h>
 
@@ -17,13 +17,13 @@ class HarmoniousGraphConstraintTestSuite : public ::testing::Test
     protected:
         const int width;
         IProblem* problem;
-        IConstraint* sut;
+        IConstraintChecker* sut;
 };
 
 HarmoniousGraphConstraintTestSuite::HarmoniousGraphConstraintTestSuite()
         : width(3),
           problem(new HarmoniousGraph(width)),
-          sut(new HarmoniousGraphConstraint(problem))
+          sut(new HarmoniousGraphConstraintChecker(problem))
 {}
 
 HarmoniousGraphConstraintTestSuite::~HarmoniousGraphConstraintTestSuite()

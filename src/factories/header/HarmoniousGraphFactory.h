@@ -15,7 +15,7 @@ class HarmoniousGraphFactory : public IProblemFactory
         ~HarmoniousGraphFactory() override;
 
         IProblem* getProblem() const override;
-        IConstraint* getConstraint() const override;
+        IConstraintChecker* getConstraint() const override;
         IVariableGetter* getVariableGetter() const override;
         IValueGetter* getValueGetter() const override;
 

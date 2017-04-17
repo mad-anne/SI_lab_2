@@ -35,6 +35,32 @@ class IRow
             return true;
         };
 
+        virtual bool compareWithAllowingNulls(const IRow* row) const
+        {
+            if (width != row->width)
+                return false;
+
+            for (int index = 0; index < width; ++index)
+            {
+                if (values[index] != row->values[index] && values[index] != nullptr && row->values[index] != nullptr)
+                    return false;
+            }
+
+            return true;
+        };
+
+        virtual const IValue* getValue(int index) const
+        {
+            return  (index < 0 || index >= values.size())
+                    ? nullptr
+                    : values[index];
+        }
+
+        virtual int getWidth() const
+        {
+            return width;
+        }
+
         virtual int countValue(const IValue* value) const
         {
             int counter = 0;

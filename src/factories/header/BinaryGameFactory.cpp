@@ -5,14 +5,14 @@
 #include <problems/header/BinaryGame.h>
 #include <accessors/header/NextVariableGetter.h>
 #include <accessors/header/NextValueGetter.h>
-#include <constraints/header/BinaryGameConstraint.h>
+#include <constraints/header/BinaryGameConstraintChecker.h>
 #include "BinaryGameFactory.h"
 
 BinaryGameFactory::BinaryGameFactory(int width, int emptyFields, IVariableGetter* variableGetter, IValueGetter* valueGetter)
 {
     problem = new BinaryGame(width, emptyFields);
 
-    constraint = new BinaryGameConstraint(problem);
+    constraint = new BinaryGameConstraintChecker(problem);
 
     if (variableGetter != nullptr)
     {
@@ -41,7 +41,7 @@ IProblem* BinaryGameFactory::getProblem() const
     return problem;
 }
 
-IConstraint* BinaryGameFactory::getConstraint() const
+IConstraintChecker* BinaryGameFactory::getConstraint() const
 {
     return constraint;
 }

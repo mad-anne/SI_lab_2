@@ -4,19 +4,19 @@
 
 #include <constraints/header/Row.h>
 #include <constraints/header/Column.h>
-#include "constraints/header/BinaryGameConstraint.h"
+#include "constraints/header/BinaryGameConstraintChecker.h"
 
-BinaryGameConstraint::BinaryGameConstraint(IProblem* problem) :
-    IConstraint(problem)
+BinaryGameConstraintChecker::BinaryGameConstraintChecker(IProblem* problem) :
+    IConstraintChecker(problem)
 {}
 
-BinaryGameConstraint::~BinaryGameConstraint()
+BinaryGameConstraintChecker::~BinaryGameConstraintChecker()
 {
     clearRows();
     clearColumns();
 }
 
-const bool BinaryGameConstraint::updateConstraints(const IVariable* variable)
+const bool BinaryGameConstraintChecker::updateConstraints(const IVariable* variable)
 {
     if (variable == nullptr)
         return true;
@@ -45,7 +45,7 @@ const bool BinaryGameConstraint::updateConstraints(const IVariable* variable)
     return false;
 }
 
-void BinaryGameConstraint::undoConstraints(const IVariable* variable)
+void BinaryGameConstraintChecker::undoConstraints(const IVariable* variable)
 {
     IRow* row = new Row(problem, variable);
     IRow* col = new Column(problem, variable);
@@ -57,7 +57,7 @@ void BinaryGameConstraint::undoConstraints(const IVariable* variable)
     delete col;
 }
 
-bool BinaryGameConstraint::checkConstraints(const IRow* row, const IRow* col) const
+bool BinaryGameConstraintChecker::checkConstraints(const IRow* row, const IRow* col) const
 {
     return checkRepetitions(row, col)
            && checkEqualValueSplit(row, col)
@@ -65,23 +65,23 @@ bool BinaryGameConstraint::checkConstraints(const IRow* row, const IRow* col) co
            && ! existsColumn(col);
 }
 
-void BinaryGameConstraint::setProblem(IProblem* problem)
+void BinaryGameConstraintChecker::setProblem(IProblem* problem)
 {
     this->problem = problem;
 }
 
-const IProblem* BinaryGameConstraint::getProblem() const
+const IProblem* BinaryGameConstraintChecker::getProblem() const
 {
     return problem;
 }
 
-bool BinaryGameConstraint::checkRepetitions(const IRow* row, const IRow* col) const
+bool BinaryGameConstraintChecker::checkRepetitions(const IRow* row, const IRow* col) const
 {
     return row->isCorrect()
            && col->isCorrect();
 }
 
-bool BinaryGameConstraint::checkEqualValueSplit(const IRow* row, const IRow* col) const
+bool BinaryGameConstraintChecker::checkEqualValueSplit(const IRow* row, const IRow* col) const
 {
     const IValue* zero = problem->getDomain()->getValue(0);
     const IValue* one = problem->getDomain()->getValue(1);
@@ -94,7 +94,7 @@ bool BinaryGameConstraint::checkEqualValueSplit(const IRow* row, const IRow* col
            && col->countValue(one) <= maxValue;
 }
 
-void BinaryGameConstraint::clearColumns()
+void BinaryGameConstraintChecker::clearColumns()
 {
     std::vector<IRow*>::const_iterator it = columns.begin();
 
@@ -105,7 +105,7 @@ void BinaryGameConstraint::clearColumns()
     }
 }
 
-void BinaryGameConstraint::clearRows()
+void BinaryGameConstraintChecker::clearRows()
 {
     std::vector<IRow*>::const_iterator it = rows.begin();
 
@@ -116,7 +116,7 @@ void BinaryGameConstraint::clearRows()
     }
 }
 
-bool BinaryGameConstraint::existsRow(const IRow* row) const
+bool BinaryGameConstraintChecker::existsRow(const IRow* row) const
 {
     std::vector<IRow*>::const_iterator it;
 
@@ -127,7 +127,7 @@ bool BinaryGameConstraint::existsRow(const IRow* row) const
     return false;
 }
 
-bool BinaryGameConstraint::existsColumn(const IRow* col) const
+bool BinaryGameConstraintChecker::existsColumn(const IRow* col) const
 {
     std::vector<IRow*>::const_iterator it;
 
@@ -138,7 +138,7 @@ bool BinaryGameConstraint::existsColumn(const IRow* col) const
     return false;
 }
 
-void BinaryGameConstraint::removeRow(IRow* row)
+void BinaryGameConstraintChecker::removeRow(IRow* row)
 {
     std::vector<IRow*>::const_iterator it;
 
@@ -153,7 +153,7 @@ void BinaryGameConstraint::removeRow(IRow* row)
     }
 }
 
-void BinaryGameConstraint::removeColumn(IRow* col)
+void BinaryGameConstraintChecker::removeColumn(IRow* col)
 {
     std::vector<IRow*>::const_iterator it;
 
@@ -168,15 +168,19 @@ void BinaryGameConstraint::removeColumn(IRow* col)
     }
 }
 
-const void BinaryGameConstraint::putForwardConstraints(const IVariable* variable)
+const void BinaryGameConstraintChecker::putForwardConstraints(const IVariable* variable)
 {
     if (variable == nullptr)
         return;
 
     limitDomainsByRepetitions(variable);
     limitDomainsByEqualSplit(variable);
+
     limitDomainsByExistingRow(variable);
     limitDomainsByExistingColumn(variable); // TODO: sprawdzenie, czy są zapisane jakieś kolumny i powtarzają się wartości (a może nie trzeba? bo forward checking)
+
+    limitDomainsInRowByExistingRows(variable);
+    limitDomainsInColumnByExistingColumns(variable);
 
     IRow* row = new Row(problem, variable);
     IRow* col = new Column(problem, variable);
@@ -185,12 +189,12 @@ const void BinaryGameConstraint::putForwardConstraints(const IVariable* variable
     col->isCompleted() ? columns.push_back(col) : delete col;
 }
 
-const void BinaryGameConstraint::undoForwardConstraints(const IVariable* variable)
+const void BinaryGameConstraintChecker::undoForwardConstraints(const IVariable* variable)
 {
-    //TODO
+    //TODO.. inaczej nie zadziała FC
 }
 
-void BinaryGameConstraint::limitDomainsByRepetitions(const IVariable* variable)
+void BinaryGameConstraintChecker::limitDomainsByRepetitions(const IVariable* variable)
 {
     const IValue* value = variable->getValue();
 
@@ -215,7 +219,7 @@ void BinaryGameConstraint::limitDomainsByRepetitions(const IVariable* variable)
         varDown->removeValueFromDomain(value);
 }
 
-void BinaryGameConstraint::limitDomainsByEqualSplit(const IVariable* variable)
+void BinaryGameConstraintChecker::limitDomainsByEqualSplit(const IVariable* variable)
 {
     IRow* row = new Row(problem, variable);
     IRow* col = new Column(problem, variable);
@@ -227,7 +231,7 @@ void BinaryGameConstraint::limitDomainsByEqualSplit(const IVariable* variable)
     delete col;
 }
 
-const IValue* BinaryGameConstraint::getValueWithMaxOccurrence(IRow* row)
+const IValue* BinaryGameConstraintChecker::getValueWithMaxOccurrence(IRow* row)
 {
     const IValue* zero = problem->getDomain()->getValue(0);
     const IValue* one = problem->getDomain()->getValue(1);
@@ -243,7 +247,7 @@ const IValue* BinaryGameConstraint::getValueWithMaxOccurrence(IRow* row)
     return nullptr;
 }
 
-void BinaryGameConstraint::removeValueFromDomainsInColumn(const IVariable* variable, const IValue* value)
+void BinaryGameConstraintChecker::removeValueFromDomainsInColumn(const IVariable* variable, const IValue* value)
 {
     if (value == nullptr)
         return;
@@ -260,7 +264,7 @@ void BinaryGameConstraint::removeValueFromDomainsInColumn(const IVariable* varia
     }
 }
 
-void BinaryGameConstraint::removeValueFromDomainsInRow(const IVariable* variable, const IValue* value)
+void BinaryGameConstraintChecker::removeValueFromDomainsInRow(const IVariable* variable, const IValue* value)
 {
     if (value == nullptr)
         return;
@@ -277,7 +281,7 @@ void BinaryGameConstraint::removeValueFromDomainsInRow(const IVariable* variable
     }
 }
 
-void BinaryGameConstraint::limitDomainsByExistingRow(const IVariable* variable)
+void BinaryGameConstraintChecker::limitDomainsByExistingRow(const IVariable* variable)
 {
     Row r(problem, variable);
 
@@ -323,7 +327,7 @@ void BinaryGameConstraint::limitDomainsByExistingRow(const IVariable* variable)
     }
 }
 
-void BinaryGameConstraint::limitDomainsByExistingColumn(const IVariable* variable)
+void BinaryGameConstraintChecker::limitDomainsByExistingColumn(const IVariable* variable)
 {
     Column c(problem, variable);
 
@@ -367,6 +371,66 @@ void BinaryGameConstraint::limitDomainsByExistingColumn(const IVariable* variabl
             }
         }
     }
+}
+
+void BinaryGameConstraintChecker::limitDomainsInRowByExistingRows(const IVariable* variable)
+{
+    IRow* r = new Row(problem, variable);
+    int row = variable->getRow();
+
+    if (! r->isCompleted())
+    {
+        std::vector<IRow*>::const_iterator it;
+
+        for (it = rows.begin(); it != rows.end(); ++it)
+        {
+            if ((*it)->compareWithAllowingNulls(r))
+            {
+                int width = r->getWidth();
+
+                for (int col = 0; col < width; ++col)
+                {
+                    if (r->getValue(col) == nullptr)
+                    {
+                        const IValue* tempVal = (*it)->getValue(col);
+                        problem->getVariable(row, col)->removeValueFromDomain(tempVal);
+                    }
+                }
+            }
+        }
+    }
+
+    delete r;
+}
+
+void BinaryGameConstraintChecker::limitDomainsInColumnByExistingColumns(const IVariable* variable)
+{
+    IRow* c = new Column(problem, variable);
+    int col = variable->getColumn();
+
+    if (! c->isCompleted())
+    {
+        std::vector<IRow*>::const_iterator it;
+
+        for (it = columns.begin(); it != columns.end(); ++it)
+        {
+            if ((*it)->compareWithAllowingNulls(c))
+            {
+                int width = c->getWidth();
+
+                for (int row = 0; row <= width; ++row)
+                {
+                    if (c->getValue(row) == nullptr)
+                    {
+                        const IValue* tempVal = (*it)->getValue(row);
+                        problem->getVariable(row, col)->removeValueFromDomain(tempVal);
+                    }
+                }
+            }
+        }
+    }
+
+    delete c;
 }
 
 // TODO: limit number of each value and inverse

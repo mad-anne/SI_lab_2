@@ -6,7 +6,7 @@
 #define SI_LAB_2_BACKTRACKING_H
 
 #include "../interface/IConstraintSatisfactionProblem.h"
-#include "../../constraints/interface/IConstraint.h"
+#include "constraints/interface/IConstraintChecker.h"
 #include "../../accessors/interface/IVariableGetter.h"
 
 class Backtracking : public IConstraintSatisfactionProblem

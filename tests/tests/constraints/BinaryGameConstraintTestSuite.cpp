@@ -3,9 +3,9 @@
 //
 
 #include <problems/interface/IProblem.h>
-#include <constraints/interface/IConstraint.h>
+#include <constraints/interface/IConstraintChecker.h>
 #include <problems/header/BinaryGame.h>
-#include <constraints/header/BinaryGameConstraint.h>
+#include <constraints/header/BinaryGameConstraintChecker.h>
 #include <gtest/gtest.h>
 
 class BinaryGameConstraintTestSuite : public ::testing::Test
@@ -18,14 +18,14 @@ class BinaryGameConstraintTestSuite : public ::testing::Test
         int width;
         int filledFields;
         IProblem* problem;
-        IConstraint* sut;
+        IConstraintChecker* sut;
 };
 
 BinaryGameConstraintTestSuite::BinaryGameConstraintTestSuite() :
     width(4),
     filledFields(0),
     problem(new BinaryGame(width, filledFields)),
-    sut(new BinaryGameConstraint(problem))
+    sut(new BinaryGameConstraintChecker(problem))
 {}
 
 BinaryGameConstraintTestSuite::~BinaryGameConstraintTestSuite()
