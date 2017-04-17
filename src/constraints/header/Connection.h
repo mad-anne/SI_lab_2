@@ -5,16 +5,22 @@
 #ifndef SI_LAB_2_CONNECTION_H
 #define SI_LAB_2_CONNECTION_H
 
-#include <constraints/interface/IConnection.h>
 
-class Connection : public IConnection
+#include <components/interface/IValue.h>
+
+class Connection
 {
+    const IValue* first;
+    const IValue* second;
+
     public:
         Connection(const IValue*, const IValue*);
         ~Connection();
 
-        const IValue* getFirstValue() const override;
-        const IValue* getSecondValue() const override;
+        const IValue* getFirstValue() const;
+        const IValue* getSecondValue() const;
+
+        bool operator==(const Connection& con);
 };
 
 #endif //SI_LAB_2_CONNECTION_H

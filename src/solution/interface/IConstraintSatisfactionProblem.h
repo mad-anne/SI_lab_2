@@ -15,7 +15,7 @@ class IConstraintSatisfactionProblem
 {
     protected:
         IProblem* problem;
-        IConstraint* constraint;
+        IConstraintChecker* constraint;
         IVariableGetter* varGetter;
         IValueGetter* valGetter;
 

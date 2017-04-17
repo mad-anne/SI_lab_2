@@ -13,7 +13,7 @@
 
 class HarmoniousGraphConstraintChecker : public IConstraintChecker
 {
-    std::vector<IConnection*> connections;
+    std::vector<Connection*> connections;
 
     public:
         HarmoniousGraphConstraintChecker(IProblem*);
@@ -50,15 +50,15 @@ private:
         void clearConnections();
 
     void removeValueFromEmptyNeighbours(const IVariable*, const IValue*);
-    void limitDomainsOnConnection(const IConnection*);
+    void limitDomainsOnConnection(const Connection*);
     void limitDomainsOnConnections(const IVariable*);
     void addValueToEmptyNeighbours(const IVariable*, const IValue*);
 
     void removeLimitsOnConnections(const IVariable*);
-    void removeLimitsOnConnection(const IVariable* variable, IConnection*);
-    void removeFromConnections(IConnection*);
+    void removeLimitsOnConnection(const IVariable* variable, Connection*);
+    void removeFromConnections(Connection*);
 
-    void addValueToDomainIfPossible(IVariable *pVariable, const IVariable *pIVariable, IConnection *pConnection);
+    void addValueToDomainIfPossible(IVariable *pVariable, const IVariable *pIVariable, Connection *pConnection);
 
     bool notExistsConstraintOnValues(IVariable *neighbour, IVariable *variable, const IVariable *removed);
 };

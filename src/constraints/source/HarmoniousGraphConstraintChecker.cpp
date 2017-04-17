@@ -227,7 +227,7 @@ void HarmoniousGraphConstraintChecker::removeValueFromEmptyNeighbours(const IVar
 
 void HarmoniousGraphConstraintChecker::limitDomainsOnConnections(const IVariable* variable)
 {
-    std::vector<IConnection*> cons;
+    std::vector<Connection*> cons;
 
     const IValue* value = variable->getValue();
 
@@ -248,7 +248,7 @@ void HarmoniousGraphConstraintChecker::limitDomainsOnConnections(const IVariable
     if (varDown != nullptr && varDown->getValue() != nullptr)
         cons.push_back(new Connection(value, varDown->getValue()));
 
-    std::vector<IConnection*>::iterator it;
+    std::vector<Connection*>::iterator it;
 
     for (it = cons.begin(); it != cons.end(); ++it)
     {
@@ -276,7 +276,7 @@ void HarmoniousGraphConstraintChecker::limitDomainsOnConnections(const IVariable
     }
 }
 
-void HarmoniousGraphConstraintChecker::limitDomainsOnConnection(const IConnection* connection)
+void HarmoniousGraphConstraintChecker::limitDomainsOnConnection(const Connection* connection)
 {
     int width = problem->getWidth();
     IVariable* variable;
@@ -320,7 +320,7 @@ void HarmoniousGraphConstraintChecker::addValueToEmptyNeighbours(const IVariable
 
 void HarmoniousGraphConstraintChecker::removeLimitsOnConnections(const IVariable* variable)
 {
-    std::vector<IConnection*> cons;
+    std::vector<Connection*> cons;
 
     const IValue* value = variable->getValue();
 
@@ -342,7 +342,7 @@ void HarmoniousGraphConstraintChecker::removeLimitsOnConnections(const IVariable
         cons.push_back(new Connection(value, varDown->getValue()));
 
 
-    std::vector<IConnection*>::iterator it = cons.begin();
+    std::vector<Connection*>::iterator it = cons.begin();
 
     while (it != cons.end())
     {
@@ -353,7 +353,7 @@ void HarmoniousGraphConstraintChecker::removeLimitsOnConnections(const IVariable
     }
 }
 
-void HarmoniousGraphConstraintChecker::removeLimitsOnConnection(const IVariable* variable, IConnection* connection)
+void HarmoniousGraphConstraintChecker::removeLimitsOnConnection(const IVariable* variable, Connection* connection)
 {
     int width = problem->getWidth();
     IVariable* tempVariable;
@@ -370,9 +370,9 @@ void HarmoniousGraphConstraintChecker::removeLimitsOnConnection(const IVariable*
     }
 }
 
-void HarmoniousGraphConstraintChecker::removeFromConnections(IConnection* connection)
+void HarmoniousGraphConstraintChecker::removeFromConnections(Connection* connection)
 {
-    std::vector<IConnection*>::const_iterator it;
+    std::vector<Connection*>::const_iterator it;
 
     for (it = connections.begin(); it != connections.end(); ++it)
     {
@@ -388,7 +388,7 @@ void HarmoniousGraphConstraintChecker::removeFromConnections(IConnection* connec
 }
 
 void HarmoniousGraphConstraintChecker::addValueToDomainIfPossible(IVariable* variable, const IVariable* removed,
-                                                           IConnection* connection)
+                                                           Connection* connection)
 {
     if (notExistsConstraintOnValues(getLeftNeighbour(variable), variable, removed)
         && notExistsConstraintOnValues(getRightNeighbour(variable), variable, removed)
