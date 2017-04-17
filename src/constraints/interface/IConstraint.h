@@ -24,6 +24,7 @@ class IConstraint
         virtual const bool checkAllAndPutConstraints(bool limitDomains) = 0;
 
         virtual void putConstraintsOnVariable(IVariable*, bool limitDomains) = 0;
+        virtual void putConstraintsOffVariable(IVariable*, bool limitDomains) = 0;
 
         virtual IVariable* getLeftNeighbour(IVariable* variable) const
         {

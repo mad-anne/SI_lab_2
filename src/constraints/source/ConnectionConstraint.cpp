@@ -68,17 +68,35 @@ void ConnectionConstraint::putConstraintsOnVariable(IVariable* variable, bool li
     if (variable == nullptr || variable->getValue() == nullptr)
         return;
 
-    addAllConnections(variable);
+    addConnectedConnections(variable);
 
     if (limitDomains)
         limitDomainsOnVariable(variable);
 }
 
-// TODO: dla forward checking
+// TODO: uwzględnia fakt sąsiadowania - nie dodawaj w drugim constraints
+void ConnectionConstraint::putConstraintsOffVariable(IVariable* variable, bool limitDomains)
+{
+    if (variable == nullptr || variable->getValue() == nullptr)
+        return;
+
+    removeConnectedConnections(variable);
+
+    if (limitDomains)
+        extendDomainsOnVariable(variable);
+}
+
 void ConnectionConstraint::limitDomainsOnVariable(IVariable* variable)
 {
     if (variable == nullptr || variable->getValue() == nullptr)
         return;
+
+    const IValue* value = getValueOfVariable(variable);
+
+    limitDomainsOnConnection(value, getValueOfVariable(getLeftNeighbour(variable)));
+    limitDomainsOnConnection(value, getValueOfVariable(getUpNeighbour(variable)));
+    limitDomainsOnConnection(value, getValueOfVariable(getRightNeighbour(variable)));
+    limitDomainsOnConnection(value, getValueOfVariable(getDownNeighbour(variable)));
 }
 
 const bool ConnectionConstraint::checkConnectionsWithNeighbours(IVariable* variable) const
@@ -118,7 +136,7 @@ const bool ConnectionConstraint::existsConnection(const IValue* valFirst, const 
     return exists;
 }
 
-void ConnectionConstraint::addAllConnections(IVariable* variable)
+void ConnectionConstraint::addConnectedConnections(IVariable* variable)
 {
     const IValue* value = getValueOfVariable(variable);
 
@@ -134,6 +152,38 @@ const bool ConnectionConstraint::addConnection(const IValue* valFirst, const IVa
         connections.push_back(new Connection(valFirst, valSecond));
 }
 
+void ConnectionConstraint::removeConnectedConnections(IVariable* variable)
+{
+    const IValue* value = getValueOfVariable(variable);
+
+    removeConnection(value, getValueOfVariable(getLeftNeighbour(variable)));
+    removeConnection(value, getValueOfVariable(getUpNeighbour(variable)));
+    removeConnection(value, getValueOfVariable(getRightNeighbour(variable)));
+    removeConnection(value, getValueOfVariable(getDownNeighbour(variable)));
+}
+
+void ConnectionConstraint::removeConnection(const IValue* valFirst, const IValue* valSecond)
+{
+    if (valFirst == nullptr || valSecond == nullptr)
+        return;
+
+    Connection connection(valFirst, valSecond);
+
+    bool found = false;
+    std::vector<Connection*>::const_iterator it = connections.begin();
+
+    while (!found && it != connections.end())
+    {
+        if ( *(*it) == connection)
+        {
+            found = true;
+            delete *it;
+            it = connections.erase(it);
+        }
+        ++it;
+    }
+}
+
 void ConnectionConstraint::clearConnections()
 {
     std::vector<Connection*>::const_iterator it = connections.begin();
@@ -145,3 +195,104 @@ void ConnectionConstraint::clearConnections()
     }
 }
 
+void ConnectionConstraint::limitDomainsOnConnection(const IValue* valFirst, const IValue* valSecond)
+{
+    if (valFirst == nullptr || valSecond == nullptr)
+        return;
+
+    int width = problem->getWidth();
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            IVariable* variable = problem->getVariable(row, col);
+
+            if (variable->getValue() == valFirst)
+            {
+                removeValueFromEmptyNeighbours(variable, valSecond);
+                continue;
+            }
+
+            if (variable->getValue() == valSecond)
+                removeValueFromEmptyNeighbours(variable, valFirst);
+        }
+    }
+}
+
+void ConnectionConstraint::removeValueFromEmptyNeighbours(IVariable* variable, const IValue* value)
+{
+    removeValueFromDomainIfEmpty(getLeftNeighbour(variable), value);
+    removeValueFromDomainIfEmpty(getUpNeighbour(variable), value);
+    removeValueFromDomainIfEmpty(getRightNeighbour(variable), value);
+    removeValueFromDomainIfEmpty(getDownNeighbour(variable), value);
+}
+
+void ConnectionConstraint::removeValueFromDomainIfEmpty(IVariable* variable, const IValue* value)
+{
+    if (variable != nullptr && variable->getValue() == nullptr)
+        variable->removeValueFromDomain(value);
+}
+
+void ConnectionConstraint::extendDomainsOnVariable(IVariable* variable)
+{
+    if (variable == nullptr || variable->getValue() == nullptr)
+        return;
+
+    const IValue* value = getValueOfVariable(variable);
+
+    extendDomainsOnConnection(value, getValueOfVariable(getLeftNeighbour(variable)), variable);
+    extendDomainsOnConnection(value, getValueOfVariable(getUpNeighbour(variable)), variable);
+    extendDomainsOnConnection(value, getValueOfVariable(getRightNeighbour(variable)), variable);
+    extendDomainsOnConnection(value, getValueOfVariable(getDownNeighbour(variable)), variable);
+}
+
+void ConnectionConstraint::extendDomainsOnConnection(const IValue* valFirst, const IValue* valSecond, IVariable* allowedNeighbour)
+{
+    if (valFirst == nullptr || valSecond == nullptr)
+        return;
+
+    int width = problem->getWidth();
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            IVariable* variable = problem->getVariable(row, col);
+
+            if (variable->getValue() == valFirst)
+            {
+                addValueToEmptyNeighbours(variable, valSecond, allowedNeighbour);
+                continue;
+            }
+
+            if (variable->getValue() == valSecond)
+                addValueToEmptyNeighbours(variable, valFirst, allowedNeighbour);
+        }
+    }
+}
+
+void ConnectionConstraint::addValueToEmptyNeighbours(IVariable* variable, const IValue* value, IVariable* allowedNeighbour)
+{
+    addValueToDomainIfEmpty(getLeftNeighbour(variable), value, allowedNeighbour);
+    addValueToDomainIfEmpty(getUpNeighbour(variable), value, allowedNeighbour);
+    addValueToDomainIfEmpty(getRightNeighbour(variable), value, allowedNeighbour);
+    addValueToDomainIfEmpty(getDownNeighbour(variable), value, allowedNeighbour);
+}
+
+void ConnectionConstraint::addValueToDomainIfEmpty(IVariable* variable, const IValue* value, IVariable* allowedNeighbour)
+{
+    if (variable != nullptr && variable->getValue() == nullptr && ! hasNeighbourWithValue(variable, value, allowedNeighbour))
+        variable->addValueToDomain(value);
+}
+
+bool ConnectionConstraint::hasNeighbourWithValue(IVariable* variable, const IValue* value, IVariable* allowedNeighbour)
+{
+    IVariable* varLeft = getLeftNeighbour(variable);
+    IVariable* varUp = getUpNeighbour(variable);
+    IVariable* varRight = getRightNeighbour(variable);
+    IVariable* varDown = getDownNeighbour(variable);
+
+    return  (getValueOfVariable(varLeft) == value && varLeft != allowedNeighbour)
+            || (getValueOfVariable(varUp) == value && varUp != allowedNeighbour)
+            || (getValueOfVariable(varRight) == value && varRight != allowedNeighbour)
+            || (getValueOfVariable(varDown) == value && varDown != allowedNeighbour);
+}
