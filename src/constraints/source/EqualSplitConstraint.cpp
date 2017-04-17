@@ -35,11 +35,6 @@ void EqualSplitConstraint::putConstraintsOnVariable(const IVariable* variable, b
         limitDomainsOnVariable(variable);
 }
 
-void EqualSplitConstraint::putConstraintsOffVariable(const IVariable* variable, bool limitDomains)
-{
-    // TODO
-}
-
 const bool EqualSplitConstraint::checkEqualSplit(const IVariable* variable) const
 {
     Row r(problem, variable);
@@ -118,4 +113,13 @@ void EqualSplitConstraint::limitDomainsInColumnByValue(const IVariable* variable
         if (tempVar->getValue() == nullptr)
             tempVar->removeValueFromDomain(value);
     }
+}
+
+bool EqualSplitConstraint::canAddValueToDomain(const IVariable *checked, const IValue *, const IVariable *reversed) {
+    return false;
+}
+
+void EqualSplitConstraint::putConstraintsOffVariable(const IVariable *)
+{
+    return;
 }

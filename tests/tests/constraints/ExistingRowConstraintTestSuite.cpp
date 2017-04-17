@@ -91,5 +91,5 @@ TEST_F(ExistingRowConstraintTestSuite, limitsDomainsBasedOnExistingRow)
 
 TEST_F(ExistingRowConstraintTestSuite, limitsDomainsBasedOnExistingColumn)
 {
-    
+
 }

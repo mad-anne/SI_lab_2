@@ -22,7 +22,9 @@ class ExistingRowConstraint : public IConstraint
         const bool checkAllAndPutConstraints(bool limitDomains) override;
 
         void putConstraintsOnVariable(const IVariable*, bool limitDomains) override;
-        void putConstraintsOffVariable(const IVariable*, bool limitDomains) override;
+        void putConstraintsOffVariable(const IVariable*) override;
+
+        bool canAddValueToDomain(const IVariable* checked, const IValue*, const IVariable* reversed);
 
     private:
         bool existsRow(const IVariable*) const;

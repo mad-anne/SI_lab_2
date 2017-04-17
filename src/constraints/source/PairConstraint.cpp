@@ -33,11 +33,6 @@ void PairConstraint::putConstraintsOnVariable(const IVariable* variable, bool li
         limitDomainsOnVariable(variable);
 }
 
-void PairConstraint::putConstraintsOffVariable(const IVariable* variable, bool limitDomains)
-{
-    // TODO
-}
-
 const bool PairConstraint::checkValueRepetitions(const IVariable* variable) const
 {
     if (variable == nullptr || variable->getValue() == nullptr)
@@ -105,4 +100,13 @@ void PairConstraint::limitDomainsInColumn(const IVariable* variable)
 
     if (getValueOfVariable(varDown) == value && varUp != nullptr && varUp->getValue() == nullptr)
         varUp->removeValueFromDomain(value);
+}
+
+bool PairConstraint::canAddValueToDomain(const IVariable* checked, const IValue *, const IVariable* reversed) {
+    return false; //TODO
+}
+
+void PairConstraint::putConstraintsOffVariable(const IVariable*)
+{
+    return;
 }

@@ -15,6 +15,7 @@ class Connection
 
     public:
         Connection(const IValue*, const IValue*);
+        Connection(const Connection&);
         ~Connection();
 
         const IValue* getFirstValue() const;

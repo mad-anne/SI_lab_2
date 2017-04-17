@@ -64,9 +64,14 @@ void NeighbourConstraint::putConstraintsOnVariable(const IVariable* variable, bo
         limitDomainsOnVariable(variable);
 }
 
-void NeighbourConstraint::putConstraintsOffVariable(const IVariable* variable, bool limitDomains)
+void NeighbourConstraint::putConstraintsOffVariable(const IVariable*)
 {
-    return; // all responsibility in ConnectionConstraint
+    return;
+}
+
+bool NeighbourConstraint::canAddValueToDomain(const IVariable* checked, const IValue* value, const IVariable* reversed)
+{
+    return ! hasNeighbourWithValue(checked, value, reversed);
 }
 
 const bool NeighbourConstraint::checkConnectionsWithNeighbours(const IVariable* variable) const
@@ -96,4 +101,17 @@ void NeighbourConstraint::limitDomainOnValue(IVariable* variable, const IValue* 
 {
     if (variable != nullptr)
         variable->removeValueFromDomain(value);
+}
+
+bool NeighbourConstraint::hasNeighbourWithValue(const IVariable* variable, const IValue* value, const IVariable* allowedNeighbour) const
+{
+    IVariable* varLeft = getLeftNeighbour(variable);
+    IVariable* varUp = getUpNeighbour(variable);
+    IVariable* varRight = getRightNeighbour(variable);
+    IVariable* varDown = getDownNeighbour(variable);
+
+    return  (getValueOfVariable(varLeft) == value && varLeft != allowedNeighbour)
+            || (getValueOfVariable(varUp) == value && varUp != allowedNeighbour)
+            || (getValueOfVariable(varRight) == value && varRight != allowedNeighbour)
+            || (getValueOfVariable(varDown) == value && varDown != allowedNeighbour);
 }

@@ -62,11 +62,13 @@ ISolution* Backtracking::recursive()
     {
         variable->setValue(value);
 
-        if (constraint->updateConstraints(variable))
+        if (constraint->isCorrectAssignment(variable))
         {
+            constraint->putConstraintsOn(variable, false);
+
             if ((solution = recursive()) == nullptr)
             {
-                constraint->undoConstraints(variable);
+                constraint->putConstraintsOff(variable, false);
                 variable->setValue(nullptr);
             }
             else
@@ -96,10 +98,11 @@ void Backtracking::recursiveFindAll()
     {
         variable->setValue(value);
 
-        if (constraint->updateConstraints(variable))
+        if (constraint->isCorrectAssignment(variable))
         {
+            constraint->putConstraintsOn(variable, false);
             recursiveFindAll();
-            constraint->undoConstraints(variable);
+            constraint->putConstraintsOff(variable, false);
             variable->setValue(nullptr);
         }
         else
@@ -124,12 +127,16 @@ void Backtracking::recursiveFindNumberOfAll()
     {
         variable->setValue(value);
 
-        if (constraint->updateConstraints(variable))
+
+        if (constraint->isCorrectAssignment(variable))
         {
+            constraint->putConstraintsOn(variable, false);
             recursiveFindNumberOfAll();
-            constraint->undoConstraints(variable);
+            constraint->putConstraintsOff(variable, false);
             variable->setValue(nullptr);
-        } else
+        }
+        else
             variable->setValue(nullptr);
     }
 }
+

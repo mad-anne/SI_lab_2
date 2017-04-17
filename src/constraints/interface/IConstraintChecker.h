@@ -12,7 +12,6 @@ class IConstraintChecker
 {
     protected:
         IProblem* problem;
-        std::vector<IConstraint*> constraints;
 
     public:
         IConstraintChecker(IProblem* problem) :
@@ -21,14 +20,12 @@ class IConstraintChecker
 
         virtual ~IConstraintChecker() = default;
 
-        virtual const bool updateConstraints(const IVariable*) = 0;
-        virtual void undoConstraints(const IVariable*) = 0;
+        virtual bool isCorrectAssignment(const IVariable*) const = 0;
 
-        virtual const void putForwardConstraints(const IVariable*) = 0;
-        virtual const void undoForwardConstraints(const IVariable*) = 0;
+        virtual const void putConstraintsOn(const IVariable*, bool limitDomains) = 0;
+        virtual const void putConstraintsOff(const IVariable*, bool limitDomains) = 0;
 
-        virtual void setProblem(IProblem*) = 0;
-        virtual const IProblem* getProblem() const = 0;
+        // TODO - if limits domains && checking constraints is connected ?
 };
 
 #endif //SI_LAB_2_ICONSTRAINTCHECKER_H

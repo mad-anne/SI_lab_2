@@ -20,6 +20,7 @@ class IDomain
         virtual void removeValue(const IValue*) = 0;
         virtual const IValue* getValue(int index) const = 0;
         virtual const unsigned long int getSize() const = 0;
+        virtual bool hasValue(const IValue* value) const = 0;
 };
 
 #endif //SI_LAB_2_IDOMAIN_H

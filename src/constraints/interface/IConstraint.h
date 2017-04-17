@@ -23,7 +23,9 @@ class IConstraint
         virtual const bool checkAllAndPutConstraints(bool limitDomains) = 0;
 
         virtual void putConstraintsOnVariable(const IVariable*, bool limitDomains) = 0;
-        virtual void putConstraintsOffVariable(const IVariable*, bool limitDomains) = 0;
+        virtual void putConstraintsOffVariable(const IVariable*) = 0;
+
+        virtual bool canAddValueToDomain(const IVariable* checked, const IValue*, const IVariable* reversed) = 0;
 
     protected:
         virtual IVariable* getLeftNeighbour(const IVariable* variable) const

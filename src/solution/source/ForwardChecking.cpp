@@ -60,11 +60,11 @@ ISolution* ForwardChecking::recursive()
     {
         variable->setValue(value);
 
-        constraint->putForwardConstraints(variable);
+        constraint->putConstraintsOn(variable, true);
 
         if ((solution = recursive()) == nullptr)
         {
-            constraint->undoForwardConstraints(variable);
+            constraint->putConstraintsOff(variable, true);
             variable->setValue(nullptr);
         }
         else
@@ -92,10 +92,35 @@ void ForwardChecking::recursiveFindNumberOfAll()
     {
         variable->setValue(value);
 
-        constraint->putForwardConstraints(variable);
+        constraint->putConstraintsOn(variable, true);
         recursiveFindNumberOfAll();
 
-        constraint->undoForwardConstraints(variable);
+        constraint->putConstraintsOff(variable, true);
+        variable->setValue(nullptr);
+    }
+}
+
+void ForwardChecking::recursiveFindAll()
+{
+    IVariable* variable = varGetter->getNext();
+
+    if (variable == nullptr)
+    {
+        solutions.push_back(new Solution(problem));
+        return;
+    }
+
+    NextValueGetter valueGetter(variable);
+    const IValue* value;
+
+    while ((value = valueGetter.getNext()) != nullptr)
+    {
+        variable->setValue(value);
+
+        constraint->putConstraintsOn(variable, true);
+        recursiveFindAll();
+
+        constraint->putConstraintsOff(variable, true);
         variable->setValue(nullptr);
     }
 }

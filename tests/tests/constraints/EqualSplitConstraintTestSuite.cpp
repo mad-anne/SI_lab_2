@@ -106,8 +106,8 @@ TEST_F(EqualSplitConstraintTestSuite, extendsDomainsBasedOnEqualSplit)
     var_0_1->setValue(one);
     sut->putConstraintsOnVariable(var_0_1, true);
 
-    sut->putConstraintsOffVariable(var_0_1, true);
-    var_0_1->setValue(nullptr);
+//    sut->putConstraintsOffVariable(var_0_1, true);
+//    var_0_1->setValue(nullptr);
 
     // ASSERT_EQ(var_0_2->getDomain()->getSize(), 2); TODO
 }

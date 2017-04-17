@@ -18,13 +18,17 @@ class NeighbourConstraint : public IConstraint
         const bool checkAllAndPutConstraints(bool limitDomains) override;
 
         void putConstraintsOnVariable(const IVariable*, bool limitDomains) override;
-        void putConstraintsOffVariable(const IVariable*, bool limitDomains) override;
+        void putConstraintsOffVariable(const IVariable*) override;
+
+        bool canAddValueToDomain(const IVariable* checked, const IValue*, const IVariable* reversed);
 
     private:
         const bool checkConnectionsWithNeighbours(const IVariable*) const;
 
         void limitDomainsOnVariable(const IVariable*);
         void limitDomainOnValue(IVariable*, const IValue*);
+
+        bool hasNeighbourWithValue(const IVariable* variable, const IValue*, const IVariable* allowedNeighbour) const;
 };
 
 

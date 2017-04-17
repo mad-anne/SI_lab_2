@@ -14,54 +14,17 @@
 
 class HarmoniousGraphConstraintChecker : public IConstraintChecker
 {
-    std::vector<Connection*> connections;
+    IConstraint* connectionConstraint;
+    IConstraint* neighbourConstraint;
 
     public:
         HarmoniousGraphConstraintChecker(IProblem*);
         ~HarmoniousGraphConstraintChecker();
 
-        const bool updateConstraints(const IVariable*) override;
-        void undoConstraints(const IVariable*) override;
+        bool isCorrectAssignment(const IVariable* variable) const override;
 
-        void setProblem(IProblem*) override;
-        const IProblem* getProblem() const override;
-
-        const void putForwardConstraints(const IVariable *variable) override;
-        const void undoForwardConstraints(const IVariable *variable) override;
-
-private:
-        const bool checkConstraints(const IVariable*) const;
-        const bool checkNeighbours(const IVariable*) const;
-        const bool checkConnections(const IVariable*) const;
-
-        const bool existsConnection(const IValue*, const IValue*) const;
-
-        void addConnections(const IVariable*);
-        void addConnection(const IValue*, const IValue*);
-
-        void removeConnections(const IVariable*);
-        void removeConnection(const IValue*, const IValue*);
-
-        IVariable* getUpNeighbour(const IVariable*) const;
-        IVariable* getRightNeighbour(const IVariable*) const;
-        IVariable* getDownNeighbour(const IVariable*) const;
-        IVariable* getLeftNeighbour(const IVariable*) const;
-
-        const IValue* getValue(const IVariable*) const;
-        void clearConnections();
-
-    void removeValueFromEmptyNeighbours(const IVariable*, const IValue*);
-    void limitDomainsOnConnection(const Connection*);
-    void limitDomainsOnConnections(const IVariable*);
-    void addValueToEmptyNeighbours(const IVariable*, const IValue*);
-
-    void removeLimitsOnConnections(const IVariable*);
-    void removeLimitsOnConnection(const IVariable* variable, Connection*);
-    void removeFromConnections(Connection*);
-
-    void addValueToDomainIfPossible(IVariable *pVariable, const IVariable *pIVariable, Connection *pConnection);
-
-    bool notExistsConstraintOnValues(IVariable *neighbour, IVariable *variable, const IVariable *removed);
+        const void putConstraintsOn(const IVariable* variable, bool limitDomains) override;
+        const void putConstraintsOff(const IVariable* variable, bool limitDomains) override;
 };
 
 #endif //SI_LAB_2_HARMONIOUSGRAPHCONSTRAINT_H

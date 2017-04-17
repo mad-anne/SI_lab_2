@@ -42,11 +42,6 @@ void ExistingRowConstraint::putConstraintsOnVariable(const IVariable* variable, 
         delete col;
 }
 
-void ExistingRowConstraint::putConstraintsOffVariable(const IVariable* variable, bool limitDomains)
-{
-
-}
-
 bool ExistingRowConstraint::existsRow(const IVariable* variable) const
 {
     IRow* row = new Row(problem, variable);
@@ -85,4 +80,13 @@ bool ExistingRowConstraint::existsColumn(const IVariable* variable) const
     delete col;
 
     return exists;
+}
+
+bool ExistingRowConstraint::canAddValueToDomain(const IVariable *checked, const IValue *, const IVariable *reversed) {
+    return false;
+}
+
+void ExistingRowConstraint::putConstraintsOffVariable(const IVariable *)
+{
+    return; // TODO
 }

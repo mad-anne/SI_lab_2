@@ -20,6 +20,7 @@ class ForwardChecking : public IConstraintSatisfactionProblem
     private:
         ISolution* recursive();
         void recursiveFindNumberOfAll();
+        void recursiveFindAll();
         void setAttributes(IProblemFactory*);
 };
 

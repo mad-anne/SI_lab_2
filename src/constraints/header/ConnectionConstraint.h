@@ -20,7 +20,14 @@ class ConnectionConstraint : public IConstraint
         const bool checkAllAndPutConstraints(bool limitDomains) override;
 
         void putConstraintsOnVariable(const IVariable*, bool limitDomains) override;
-        void putConstraintsOffVariable(const IVariable*, bool limitDomains) override;
+        void putConstraintsOffVariable(const IVariable*) override;
+
+        bool canAddValueToDomain(const IVariable* checked, const IValue*, const IVariable* reversed);
+
+        const IValue* getLeftValueInConnection(const IVariable*) const;
+        const IValue* getUpValueInConnection(const IVariable*) const;
+        const IValue* getRightValueInConnection(const IVariable*) const;
+        const IValue* getDownValueInConnection(const IVariable*) const;
 
     private:
         const bool checkConnectionsWithNeighbours(const IVariable*) const;
@@ -36,15 +43,11 @@ class ConnectionConstraint : public IConstraint
         void removeValueFromEmptyNeighbours(IVariable*, const IValue*);
         void removeValueFromDomainIfEmpty(IVariable*, const IValue*);
 
-        void extendDomainsOnVariable(const IVariable*);
-        void extendDomainsOnConnection(const IValue*, const IValue*, const IVariable* allowedNeighbour);
-        void addValueToEmptyNeighbours(IVariable*, const IValue*, const IVariable* allowedNeighbour);
-        void addValueToDomainIfEmpty(IVariable*, const IValue*, const IVariable* allowedNeighbour);
-        bool hasNeighbourWithValue(IVariable*, const IValue*, const IVariable* allowedNeighbour);
-
         const bool existsConnection(const IValue*, const IValue*) const;
 
         void clearConnections();
+
+        bool checkConnectedConnections(const IVariable*, const IValue*, const IVariable*);
 };
 
 

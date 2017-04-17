@@ -391,7 +391,7 @@ void Menu::performHarmoniousGraphColoring(int method, int type) const
         }
     }
 
-    printf("Time taken: %.100fms\n", (double) (endTime - startTime));
+    std::cout<< "Time taken: " << (endTime - startTime) << " clocks per second"<< std::endl;
 
     delete hgFactory;
 }
@@ -493,7 +493,7 @@ void Menu::performBinaryGameSolving(int method, int type) const
         }
     }
 
-    std::cout<< "Time taken: " << (endTime - startTime) << std::endl;
+    std::cout<< "Time taken: " << (endTime - startTime) << " clocks per second"<< std::endl;
 
     delete bgFactory;
 }
