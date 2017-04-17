@@ -10,37 +10,39 @@
 
 class ConnectionConstraint : public IConstraint
 {
+    std::vector<Connection*> connections;
+
     public:
         ConnectionConstraint(IProblem *problem);
         ~ConnectionConstraint() override;
 
-        const bool checkVariable(IVariable*) const override;
+        const bool checkVariable(const IVariable*) const override;
         const bool checkAllAndPutConstraints(bool limitDomains) override;
 
-        void putConstraintsOnVariable(IVariable*, bool limitDomains) override;
-        void putConstraintsOffVariable(IVariable*, bool limitDomains) override;
+        void putConstraintsOnVariable(const IVariable*, bool limitDomains) override;
+        void putConstraintsOffVariable(const IVariable*, bool limitDomains) override;
 
     private:
-        const bool checkConnectionsWithNeighbours(IVariable*) const;
+        const bool checkConnectionsWithNeighbours(const IVariable*) const;
 
-        void addConnectedConnections(IVariable*);
+        void addConnectedConnections(const IVariable*);
         const bool addConnection(const IValue*, const IValue*);
 
-        void removeConnectedConnections(IVariable*);
+        void removeConnectedConnections(const IVariable*);
         void removeConnection(const IValue*, const IValue*);
 
-        void limitDomainsOnVariable(IVariable*);
+        void limitDomainsOnVariable(const IVariable*);
         void limitDomainsOnConnection(const IValue*, const IValue*);
         void removeValueFromEmptyNeighbours(IVariable*, const IValue*);
         void removeValueFromDomainIfEmpty(IVariable*, const IValue*);
 
-        void extendDomainsOnVariable(IVariable*);
-        void extendDomainsOnConnection(const IValue*, const IValue*, IVariable* allowedNeighbour);
-        void addValueToEmptyNeighbours(IVariable*, const IValue*, IVariable* allowedNeighbour);
-        void addValueToDomainIfEmpty(IVariable*, const IValue*, IVariable* allowedNeighbour);
+        void extendDomainsOnVariable(const IVariable*);
+        void extendDomainsOnConnection(const IValue*, const IValue*, const IVariable* allowedNeighbour);
+        void addValueToEmptyNeighbours(IVariable*, const IValue*, const IVariable* allowedNeighbour);
+        void addValueToDomainIfEmpty(IVariable*, const IValue*, const IVariable* allowedNeighbour);
+        bool hasNeighbourWithValue(IVariable*, const IValue*, const IVariable* allowedNeighbour);
 
         const bool existsConnection(const IValue*, const IValue*) const;
-        bool hasNeighbourWithValue(IVariable*, const IValue*, IVariable* allowedNeighbour);
 
         void clearConnections();
 };

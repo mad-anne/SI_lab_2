@@ -12,7 +12,6 @@ class IConstraint
 {
     protected:
         IProblem* problem;
-        std::vector<Connection*> connections;
 
     public:
         IConstraint(IProblem* problem)
@@ -20,38 +19,39 @@ class IConstraint
         {}
         virtual ~IConstraint() = default;
 
-        virtual const bool checkVariable(IVariable*) const = 0;
+        virtual const bool checkVariable(const IVariable*) const = 0;
         virtual const bool checkAllAndPutConstraints(bool limitDomains) = 0;
 
-        virtual void putConstraintsOnVariable(IVariable*, bool limitDomains) = 0;
-        virtual void putConstraintsOffVariable(IVariable*, bool limitDomains) = 0;
+        virtual void putConstraintsOnVariable(const IVariable*, bool limitDomains) = 0;
+        virtual void putConstraintsOffVariable(const IVariable*, bool limitDomains) = 0;
 
-        virtual IVariable* getLeftNeighbour(IVariable* variable) const
+    protected:
+        virtual IVariable* getLeftNeighbour(const IVariable* variable) const
         {
             return  variable == nullptr ? nullptr
                     : problem->getVariable(variable->getRow(), variable->getColumn() - 1);
         }
 
-        virtual IVariable* getUpNeighbour(IVariable* variable) const
+        virtual IVariable* getUpNeighbour(const IVariable* variable) const
         {
             return  variable == nullptr ? nullptr
                     : problem->getVariable(variable->getRow() - 1, variable->getColumn());
 
         }
 
-        virtual IVariable* getRightNeighbour(IVariable* variable) const
+        virtual IVariable* getRightNeighbour(const IVariable* variable) const
         {
             return  variable == nullptr ? nullptr
                     : problem->getVariable(variable->getRow(), variable->getColumn() + 1);
         }
 
-        virtual IVariable* getDownNeighbour(IVariable* variable) const
+        virtual IVariable* getDownNeighbour(const IVariable* variable) const
         {
             return  variable == nullptr ? nullptr
                     : problem->getVariable(variable->getRow() + 1, variable->getColumn());
         }
 
-        virtual const IValue* getValueOfVariable(IVariable* variable) const
+        virtual const IValue* getValueOfVariable(const IVariable* variable) const
         {
             return variable == nullptr ? nullptr : variable->getValue();
         }

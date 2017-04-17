@@ -14,17 +14,17 @@ class NeighbourConstraint : public IConstraint
         NeighbourConstraint(IProblem *problem);
         ~NeighbourConstraint() override;
 
-        const bool checkVariable(IVariable *variable) const override;
+        const bool checkVariable(const IVariable*) const override;
         const bool checkAllAndPutConstraints(bool limitDomains) override;
 
-        void putConstraintsOnVariable(IVariable *variable, bool limitDomains) override;
-        void putConstraintsOffVariable(IVariable *variable, bool limitDomains) override;
+        void putConstraintsOnVariable(const IVariable*, bool limitDomains) override;
+        void putConstraintsOffVariable(const IVariable*, bool limitDomains) override;
 
-    const bool checkConnectionsWithNeighbours(IVariable *pVariable) const;
+    private:
+        const bool checkConnectionsWithNeighbours(const IVariable*) const;
 
-    void limitDomainsOnVariable(IVariable *pVariable);
-
-    void limitDomainOnValue(IVariable *pVariable, const IValue *pValue);
+        void limitDomainsOnVariable(const IVariable*);
+        void limitDomainOnValue(IVariable*, const IValue*);
 };
 
 

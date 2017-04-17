@@ -67,8 +67,8 @@ TEST_F(HarmoniousGraphConstraintTestSuite, returnsFalseIfNeighboursHaveTheSameVa
 
 TEST_F(HarmoniousGraphConstraintTestSuite, returnsFalseIfAlreadyExistsTheSameConnection)
 {
-    IValue* value1 = new Color(1);
-    IValue* value2 = new Color(2);
+    const IValue* value1 = problem->getDomain()->getValue(0);
+    const IValue* value2 = problem->getDomain()->getValue(1);
 
     problem->getVariable(0, 0)->setValue(value1);
     ASSERT_TRUE(sut->updateConstraints(problem->getVariable(0, 0)));
@@ -78,9 +78,6 @@ TEST_F(HarmoniousGraphConstraintTestSuite, returnsFalseIfAlreadyExistsTheSameCon
 
     problem->getVariable(0, 2)->setValue(value1);
     ASSERT_FALSE(sut->updateConstraints(problem->getVariable(0, 2)));
-
-    delete value1;
-    delete value2;
 }
 
 TEST_F(HarmoniousGraphConstraintTestSuite, returnsFalseIfAssigningAgainTheSameValueToVariable)

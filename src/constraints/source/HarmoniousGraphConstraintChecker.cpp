@@ -4,10 +4,15 @@
 
 #include <problems/interface/IProblem.h>
 #include <constraints/header/HarmoniousGraphConstraintChecker.h>
+#include <constraints/header/ConnectionConstraint.h>
+#include <constraints/header/NeighbourConstraint.h>
 
 HarmoniousGraphConstraintChecker::HarmoniousGraphConstraintChecker(IProblem* problem)
         : IConstraintChecker(problem)
-{}
+{
+    constraints.push_back(new NeighbourConstraint(problem));
+    constraints.push_back(new ConnectionConstraint(problem));
+}
 
 HarmoniousGraphConstraintChecker::~HarmoniousGraphConstraintChecker()
 {
@@ -16,18 +21,61 @@ HarmoniousGraphConstraintChecker::~HarmoniousGraphConstraintChecker()
 
 const bool HarmoniousGraphConstraintChecker::updateConstraints(const IVariable* variable)
 {
-    if (checkConstraints(variable))
+    std::vector<IConstraint*>::const_iterator it;
+    bool isCorrect = true;
+
+    for (it = constraints.begin(); isCorrect && it != constraints.end(); ++it)
+        isCorrect = (*it)->checkVariable(variable);
+
+    if (isCorrect)
     {
-        addConnections(variable);
-        return true;
+        std::vector<IConstraint*>::const_iterator it;
+
+        for (it = constraints.begin(); it != constraints.end(); ++it)
+            (*it)->putConstraintsOnVariable(variable, false);
     }
 
-    return false;
+    return isCorrect;
+
+//    if (checkConstraints(variable))
+//    {
+//        addConnections(variable);
+//        return true;
+//    }
+//
+//    return false;
 }
 
 void HarmoniousGraphConstraintChecker::undoConstraints(const IVariable* variable)
 {
-    removeConnections(variable);
+    std::vector<IConstraint*>::const_iterator it;
+
+    for (it = constraints.begin(); it != constraints.end(); ++it)
+        (*it)->putConstraintsOffVariable(variable, false);
+
+//    removeConnections(variable);
+}
+
+const void HarmoniousGraphConstraintChecker::putForwardConstraints(const IVariable* variable)
+{
+    std::vector<IConstraint*>::const_iterator it;
+
+    for (it = constraints.begin(); it != constraints.end(); ++it)
+        (*it)->putConstraintsOnVariable(variable, false);
+
+//    removeValueFromEmptyNeighbours(variable, variable->getValue());
+//    limitDomainsOnConnections(variable);
+}
+
+const void HarmoniousGraphConstraintChecker::undoForwardConstraints(const IVariable* variable)
+{
+    std::vector<IConstraint*>::const_iterator it;
+
+    for (it = constraints.begin(); it != constraints.end(); ++it)
+        (*it)->putConstraintsOffVariable(variable, false);
+
+//    addValueToEmptyNeighbours(variable, variable->getValue());
+//    removeLimitsOnConnections(variable);
 }
 
 void HarmoniousGraphConstraintChecker::setProblem(IProblem* problem)
@@ -187,22 +235,18 @@ const IValue *HarmoniousGraphConstraintChecker::getValue(const IVariable* variab
 
 void HarmoniousGraphConstraintChecker::clearConnections()
 {
+    std::vector<IConstraint*>::const_iterator it = constraints.begin();
+
+    while (it != constraints.end())
+    {
+        delete *it;
+        it = constraints.erase(it);
+    }
+
     for (int i = 0; i < connections.size(); ++i)
         delete connections[i];
 
     connections.clear();
-}
-
-const void HarmoniousGraphConstraintChecker::putForwardConstraints(const IVariable* variable)
-{
-    removeValueFromEmptyNeighbours(variable, variable->getValue());
-    limitDomainsOnConnections(variable);
-}
-
-const void HarmoniousGraphConstraintChecker::undoForwardConstraints(const IVariable* variable)
-{
-    addValueToEmptyNeighbours(variable, variable->getValue());
-    removeLimitsOnConnections(variable);
 }
 
 void HarmoniousGraphConstraintChecker::removeValueFromEmptyNeighbours(const IVariable* variable, const IValue* value)

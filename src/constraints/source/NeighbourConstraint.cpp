@@ -11,7 +11,7 @@ NeighbourConstraint::NeighbourConstraint(IProblem* problem) :
 NeighbourConstraint::~NeighbourConstraint()
 {}
 
-const bool NeighbourConstraint::checkVariable(IVariable* variable) const
+const bool NeighbourConstraint::checkVariable(const IVariable* variable) const
 {
     if (variable == nullptr || variable->getValue() == nullptr)
         return true;
@@ -55,7 +55,7 @@ const bool NeighbourConstraint::checkAllAndPutConstraints(bool limitDomains)
     return isCorrect;
 }
 
-void NeighbourConstraint::putConstraintsOnVariable(IVariable* variable, bool limitDomains)
+void NeighbourConstraint::putConstraintsOnVariable(const IVariable* variable, bool limitDomains)
 {
     if (variable == nullptr || variable->getValue() == nullptr)
         return;
@@ -64,12 +64,12 @@ void NeighbourConstraint::putConstraintsOnVariable(IVariable* variable, bool lim
         limitDomainsOnVariable(variable);
 }
 
-void NeighbourConstraint::putConstraintsOffVariable(IVariable* variable, bool limitDomains)
+void NeighbourConstraint::putConstraintsOffVariable(const IVariable* variable, bool limitDomains)
 {
     return; // all responsibility in ConnectionConstraint
 }
 
-const bool NeighbourConstraint::checkConnectionsWithNeighbours(IVariable* variable) const
+const bool NeighbourConstraint::checkConnectionsWithNeighbours(const IVariable* variable) const
 {
     const IValue* value = variable->getValue();
 
@@ -79,7 +79,7 @@ const bool NeighbourConstraint::checkConnectionsWithNeighbours(IVariable* variab
             && (getValueOfVariable(getDownNeighbour(variable)) != value);
 }
 
-void NeighbourConstraint::limitDomainsOnVariable(IVariable* variable)
+void NeighbourConstraint::limitDomainsOnVariable(const IVariable* variable)
 {
     if (variable == nullptr || variable->getValue() == nullptr)
         return;

@@ -6,6 +6,7 @@
 #define SI_LAB_2_HARMONIOUSGRAPHCONSTRAINT_H
 
 #include <constraints/interface/IConstraintChecker.h>
+#include <constraints/interface/IConstraint.h>
 #include <components/header/Color.h>
 #include <vector>
 #include "Connection.h"
