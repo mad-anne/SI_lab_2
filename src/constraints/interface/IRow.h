@@ -74,6 +74,17 @@ class IRow
             return counter;
         }
 
+        virtual bool operator==(const IRow& row)
+        {
+            for (int index = 0; index < width; ++index)
+            {
+                if (values[index] != row.values[index])
+                    return false;
+            }
+
+            return true;
+        }
+
         virtual bool isCompleted() const
         {
             for (int index = 0; index < width; ++index)

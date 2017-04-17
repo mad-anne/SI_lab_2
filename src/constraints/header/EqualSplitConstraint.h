@@ -26,13 +26,11 @@ class EqualSplitConstraint : public IConstraint
 
         void limitDomainsOnVariable(const IVariable*);
 
-    void limitDomainsInRow(const IVariable *variable);
+        void limitDomainsInRow(const IVariable *variable);
+        void limitDomainsInColumn(const IVariable *variable);
 
-    void limitDomainsInColumn(const IVariable *variable);
-
-    void limitDomainsInRowByValue(const IVariable *pVariable, const IValue *pValue);
-
-    void limitDomainsInColumnByValue(const IVariable *pVariable, const IValue *pValue);
+        void limitDomainsInRowByValue(const IVariable *pVariable, const IValue *pValue);
+        void limitDomainsInColumnByValue(const IVariable *pVariable, const IValue *pValue);
 };
 
 
