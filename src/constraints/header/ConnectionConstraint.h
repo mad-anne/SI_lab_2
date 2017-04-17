@@ -1,5 +1,5 @@
 //
-// Created by Dom on 2017-04-17.
+// Created by Anna Siwik on 2017-04-17.
 //
 
 #ifndef SI_LAB_2_CONNECTIONCONSTRAINT_H
@@ -18,7 +18,7 @@ class ConnectionConstraint : public IConstraint
         const bool checkAllAndPutConstraints(bool limitDomains) override;
 
         void putConstraintsOnVariable(IVariable*, bool limitDomains) override;
-        void putConstraintsOffVariable(IVariable*, bool limitDomains) override ;
+        void putConstraintsOffVariable(IVariable*, bool limitDomains) override;
 
     private:
         const bool checkConnectionsWithNeighbours(IVariable*) const;
