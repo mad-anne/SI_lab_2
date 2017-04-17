@@ -14,15 +14,21 @@ class ConnectionConstraint : public IConstraint
         ConnectionConstraint(IProblem *problem);
         ~ConnectionConstraint() override;
 
-        const bool checkVariable(IVariable *variable) const override;
-        const bool checkAll() const override;
+        const bool checkVariable(IVariable*) const override;
+        const bool checkAllAndPutConstraints(bool limitDomains) override;
 
-        void putConstraintsOnVariable(IVariable *variable, bool limitDomains) override;
-        void putConstraintsOnAll() override;
+        void putConstraintsOnVariable(IVariable*, bool limitDomains) override;
 
     private:
-        const bool existsConnection(IValue*, IValue*) const;
-        const bool addConnection(Connection*);
+        const bool checkConnectionsWithNeighbours(IVariable*) const;
+
+        const bool existsConnection(const IValue*, const IValue*) const;
+        const bool addConnection(const IValue*, const IValue*);
+        void addAllConnections(IVariable*);
+
+        void limitDomainsOnVariable(IVariable*);
+
+        void clearConnections();
 };
 
 

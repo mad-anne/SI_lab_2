@@ -62,3 +62,36 @@ IVariable* HarmoniousGraph::getVariable(int row, int column) const
            ? nodes[row][column]
            : nullptr;
 }
+
+void HarmoniousGraph::resetAllDomains()
+{
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            if (nodes[row][col]->getDomain()->getSize() != domain->getSize())
+                nodes[row][col]->addDomain(domain);
+        }
+    }
+}
+
+IProblem* HarmoniousGraph::deepCopy() const
+{
+    IProblem* copy = new HarmoniousGraph(width);
+    const IDomain* copiedDomain = copy->getDomain();
+
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            if (nodes[row][col]->getValue() != nullptr)
+            {
+                int index = nodes[row][col]->getValue()->getValue();
+                const IValue* value = copiedDomain->getValue(index);
+                copy->getVariable(row, col)->setValue(value);
+            }
+        }
+    }
+
+    return copy;
+}

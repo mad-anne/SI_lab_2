@@ -17,7 +17,9 @@ class HarmoniousGraph : public IProblem
         HarmoniousGraph(int width);
         ~HarmoniousGraph();
 
+        IProblem* deepCopy() const;
         IVariable* getVariable(int row, int column) const override;
+        void resetAllDomains();
 
     private:
         void generateEmptyGraph();

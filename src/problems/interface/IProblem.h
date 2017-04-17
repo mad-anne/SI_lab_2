@@ -25,6 +25,8 @@ class IProblem
             delete domain;
         }
 
+        virtual IProblem* deepCopy() const = 0;
+
         virtual IVariable* getVariable(int row, int column) const = 0;
 
         virtual const int getWidth() const
@@ -36,6 +38,8 @@ class IProblem
         {
             return domain;
         }
+
+        virtual void resetAllDomains() = 0;
 };
 
 #endif //SI_LAB_2_IGRAPH_H

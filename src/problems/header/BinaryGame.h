@@ -17,7 +17,11 @@ class BinaryGame : public IProblem
         BinaryGame(int width, int filledFields);
         ~BinaryGame() override;
 
+        IProblem* deepCopy() const;
         IVariable* getVariable(int row, int column) const override;
+        void resetAllDomains() override;
+
+        const int getFilledFields() const;
 
     private:
         void generateEmptyGrid();
