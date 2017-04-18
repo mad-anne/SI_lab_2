@@ -19,7 +19,8 @@ class MostFilledCrossingVariableGetter : public IVariableGetter
         void setProblem(const IProblem*) override;
         const IProblem* getProblem() const override;
 
-    int countNullsOnCrossing(IVariable *pVariable);
+    private:
+        int countNullsOnCrossing(IVariable *pVariable);
 };
 
 
