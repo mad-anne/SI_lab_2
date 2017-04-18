@@ -10,6 +10,7 @@ ForwardChecking::ForwardChecking() :
     IConstraintSatisfactionProblem()
 {}
 
+// TODO - jeśli którakolwiek domena jest pusta, przestań sprawdzać
 ForwardChecking::~ForwardChecking()
 {}
 

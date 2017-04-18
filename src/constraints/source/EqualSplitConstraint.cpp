@@ -23,7 +23,7 @@ const bool EqualSplitConstraint::checkVariable(const IVariable* variable) const
 
 const bool EqualSplitConstraint::checkAllAndPutConstraints(bool limitDomains)
 {
-    return 0; //TODO
+    return 0; //TODO - przenieść do checkerów
 }
 
 void EqualSplitConstraint::putConstraintsOnVariable(const IVariable* variable, bool limitDomains)
@@ -116,7 +116,7 @@ void EqualSplitConstraint::limitDomainsInColumnByValue(const IVariable* variable
 }
 
 bool EqualSplitConstraint::canAddValueToDomain(const IVariable *checked, const IValue *, const IVariable *reversed) {
-    return false;
+    return false; // TODO czy ktoras z wartosci moze byc zaburzona  (bo ilosc w kol/wier jest juz max i to te val dodajemu); jesli nie ta wie/kol to true
 }
 
 void EqualSplitConstraint::putConstraintsOffVariable(const IVariable *)

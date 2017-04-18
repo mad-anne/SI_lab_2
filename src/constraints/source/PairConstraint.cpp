@@ -48,7 +48,7 @@ const bool PairConstraint::checkValuesInRow(const IVariable* variable) const
     const IValue* valLeft = getValueOfVariable(getLeftNeighbour(variable));
     const IValue* valRight = getValueOfVariable(getRightNeighbour(variable));
 
-    return  ! (valLeft == value && valRight == value)
+    return  ! (valLeft == value && value == valRight)
             && (valLeft == value ? getValueOfVariable(getLeftNeighbour(getLeftNeighbour(variable))) != value : true)
             && (valRight == value ? getValueOfVariable(getRightNeighbour(getRightNeighbour(variable))) != value : true);
 }
@@ -60,7 +60,7 @@ bool PairConstraint::checkValuesInColumn(const IVariable* variable) const
     const IValue* valUp = getValueOfVariable(getUpNeighbour(variable));
     const IValue* valDown = getValueOfVariable(getDownNeighbour(variable));
 
-    return  ! (valUp == value && valDown == value)
+    return  ! (valUp == value && value == valDown)
             && (valUp == value ? getValueOfVariable(getUpNeighbour(getUpNeighbour(variable))) != value : true)
             && (valDown == value ? getValueOfVariable(getDownNeighbour(getDownNeighbour(variable))) != value : true);
 }
@@ -102,8 +102,9 @@ void PairConstraint::limitDomainsInColumn(const IVariable* variable)
         varUp->removeValueFromDomain(value);
 }
 
-bool PairConstraint::canAddValueToDomain(const IVariable* checked, const IValue *, const IVariable* reversed) {
-    return false; //TODO
+bool PairConstraint::canAddValueToDomain(const IVariable* checked, const IValue *, const IVariable* reversed)
+{
+    return false; //TODO jesli nie w wierszu/kol, to true; jesli tak, to czy wplywa na mozliwosc powstania trojki
 }
 
 void PairConstraint::putConstraintsOffVariable(const IVariable*)

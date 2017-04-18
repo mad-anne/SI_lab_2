@@ -47,6 +47,9 @@ const void BinaryGameConstraintChecker::putConstraintsOff(const IVariable* varia
     equalSplitConstraint->putConstraintsOffVariable(variable);
     existingRowConstraint->putConstraintsOffVariable(variable);
 
+    if (! limitDomains)
+        return;
+
     const IValue* zero = problem->getDomain()->getValue(0);
     const IValue* one = problem->getDomain()->getValue(1);
 

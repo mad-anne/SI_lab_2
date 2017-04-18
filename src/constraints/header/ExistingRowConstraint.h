@@ -29,6 +29,13 @@ class ExistingRowConstraint : public IConstraint
     private:
         bool existsRow(const IVariable*) const;
         bool existsColumn(const IVariable*) const;
+
+    void limitDomainsInRows(IRow *pRow);
+
+    void limitDomainsInRow(int r, IRow *pRow);
+    void limitDomainsInColumn(int colNumber, IRow*);
+
+    void limitDomainsInColumns(IRow *pRow);
 };
 
 
