@@ -22,6 +22,8 @@ class ForwardChecking : public IConstraintSatisfactionProblem
         void recursiveFindNumberOfAll();
         void recursiveFindAll();
         void setAttributes(IProblemFactory*);
+
+        bool isNullVariableWithEmptyDomain();
 };
 
 

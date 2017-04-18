@@ -62,7 +62,7 @@ ISolution* ForwardChecking::recursive()
 
         constraint->putConstraintsOn(variable, true);
 
-        if ((solution = recursive()) == nullptr)
+        if (!isNullVariableWithEmptyDomain() && (solution = recursive()) == nullptr)
         {
             constraint->putConstraintsOff(variable, true);
             variable->setValue(nullptr);
@@ -99,7 +99,9 @@ void ForwardChecking::recursiveFindNumberOfAll()
         }
 
         constraint->putConstraintsOn(variable, true);
-        recursiveFindNumberOfAll();
+
+        if (! isNullVariableWithEmptyDomain())
+            recursiveFindNumberOfAll();
 
         constraint->putConstraintsOff(variable, true);
         variable->setValue(nullptr);
@@ -130,11 +132,31 @@ void ForwardChecking::recursiveFindAll()
         }
 
         constraint->putConstraintsOn(variable, true);
-        recursiveFindAll();
+
+        if (! isNullVariableWithEmptyDomain())
+            recursiveFindAll();
 
         constraint->putConstraintsOff(variable, true);
         variable->setValue(nullptr);
     }
 
     delete tempValGetter;
+}
+
+bool ForwardChecking::isNullVariableWithEmptyDomain()
+{
+    int width = problem->getWidth();
+
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            IVariable* tempVar = problem->getVariable(row, col);
+
+            if (tempVar->getValue() == nullptr && tempVar->getDomain()->getSize() == 0)
+                return true;
+        }
+    }
+
+    return false;
 }
