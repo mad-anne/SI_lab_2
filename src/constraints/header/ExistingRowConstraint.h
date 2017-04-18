@@ -36,6 +36,14 @@ class ExistingRowConstraint : public IConstraint
     void limitDomainsInColumn(int colNumber, IRow*);
 
     void limitDomainsInColumns(IRow *pRow);
+
+    void removeFromRows(IRow *pRow);
+
+    void removeFromColumns(IRow *pRow);
+
+    bool canAddValueToRow(const IVariable *pVariable, const IValue *pValue, const IVariable *pIVariable);
+
+    bool canAddValueToColumn(const IVariable *pVariable, const IValue *pValue, const IVariable *pIVariable);
 };
 
 

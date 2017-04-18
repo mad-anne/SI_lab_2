@@ -120,22 +120,31 @@ TEST_F(PairConstraintTestSuite, limitsDomainsBasedOnPair)
     sut->putConstraintsOnVariable(var_0_1, true);
 
     ASSERT_EQ(var_0_2->getDomain()->getSize(), 1);
+
+    sut->putConstraintsOffVariable(var_0_1);
+    var_0_1->setValue(nullptr);
+
+    ASSERT_TRUE(sut->canAddValueToDomain(var_0_2, one, var_0_1));
 }
 
-TEST_F(PairConstraintTestSuite, extendsDomainsBasedOnPair)
+TEST_F(PairConstraintTestSuite, cantAddValueToDomainIfExistsPair)
 {
     IVariable* var_0_0 = problem->getVariable(0, 0);
     IVariable* var_0_1 = problem->getVariable(0, 1);
     IVariable* var_0_2 = problem->getVariable(0, 2);
+    IVariable* var_0_3 = problem->getVariable(0, 3);
 
     var_0_0->setValue(one);
     sut->putConstraintsOnVariable(var_0_0, true);
 
-    var_0_1->setValue(one);
-    sut->putConstraintsOnVariable(var_0_1, true);
+    var_0_2->setValue(one);
+    sut->putConstraintsOnVariable(var_0_2, true);
 
-//    sut->putConstraintsOffVariable(var_0_1, true);
-//    var_0_1->setValue(nullptr);
+    var_0_3->setValue(zero);
+    sut->putConstraintsOnVariable(var_0_3, true);
 
-//    ASSERT_EQ(var_0_2->getDomain()->getSize(), 2);
+    sut->putConstraintsOffVariable(var_0_3);
+    var_0_3->setValue(nullptr);
+
+    ASSERT_FALSE(sut->canAddValueToDomain(var_0_1, one, var_0_3));
 }

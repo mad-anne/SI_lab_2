@@ -2,6 +2,7 @@
 // Created by Anna Siwik on 2017-04-17.
 //
 
+#include <constraints/header/Row.h>
 #include "constraints/header/PairConstraint.h"
 
 PairConstraint::PairConstraint(IProblem *problem) :
@@ -31,6 +32,17 @@ void PairConstraint::putConstraintsOnVariable(const IVariable* variable, bool li
 
     if (limitDomains)
         limitDomainsOnVariable(variable);
+}
+
+void PairConstraint::putConstraintsOffVariable(const IVariable*)
+{
+    return;
+}
+
+bool PairConstraint::canAddValueToDomain(const IVariable* checked, const IValue* value, const IVariable* reversed)
+{
+    return canAddValueToRow(checked, value, reversed)
+           && canAddValueToColumn(checked, value, reversed);
 }
 
 const bool PairConstraint::checkValueRepetitions(const IVariable* variable) const
@@ -102,12 +114,23 @@ void PairConstraint::limitDomainsInColumn(const IVariable* variable)
         varUp->removeValueFromDomain(value);
 }
 
-bool PairConstraint::canAddValueToDomain(const IVariable* checked, const IValue *, const IVariable* reversed)
+bool PairConstraint::canAddValueToRow(const IVariable* checked, const IValue* value, const IVariable* reversed)
 {
-    return false; //TODO jesli nie w wierszu/kol, to true; jesli tak, to czy wplywa na mozliwosc powstania trojki
+    IVariable* varLeft = getLeftNeighbour(checked);
+    IVariable* varRight = getRightNeighbour(checked);
+
+    return ! (getValueOfVariable(varLeft) == value && getValueOfVariable(varRight) == value)
+           && ! (getValueOfVariable(varLeft) == value && getValueOfVariable(getLeftNeighbour(varLeft)) == value)
+           && ! (getValueOfVariable(varRight) == value && getValueOfVariable(getRightNeighbour(varRight)) == value);
 }
 
-void PairConstraint::putConstraintsOffVariable(const IVariable*)
+bool
+PairConstraint::canAddValueToColumn(const IVariable* checked, const IValue* value, const IVariable* reversed)
 {
-    return;
+    IVariable* varUp = getUpNeighbour(checked);
+    IVariable* varDown = getDownNeighbour(checked);
+
+    return ! (getValueOfVariable(varUp) == value && getValueOfVariable(varDown) == value)
+           && ! (getValueOfVariable(varUp) == value && getValueOfVariable(getLeftNeighbour(varUp)) == value)
+           && ! (getValueOfVariable(varDown) == value && getValueOfVariable(getRightNeighbour(varDown)) == value);
 }

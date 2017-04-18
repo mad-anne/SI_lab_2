@@ -77,6 +77,51 @@ TEST_F(EqualSplitConstraintTestSuite, checkVariableReturnsFalseIfItIsTooMuchOnes
     sut->putConstraintsOnVariable(var_2_0, false);
 }
 
+TEST_F(EqualSplitConstraintTestSuite, canAddValueToDomainReturnsFalseWhenNotEqualSplit)
+{
+    IVariable* var_0_0 = problem->getVariable(0, 0);
+    IVariable* var_0_1 = problem->getVariable(0, 1);
+    IVariable* var_0_2 = problem->getVariable(0, 2);
+    IVariable* var_0_3 = problem->getVariable(0, 3);
+
+    var_0_0->setValue(one);
+    sut->putConstraintsOnVariable(var_0_0, true);
+
+    var_0_1->setValue(one);
+    sut->putConstraintsOnVariable(var_0_1, true);
+
+    var_0_2->setValue(zero);
+    sut->putConstraintsOnVariable(var_0_2, true);
+
+    sut->putConstraintsOffVariable(var_0_2);
+
+    ASSERT_FALSE(sut->canAddValueToDomain(var_0_3, one, var_0_2));
+}
+
+TEST_F(EqualSplitConstraintTestSuite, canAddValueToDomainReturnsTrueIfEqualSplit)
+{
+    IVariable* var_0_0 = problem->getVariable(0, 0);
+    IVariable* var_0_1 = problem->getVariable(0, 1);
+    IVariable* var_0_2 = problem->getVariable(0, 2);
+    IVariable* var_0_3 = problem->getVariable(0, 3);
+
+    var_0_0->setValue(one);
+    sut->putConstraintsOnVariable(var_0_0, true);
+
+    var_0_1->setValue(one);
+    sut->putConstraintsOnVariable(var_0_1, true);
+
+    var_0_2->setValue(zero);
+    sut->putConstraintsOnVariable(var_0_2, true);
+
+    sut->putConstraintsOffVariable(var_0_2);
+    var_0_2->setValue(nullptr);
+
+    sut->putConstraintsOffVariable(var_0_1);
+
+    ASSERT_TRUE(sut->canAddValueToDomain(var_0_3, one, var_0_1));
+}
+
 TEST_F(EqualSplitConstraintTestSuite, limitsDomainsBasedOnEqualSplit)
 {
     IVariable* var_0_0 = problem->getVariable(0, 0);
@@ -92,22 +137,9 @@ TEST_F(EqualSplitConstraintTestSuite, limitsDomainsBasedOnEqualSplit)
     sut->putConstraintsOnVariable(var_0_1, true);
 
     ASSERT_EQ(var_0_2->getDomain()->getSize(), 1);
-}
 
-TEST_F(EqualSplitConstraintTestSuite, extendsDomainsBasedOnEqualSplit)
-{
-    IVariable* var_0_0 = problem->getVariable(0, 0);
-    IVariable* var_0_1 = problem->getVariable(0, 1);
-    IVariable* var_0_2 = problem->getVariable(0, 2);
+    sut->putConstraintsOffVariable(var_0_1);
+    var_0_1->setValue(nullptr);
 
-    var_0_0->setValue(one);
-    sut->putConstraintsOnVariable(var_0_0, true);
-
-    var_0_1->setValue(one);
-    sut->putConstraintsOnVariable(var_0_1, true);
-
-//    sut->putConstraintsOffVariable(var_0_1, true);
-//    var_0_1->setValue(nullptr);
-
-    // ASSERT_EQ(var_0_2->getDomain()->getSize(), 2); TODO
+    ASSERT_TRUE(sut->canAddValueToDomain(var_0_2, one, var_0_1));
 }

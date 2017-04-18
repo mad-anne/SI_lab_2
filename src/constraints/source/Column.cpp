@@ -12,6 +12,9 @@ Column::Column(const IProblem* problem, const IVariable* variable) :
     readColumn(problem);
 }
 
+Column::~Column()
+{}
+
 const int Column::getColNumber() const
 {
     return colNumber;

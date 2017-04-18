@@ -35,6 +35,15 @@ void EqualSplitConstraint::putConstraintsOnVariable(const IVariable* variable, b
         limitDomainsOnVariable(variable);
 }
 
+bool EqualSplitConstraint::canAddValueToDomain(const IVariable* checked, const IValue* value, const IVariable* reversed)
+{
+    if (checked->getRow() != reversed->getRow() && checked->getColumn() != reversed->getColumn())
+        return true;
+
+    return canAddValueToRow(checked, value, reversed)
+           && canAddValueToColumn(checked, value, reversed);
+}
+
 const bool EqualSplitConstraint::checkEqualSplit(const IVariable* variable) const
 {
     Row r(problem, variable);
@@ -115,11 +124,27 @@ void EqualSplitConstraint::limitDomainsInColumnByValue(const IVariable* variable
     }
 }
 
-bool EqualSplitConstraint::canAddValueToDomain(const IVariable *checked, const IValue *, const IVariable *reversed) {
-    return false; // TODO czy ktoras z wartosci moze byc zaburzona  (bo ilosc w kol/wier jest juz max i to te val dodajemu); jesli nie ta wie/kol to true
-}
-
-void EqualSplitConstraint::putConstraintsOffVariable(const IVariable *)
+void EqualSplitConstraint::putConstraintsOffVariable(const IVariable*)
 {
     return;
+}
+
+bool EqualSplitConstraint::canAddValueToRow(const IVariable* checked, const IValue* value, const IVariable* reversed)
+{
+    Row r(problem, checked);
+
+    int maxValue = problem->getWidth() / 2;
+
+    return (reversed->getValue() == value && r.countValue(value) <= maxValue)
+            || (r.countValue(value) < maxValue);
+}
+
+bool EqualSplitConstraint::canAddValueToColumn(const IVariable* checked, const IValue* value, const IVariable* reversed)
+{
+    Column c(problem, checked);
+
+    int maxValue = problem->getWidth() / 2;
+
+    return (reversed->getValue() == value && c.countValue(value) <= maxValue)
+           || (c.countValue(value) < maxValue);
 }

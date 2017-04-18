@@ -127,7 +127,6 @@ void Backtracking::recursiveFindNumberOfAll()
     {
         variable->setValue(value);
 
-
         if (constraint->isCorrectAssignment(variable))
         {
             constraint->putConstraintsOn(variable, false);

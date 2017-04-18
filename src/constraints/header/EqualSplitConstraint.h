@@ -12,7 +12,6 @@ class EqualSplitConstraint : public IConstraint
 {
     public:
         EqualSplitConstraint(IProblem *problem);
-
         ~EqualSplitConstraint() override;
 
         const bool checkVariable(const IVariable*) const override;
@@ -33,6 +32,10 @@ class EqualSplitConstraint : public IConstraint
 
         void limitDomainsInRowByValue(const IVariable *pVariable, const IValue *pValue);
         void limitDomainsInColumnByValue(const IVariable *pVariable, const IValue *pValue);
+
+    bool canAddValueToRow(const IVariable *pVariable, const IValue *pValue, const IVariable *pIVariable);
+
+    bool canAddValueToColumn(const IVariable *pVariable, const IValue *pValue, const IVariable *pIVariable);
 };
 
 

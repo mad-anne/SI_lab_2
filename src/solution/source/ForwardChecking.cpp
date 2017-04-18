@@ -103,8 +103,6 @@ void ForwardChecking::recursiveFindNumberOfAll()
             constraint->putConstraintsOff(variable, true);
             variable->setValue(nullptr);
         }
-
-
     }
 }
 

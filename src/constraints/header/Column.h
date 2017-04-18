@@ -16,7 +16,7 @@ class Column : public IRow
 
     public:
         Column(const IProblem*, const IVariable*);
-        ~Column() override = default;
+        ~Column() override;
 
         const int getColNumber() const;
 

@@ -12,6 +12,9 @@ Row::Row(const IProblem* problem, const IVariable* variable) :
     readRow(problem);
 }
 
+Row::~Row()
+{}
+
 const int Row::getRowNumber() const
 {
     return rowNumber;

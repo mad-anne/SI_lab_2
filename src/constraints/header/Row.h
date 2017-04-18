@@ -16,7 +16,7 @@ class Row : public IRow
 
     public:
         Row(const IProblem*, const IVariable*);
-        ~Row() override = default;
+        ~Row() override;
 
         const int getRowNumber() const;
 

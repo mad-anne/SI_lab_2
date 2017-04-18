@@ -31,6 +31,10 @@ class PairConstraint : public IConstraint
         void limitDomainsOnVariable(const IVariable*);
         void limitDomainsInRow(const IVariable*);
         void limitDomainsInColumn(const IVariable*);
+
+    bool canAddValueToRow(const IVariable *pVariable, const IValue *pValue, const IVariable *pIVariable);
+
+    bool canAddValueToColumn(const IVariable *pVariable, const IValue *pValue, const IVariable *pIVariable);
 };
 
 

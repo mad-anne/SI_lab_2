@@ -75,7 +75,7 @@ TEST_F(BinaryGameConstraintTestSuite, returnsFalseWhenRowAlreadyExists)
     problem->getVariable(0, 2)->setValue(problem->getDomain()->getValue(0));
     problem->getVariable(0, 3)->setValue(problem->getDomain()->getValue(1));
 
-    sut->isCorrectAssignment(problem->getVariable(0, 3));
+    sut->putConstraintsOn(problem->getVariable(0, 3), false);
 
     problem->getVariable(1, 0)->setValue(problem->getDomain()->getValue(0));
     problem->getVariable(1, 1)->setValue(problem->getDomain()->getValue(1));
@@ -92,14 +92,19 @@ TEST_F(BinaryGameConstraintTestSuite, removesRowsFromAlreadyExisting)
     problem->getVariable(0, 2)->setValue(problem->getDomain()->getValue(0));
     problem->getVariable(0, 3)->setValue(problem->getDomain()->getValue(1));
 
-    sut->isCorrectAssignment(problem->getVariable(0, 3));
+    ASSERT_TRUE(sut->isCorrectAssignment(problem->getVariable(0, 3)));
+    sut->putConstraintsOn(problem->getVariable(0, 3), true);
 
     problem->getVariable(1, 0)->setValue(problem->getDomain()->getValue(0));
     problem->getVariable(1, 1)->setValue(problem->getDomain()->getValue(1));
     problem->getVariable(1, 2)->setValue(problem->getDomain()->getValue(0));
     problem->getVariable(1, 3)->setValue(problem->getDomain()->getValue(1));
 
-    sut->putConstraintsOff(problem->getVariable(0, 3), false);
+    ASSERT_FALSE(sut->isCorrectAssignment(problem->getVariable(1, 3)));
+    problem->getVariable(1, 3)->setValue(nullptr);
+
+    sut->putConstraintsOff(problem->getVariable(0, 3), true);
+    problem->getVariable(0, 3)->setValue(nullptr);
 
     ASSERT_TRUE(sut->isCorrectAssignment(problem->getVariable(1, 3)));
 }

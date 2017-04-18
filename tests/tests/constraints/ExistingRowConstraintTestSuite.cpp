@@ -86,10 +86,39 @@ TEST_F(ExistingRowConstraintTestSuite, checkVariableReturnsFalseIfRowAlreadyExis
 
 TEST_F(ExistingRowConstraintTestSuite, limitsDomainsBasedOnExistingRow)
 {
+    IVariable* var_0_0 = problem->getVariable(0, 0);
+    IVariable* var_0_1 = problem->getVariable(0, 1);
+    IVariable* var_0_2 = problem->getVariable(0, 2);
+    IVariable* var_0_3 = problem->getVariable(0, 3);
 
-}
+    IVariable* var_1_0 = problem->getVariable(1, 0);
+    IVariable* var_1_1 = problem->getVariable(1, 1);
+    IVariable* var_1_2 = problem->getVariable(1, 2);
 
-TEST_F(ExistingRowConstraintTestSuite, limitsDomainsBasedOnExistingColumn)
-{
+    var_0_0->setValue(zero);
+    sut->putConstraintsOnVariable(var_0_0, true);
 
+    var_0_1->setValue(zero);
+    sut->putConstraintsOnVariable(var_0_1, true);
+
+    var_0_2->setValue(one);
+    sut->putConstraintsOnVariable(var_0_2, true);
+
+    var_0_3->setValue(one);
+    sut->putConstraintsOnVariable(var_0_3, true);
+
+    var_1_0->setValue(zero);
+    sut->putConstraintsOnVariable(var_1_0, true);
+
+    ASSERT_EQ(var_1_2->getDomain()->getSize(), 2);
+
+    var_1_1->setValue(zero);
+    sut->putConstraintsOnVariable(var_1_1, true);
+
+    ASSERT_EQ(var_1_2->getDomain()->getSize(), 1);
+
+    sut->putConstraintsOffVariable(var_1_1);
+    var_1_1->setValue(nullptr);
+
+    ASSERT_TRUE(sut->canAddValueToDomain(var_1_2, one, var_1_1));
 }
