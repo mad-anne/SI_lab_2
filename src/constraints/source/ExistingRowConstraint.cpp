@@ -193,6 +193,9 @@ void ExistingRowConstraint::limitDomainsInColumn(int colNumber, IRow* column)
 
 void ExistingRowConstraint::removeFromRows(IRow* row)
 {
+    if (! row->isCompleted())
+        return;
+
     std::vector<IRow*>::const_iterator it = rows.begin();
     bool found = false;
     while (! found && it != rows.end())
@@ -231,13 +234,18 @@ void ExistingRowConstraint::removeFromColumns(IRow* col)
 bool ExistingRowConstraint::canAddValueToRow(const IVariable* checked, const IValue* value, const IVariable* reversed)
 {
     IRow* row = new Row(problem, checked);
+    row->setValue(checked->getColumn(), value);
+
+    if (reversed->getRow() == checked->getRow())
+        row->setValue(reversed->getColumn(), nullptr);
+
     bool canAdd = true;
 
-    if (! row->isCompleted() && row->countValue(nullptr) <= 2)
+    if (row->countValue(nullptr) <= 1)
     {
         for (int i = 0; canAdd && i < rows.size(); ++i)
         {
-            if (rows[i]->compareWithAllowingNulls(row) && rows[i]->getValue(checked->getColumn()) == value)
+            if (rows[i]->compareWithAllowingNulls(row))
                 canAdd = false;
         }
     }
@@ -250,13 +258,18 @@ bool ExistingRowConstraint::canAddValueToRow(const IVariable* checked, const IVa
 bool ExistingRowConstraint::canAddValueToColumn(const IVariable* checked, const IValue* value, const IVariable* reversed)
 {
     IRow* col = new Column(problem, checked);
+    col->setValue(checked->getRow(), value);
+
+    if (reversed->getColumn() == checked->getColumn())
+        col->setValue(reversed->getRow(), nullptr);
+
     bool canAdd = true;
 
-    if (! col->isCompleted() && col->countValue(nullptr) <= 2)
+    if (col->countValue(nullptr) <= 1)
     {
         for (int i = 0; canAdd && i < columns.size(); ++i)
         {
-            if (columns[i]->compareWithAllowingNulls(col) && columns[i]->getValue(checked->getRow()) == value)
+            if (columns[i]->compareWithAllowingNulls(col))
                 canAdd = false;
         }
     }

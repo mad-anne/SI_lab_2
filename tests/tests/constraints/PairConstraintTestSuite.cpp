@@ -144,7 +144,6 @@ TEST_F(PairConstraintTestSuite, cantAddValueToDomainIfExistsPair)
     sut->putConstraintsOnVariable(var_0_3, true);
 
     sut->putConstraintsOffVariable(var_0_3);
-    var_0_3->setValue(nullptr);
 
     ASSERT_FALSE(sut->canAddValueToDomain(var_0_1, one, var_0_3));
 }

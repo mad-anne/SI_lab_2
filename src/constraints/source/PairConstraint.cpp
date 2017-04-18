@@ -3,6 +3,7 @@
 //
 
 #include <constraints/header/Row.h>
+#include <constraints/header/Column.h>
 #include "constraints/header/PairConstraint.h"
 
 PairConstraint::PairConstraint(IProblem *problem) :
@@ -116,21 +117,32 @@ void PairConstraint::limitDomainsInColumn(const IVariable* variable)
 
 bool PairConstraint::canAddValueToRow(const IVariable* checked, const IValue* value, const IVariable* reversed)
 {
-    IVariable* varLeft = getLeftNeighbour(checked);
-    IVariable* varRight = getRightNeighbour(checked);
+    if (checked->getValue() != nullptr)
+        return false;
 
-    return ! (getValueOfVariable(varLeft) == value && getValueOfVariable(varRight) == value)
-           && ! (getValueOfVariable(varLeft) == value && getValueOfVariable(getLeftNeighbour(varLeft)) == value)
-           && ! (getValueOfVariable(varRight) == value && getValueOfVariable(getRightNeighbour(varRight)) == value);
+    IRow* row = new Row(problem, checked);
+    row->setValue(checked->getColumn(), value);
+
+    if (reversed->getRow() == checked->getRow())
+        row->setValue(reversed->getColumn(), nullptr);
+
+    bool isCorrect = row->isCorrect();
+    delete row;
+    return isCorrect;
 }
 
-bool
-PairConstraint::canAddValueToColumn(const IVariable* checked, const IValue* value, const IVariable* reversed)
+bool PairConstraint::canAddValueToColumn(const IVariable* checked, const IValue* value, const IVariable* reversed)
 {
-    IVariable* varUp = getUpNeighbour(checked);
-    IVariable* varDown = getDownNeighbour(checked);
+    if (checked->getValue() != nullptr)
+        return false;
 
-    return ! (getValueOfVariable(varUp) == value && getValueOfVariable(varDown) == value)
-           && ! (getValueOfVariable(varUp) == value && getValueOfVariable(getLeftNeighbour(varUp)) == value)
-           && ! (getValueOfVariable(varDown) == value && getValueOfVariable(getRightNeighbour(varDown)) == value);
+    IRow* col = new Column(problem, checked);
+    col->setValue(checked->getRow(), value);
+
+    if (reversed->getColumn() == checked->getColumn())
+        col->setValue(reversed->getRow(), nullptr);
+
+    bool isCorrect = col->isCorrect();
+    delete col;
+    return isCorrect;
 }
