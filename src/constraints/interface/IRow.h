@@ -104,21 +104,19 @@ class IRow
                 const IValue* second = values[index - 1];
                 const IValue* third = values[index];
 
-                if (first == second && second == third
-                    && first != nullptr && second != nullptr && third != nullptr)
-                {
+                if (first == second && second == third && second != nullptr)
                     return false;
-                }
             }
 
             return true;
         }
 
-        virtual const IValue* getValueAfterPair(unsigned long int index)
+        virtual void setValue(int index, const IValue* value)
         {
-            return (index < 0 || index >= values.size())
-                    ? nullptr
-                    : values[index];
+            if (index >= values.size() || index < 0)
+                return;
+
+            values.at(index) = value;
         }
 };
 

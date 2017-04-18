@@ -94,6 +94,7 @@ TEST_F(ExistingRowConstraintTestSuite, limitsDomainsBasedOnExistingRow)
     IVariable* var_1_0 = problem->getVariable(1, 0);
     IVariable* var_1_1 = problem->getVariable(1, 1);
     IVariable* var_1_2 = problem->getVariable(1, 2);
+    IVariable* var_1_3 = problem->getVariable(1, 3);
 
     var_0_0->setValue(zero);
     sut->putConstraintsOnVariable(var_0_0, true);
@@ -116,6 +117,7 @@ TEST_F(ExistingRowConstraintTestSuite, limitsDomainsBasedOnExistingRow)
     sut->putConstraintsOnVariable(var_1_1, true);
 
     ASSERT_EQ(var_1_2->getDomain()->getSize(), 1);
+    ASSERT_EQ(var_1_3->getDomain()->getSize(), 1);
 
     sut->putConstraintsOffVariable(var_1_1);
     var_1_1->setValue(nullptr);

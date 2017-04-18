@@ -7,6 +7,7 @@
 #include <constraints/header/PairConstraint.h>
 #include <constraints/header/EqualSplitConstraint.h>
 #include <constraints/header/ExistingRowConstraint.h>
+#include <iostream>
 #include "constraints/header/BinaryGameConstraintChecker.h"
 
 BinaryGameConstraintChecker::BinaryGameConstraintChecker(IProblem* problem) :
@@ -59,7 +60,12 @@ const void BinaryGameConstraintChecker::putConstraintsOff(const IVariable* varia
         for (int col = 0; col < width; ++col)
         {
             IVariable* tempVar = problem->getVariable(row, col);
-            if (tempVar->getValue() == nullptr && tempVar != variable)
+
+            if (variable->getRow() == 1 && variable->getColumn() == 1 && variable->getValue() == 0
+                && tempVar->getRow() == 1 && tempVar->getColumn() == 2)
+                std::cout << "GOT YA" << std::endl;
+
+            if (tempVar->getValue() == nullptr)
             {
                 if (! tempVar->getDomain()->hasValue(zero))
                 {

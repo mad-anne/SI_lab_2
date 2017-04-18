@@ -24,8 +24,6 @@ class IConstraintChecker
 
         virtual const void putConstraintsOn(const IVariable*, bool limitDomains) = 0;
         virtual const void putConstraintsOff(const IVariable*, bool limitDomains) = 0;
-
-        // TODO - if limits domains && checking constraints is connected ?
 };
 
 #endif //SI_LAB_2_ICONSTRAINTCHECKER_H

@@ -23,7 +23,7 @@ const bool EqualSplitConstraint::checkVariable(const IVariable* variable) const
 
 const bool EqualSplitConstraint::checkAllAndPutConstraints(bool limitDomains)
 {
-    return 0; //TODO - przenieść do checkerów
+    return 0;
 }
 
 void EqualSplitConstraint::putConstraintsOnVariable(const IVariable* variable, bool limitDomains)
@@ -37,9 +37,6 @@ void EqualSplitConstraint::putConstraintsOnVariable(const IVariable* variable, b
 
 bool EqualSplitConstraint::canAddValueToDomain(const IVariable* checked, const IValue* value, const IVariable* reversed)
 {
-    if (checked->getRow() != reversed->getRow() && checked->getColumn() != reversed->getColumn())
-        return true;
-
     return canAddValueToRow(checked, value, reversed)
            && canAddValueToColumn(checked, value, reversed);
 }
@@ -131,20 +128,38 @@ void EqualSplitConstraint::putConstraintsOffVariable(const IVariable*)
 
 bool EqualSplitConstraint::canAddValueToRow(const IVariable* checked, const IValue* value, const IVariable* reversed)
 {
-    Row r(problem, checked);
-
+    const IValue* zero = problem->getDomain()->getValue(0);
+    const IValue* one = problem->getDomain()->getValue(1);
     int maxValue = problem->getWidth() / 2;
 
-    return (reversed->getValue() == value && r.countValue(value) <= maxValue)
-            || (r.countValue(value) < maxValue);
+    IRow* row = new Row(problem, checked);
+    row->setValue(checked->getColumn(), value);
+
+    if (reversed->getRow() == checked->getRow())
+        row->setValue(reversed->getColumn(), nullptr);
+
+    bool canAdd = row->countValue(zero) <= maxValue && row->countValue(one) <= maxValue;
+
+    delete row;
+    return canAdd;
 }
 
 bool EqualSplitConstraint::canAddValueToColumn(const IVariable* checked, const IValue* value, const IVariable* reversed)
 {
-    Column c(problem, checked);
 
+    const IValue* zero = problem->getDomain()->getValue(0);
+    const IValue* one = problem->getDomain()->getValue(1);
     int maxValue = problem->getWidth() / 2;
 
-    return (reversed->getValue() == value && c.countValue(value) <= maxValue)
-           || (c.countValue(value) < maxValue);
+    IRow* col = new Column(problem, checked);
+    col->setValue(checked->getRow(), value);
+
+    if (reversed->getColumn() == checked->getColumn())
+        col->setValue(reversed->getRow(), nullptr);
+
+    bool canAdd = col->countValue(zero) <= maxValue && col->countValue(one) <= maxValue;
+
+    delete col;
+    return canAdd;
+
 }

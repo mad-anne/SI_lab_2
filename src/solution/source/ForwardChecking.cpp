@@ -4,13 +4,13 @@
 
 #include <solution/header/Solution.h>
 #include <accessors/header/NextValueGetter.h>
+#include <iostream>
 #include "../header/ForwardChecking.h"
 
 ForwardChecking::ForwardChecking() :
     IConstraintSatisfactionProblem()
 {}
 
-// TODO - jeśli którakolwiek domena jest pusta, przestań sprawdzać
 ForwardChecking::~ForwardChecking()
 {}
 
@@ -60,11 +60,23 @@ ISolution* ForwardChecking::recursive()
     {
         variable->setValue(value);
 
+        std::cout << "\nVARIABLE" << std::endl;
+        std::cout << "row: " << variable->getRow() << " col: " << variable->getColumn() << std::endl;
+        std::cout<< "assigned value: " << value->getValue() << std::endl;
+
         constraint->putConstraintsOn(variable, true);
 
         if ((solution = recursive()) == nullptr)
         {
+            if (variable->getRow() == 1 && variable->getColumn() == 1 && variable->getValue()->getValue() == 0)
+                std::cout << "COS" << std::endl;
+
             constraint->putConstraintsOff(variable, true);
+
+            std::cout << "\nVARIABLE" << std::endl;
+            std::cout << "row: " << variable->getRow() << " col: " << variable->getColumn() << std::endl;
+            std::cout<< "REMOVED value: " << value->getValue() << std::endl;
+
             variable->setValue(nullptr);
         }
         else
