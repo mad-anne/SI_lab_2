@@ -45,3 +45,8 @@ bool NextValueGetter::hasBeenUsed(const IValue* value)
 {
     return std::find(used.begin(), used.end(), value) != used.end();
 }
+
+IValueGetter* NextValueGetter::instantiate(const IVariable* variable) const
+{
+    return new NextValueGetter(variable);
+}

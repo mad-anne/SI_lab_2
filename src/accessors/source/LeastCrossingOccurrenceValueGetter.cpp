@@ -1,5 +1,5 @@
 //
-// Created by annam on 18.04.2017.
+// Created by Anna Siwik on 18.04.2017.
 //
 
 #include <algorithm>
@@ -7,7 +7,7 @@
 #include <constraints/header/Row.h>
 #include "accessors/header/LeastCrossingOccurrenceValueGetter.h"
 
-LeastCrossingOccurrenceValueGetter::LeastCrossingOccurrenceValueGetter(const IVariable* variable, IProblem* problem) :
+LeastCrossingOccurrenceValueGetter::LeastCrossingOccurrenceValueGetter(const IVariable* variable, const IProblem* problem) :
         IValueGetter(variable),
         problem(problem)
 {
@@ -67,4 +67,9 @@ int LeastCrossingOccurrenceValueGetter::countValueOnCrossing(IValue* value)
 
     return r.countValue(value) + c.countValue(value)
            + (variable->getValue() == value ? -1 : 0);
+}
+
+IValueGetter* LeastCrossingOccurrenceValueGetter::instantiate(const IVariable* variable) const
+{
+    return new LeastCrossingOccurrenceValueGetter(variable, problem);
 }

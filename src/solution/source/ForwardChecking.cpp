@@ -53,10 +53,10 @@ ISolution* ForwardChecking::recursive()
     if (variable == nullptr)
         return new Solution(problem);
 
-    NextValueGetter valueGetter(variable);
-     IValue* value;
+    IValueGetter* tempValGetter = valGetter->instantiate(variable);
+    IValue* value;
 
-    while ((value = valueGetter.getNext()) != nullptr)
+    while ((value = tempValGetter->getNext()) != nullptr)
     {
         variable->setValue(value);
 
@@ -71,6 +71,8 @@ ISolution* ForwardChecking::recursive()
             break;
     }
 
+    delete tempValGetter;
+
     return solution;
 }
 
@@ -82,10 +84,10 @@ void ForwardChecking::recursiveFindNumberOfAll()
     if (variable == nullptr)
         return;
 
-    NextValueGetter valueGetter(variable);
+    IValueGetter* tempValGetter = valGetter->instantiate(variable);
     IValue* value;
 
-    while ((value = valueGetter.getNext()) != nullptr)
+    while ((value = tempValGetter->getNext()) != nullptr)
     {
         variable->setValue(value);
 
@@ -95,15 +97,15 @@ void ForwardChecking::recursiveFindNumberOfAll()
             variable->setValue(nullptr);
             continue;
         }
-        else
-        {
-            constraint->putConstraintsOn(variable, true);
-            recursiveFindNumberOfAll();
 
-            constraint->putConstraintsOff(variable, true);
-            variable->setValue(nullptr);
-        }
+        constraint->putConstraintsOn(variable, true);
+        recursiveFindNumberOfAll();
+
+        constraint->putConstraintsOff(variable, true);
+        variable->setValue(nullptr);
     }
+
+    delete tempValGetter;
 }
 
 void ForwardChecking::recursiveFindAll()
@@ -111,17 +113,21 @@ void ForwardChecking::recursiveFindAll()
     IVariable* variable = varGetter->getNext();
 
     if (variable == nullptr)
-    {
-        solutions.push_back(new Solution(problem));
         return;
-    }
 
-    NextValueGetter valueGetter(variable);
+    IValueGetter* tempValGetter = valGetter->instantiate(variable);
     IValue* value;
 
-    while ((value = valueGetter.getNext()) != nullptr)
+    while ((value = tempValGetter->getNext()) != nullptr)
     {
         variable->setValue(value);
+
+        if (problem->isCompleted())
+        {
+            solutions.push_back(new Solution(problem));
+            variable->setValue(nullptr);
+            continue;
+        }
 
         constraint->putConstraintsOn(variable, true);
         recursiveFindAll();
@@ -129,4 +135,6 @@ void ForwardChecking::recursiveFindAll()
         constraint->putConstraintsOff(variable, true);
         variable->setValue(nullptr);
     }
+
+    delete tempValGetter;
 }

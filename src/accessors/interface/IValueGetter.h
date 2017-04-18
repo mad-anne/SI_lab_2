@@ -23,6 +23,8 @@ class IValueGetter
 
         virtual ~IValueGetter() = default;
 
+        virtual IValueGetter* instantiate(const IVariable*) const = 0;
+
         virtual IValue* getNext() = 0;
 
         virtual void setVariable(const IVariable*) = 0;

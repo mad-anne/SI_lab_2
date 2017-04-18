@@ -22,7 +22,9 @@ class NextValueGetter : public IValueGetter
         void setVariable(const IVariable*) override;
         const IVariable* getVariable() const override;
 
-    private:
+    IValueGetter *instantiate(const IVariable *variable) const override;
+
+private:
         bool hasBeenUsed(const IValue *pValue);
 };
 

@@ -56,3 +56,8 @@ bool LeastUsedValueGetter::hasBeenUsed(IValue* value)
 {
     return std::find(used.begin(), used.end(), value) != used.end();
 }
+
+IValueGetter* LeastUsedValueGetter::instantiate(const IVariable* variable) const
+{
+    return new LeastUsedValueGetter(variable);
+}

@@ -55,10 +55,10 @@ ISolution* Backtracking::recursive()
     if (variable == nullptr)
         return new Solution(problem);
 
-    NextValueGetter valueGetter(variable);
+    IValueGetter* tempValGetter = valGetter->instantiate(variable);
     IValue* value;
 
-    while ((value = valueGetter.getNext()) != nullptr)
+    while ((value = tempValGetter->getNext()) != nullptr)
     {
         variable->setValue(value);
 
@@ -78,6 +78,8 @@ ISolution* Backtracking::recursive()
             variable->setValue(nullptr);
     }
 
+    delete tempValGetter;
+
     return solution;
 }
 
@@ -91,10 +93,10 @@ void Backtracking::recursiveFindAll()
         return;
     }
 
-    NextValueGetter valueGetter(variable);
+    IValueGetter* tempValGetter = valGetter->instantiate(variable);
     IValue* value;
 
-    while ((value = valueGetter.getNext()) != nullptr)
+    while ((value = tempValGetter->getNext()) != nullptr)
     {
         variable->setValue(value);
 
@@ -108,6 +110,8 @@ void Backtracking::recursiveFindAll()
         else
             variable->setValue(nullptr);
     }
+
+    delete tempValGetter;
 }
 
 void Backtracking::recursiveFindNumberOfAll()
@@ -120,10 +124,10 @@ void Backtracking::recursiveFindNumberOfAll()
         return;
     }
 
-    NextValueGetter valueGetter(variable);
+    IValueGetter* tempValGetter = valGetter->instantiate(variable);
     IValue* value;
 
-    while ((value = valueGetter.getNext()) != nullptr)
+    while ((value = tempValGetter->getNext()) != nullptr)
     {
         variable->setValue(value);
 
@@ -137,5 +141,7 @@ void Backtracking::recursiveFindNumberOfAll()
         else
             variable->setValue(nullptr);
     }
+
+    delete tempValGetter;
 }
 

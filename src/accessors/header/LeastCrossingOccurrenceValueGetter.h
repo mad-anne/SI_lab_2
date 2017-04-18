@@ -1,5 +1,5 @@
 //
-// Created by annam on 18.04.2017.
+// Created by Anna Siwik on 18.04.2017.
 //
 
 #ifndef SI_LAB_2_LEASTCROSSINGOCCURRENCEVALUEGETTER_H
@@ -15,15 +15,17 @@ class LeastCrossingOccurrenceValueGetter : public IValueGetter
     const IProblem* problem;
 
     public:
-        LeastCrossingOccurrenceValueGetter(const IVariable *variable, IProblem*);
+        LeastCrossingOccurrenceValueGetter(const IVariable*, const IProblem*);
         ~LeastCrossingOccurrenceValueGetter();
+
+        IValueGetter* instantiate(const IVariable *variable) const override;
 
         IValue* getNext() override;
 
         void setVariable(const IVariable *variable) override;
         const IVariable* getVariable() const override;
 
-    private:
+private:
         bool hasBeenUsed(IValue *pValue);
         int countValueOnCrossing(IValue* value);
 };
