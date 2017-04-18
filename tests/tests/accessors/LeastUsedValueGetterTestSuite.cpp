@@ -26,7 +26,10 @@ LeastUsedValueGetterTestSuite::LeastUsedValueGetterTestSuite() :
 {}
 
 LeastUsedValueGetterTestSuite::~LeastUsedValueGetterTestSuite()
-{}
+{
+    delete problem;
+    delete sut;
+}
 
 TEST_F(LeastUsedValueGetterTestSuite, returnsFirstValueForTheFirstTime)
 {

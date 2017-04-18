@@ -3,7 +3,7 @@
 //
 
 #include <algorithm>
-#include "LeastUsedValueGetter.h"
+#include "accessors/header/LeastUsedValueGetter.h"
 
 LeastUsedValueGetter::LeastUsedValueGetter(const IVariable* variable) :
         IValueGetter(variable)

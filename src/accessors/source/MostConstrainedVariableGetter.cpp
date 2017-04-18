@@ -3,7 +3,7 @@
 //
 
 #include <set>
-#include "MostConstrainedVariableGetter.h"
+#include "accessors/header/MostConstrainedVariableGetter.h"
 
 MostConstrainedVariableGetter::MostConstrainedVariableGetter(IProblem* problem) :
     IVariableGetter(problem)
@@ -47,7 +47,7 @@ void MostConstrainedVariableGetter::setProblem(const IProblem* problem)
     this->problem = problem;
 }
 
-const IProblem *MostConstrainedVariableGetter::getProblem() const
+const IProblem* MostConstrainedVariableGetter::getProblem() const
 {
     return problem;
 }
