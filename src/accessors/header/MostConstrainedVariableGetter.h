@@ -1,5 +1,5 @@
 //
-// Created by annam on 18.04.2017.
+// Created by Anna Siwik on 18.04.2017.
 //
 
 #ifndef SI_LAB_2_MOSTCONSTRAINTEDVARIABLEGETTER_H

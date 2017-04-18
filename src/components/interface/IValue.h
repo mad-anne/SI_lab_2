@@ -10,11 +10,13 @@ class IValue
     protected:
         int value;
         int connectedConstraints;
+        int assignments;
 
     public:
         IValue(int value) :
             value(value),
-            connectedConstraints(0)
+            connectedConstraints(0),
+            assignments(0)
         { }
 
         virtual ~IValue() {}
@@ -35,6 +37,21 @@ class IValue
         virtual int decrementConnectedConstraints()
         {
             return --connectedConstraints;
+        }
+
+        virtual int getNumberOfAssignments() const
+        {
+            return assignments;
+        }
+
+        virtual int incrementAssignments()
+        {
+            return ++assignments;
+        }
+
+        virtual int decrementAssignments()
+        {
+            return --assignments;
         }
 };
 

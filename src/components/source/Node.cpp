@@ -16,6 +16,12 @@ Node::~Node()
 
 void Node::setValue(IValue* value)
 {
+    if (value != nullptr)
+        value->incrementAssignments();
+
+    if (this->value != nullptr)
+        this->value->decrementAssignments();
+
     this->value = value;
 }
 
