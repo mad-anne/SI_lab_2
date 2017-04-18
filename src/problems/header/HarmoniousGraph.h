@@ -21,6 +21,7 @@ class HarmoniousGraph : public IProblem
         IVariable* getVariable(int row, int column) const override;
         void resetAllDomains();
         void resetAllVariables();
+        bool isCompleted() const override;
 
     private:
         void generateEmptyGraph();

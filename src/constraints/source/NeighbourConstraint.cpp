@@ -99,7 +99,7 @@ void NeighbourConstraint::limitDomainsOnVariable(const IVariable* variable)
 
 void NeighbourConstraint::limitDomainOnValue(IVariable* variable, const IValue* value)
 {
-    if (variable != nullptr)
+    if (variable != nullptr && variable->getValue() == nullptr)
         variable->removeValueFromDomain(value);
 }
 

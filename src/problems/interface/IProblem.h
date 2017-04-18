@@ -41,6 +41,8 @@ class IProblem
 
         virtual void resetAllDomains() = 0;
         virtual void resetAllVariables() = 0;
+
+        virtual bool isCompleted() const = 0;
 };
 
 #endif //SI_LAB_2_IGRAPH_H

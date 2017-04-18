@@ -84,12 +84,8 @@ void ConnectionConstraint::limitDomainsOnVariable(const IVariable* variable)
     if (variable == nullptr || variable->getValue() == nullptr)
         return;
 
-    const IValue* value = getValueOfVariable(variable);
-
-    limitDomainsOnConnection(value, getValueOfVariable(getLeftNeighbour(variable)));
-    limitDomainsOnConnection(value, getValueOfVariable(getUpNeighbour(variable)));
-    limitDomainsOnConnection(value, getValueOfVariable(getRightNeighbour(variable)));
-    limitDomainsOnConnection(value, getValueOfVariable(getDownNeighbour(variable)));
+    for (int i = 0; i < connections.size(); ++i)
+        limitDomainsOnConnection(connections[i]->getFirstValue(), connections[i]->getSecondValue());
 }
 
 const bool ConnectionConstraint::checkConnectionsWithNeighbours(const IVariable* variable) const

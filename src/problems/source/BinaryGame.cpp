@@ -111,3 +111,17 @@ void BinaryGame::resetAllVariables()
         }
     }
 }
+
+bool BinaryGame::isCompleted() const
+{
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            if (nodes[row][col]->getValue() == nullptr)
+                return false;
+        }
+    }
+
+    return true;
+}

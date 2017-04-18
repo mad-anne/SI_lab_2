@@ -106,3 +106,17 @@ void HarmoniousGraph::resetAllVariables()
         }
     }
 }
+
+bool HarmoniousGraph::isCompleted() const
+{
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            if (nodes[row][col]->getValue() == nullptr)
+                return false;
+        }
+    }
+
+    return true;
+}

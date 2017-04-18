@@ -10,7 +10,7 @@
 
 class NextValueGetter : public IValueGetter
 {
-    int currentIndex;
+    std::vector<const IValue*> used;
     const IDomain* domain;
 
     public:
@@ -21,6 +21,9 @@ class NextValueGetter : public IValueGetter
 
         void setVariable(const IVariable*) override;
         const IVariable* getVariable() const override;
+
+    private:
+        bool hasBeenUsed(const IValue *pValue);
 };
 
 

@@ -21,9 +21,11 @@ class BinaryGame : public IProblem
         IVariable* getVariable(int row, int column) const override;
         void resetAllDomains() override;
 
+        bool isCompleted() const override;
+
         const int getFilledFields() const;
 
-    void resetAllVariables() override;
+        void resetAllVariables() override;
 
 private:
         void generateEmptyGrid();

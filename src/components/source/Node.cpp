@@ -42,17 +42,11 @@ void Node::addDomain(const IDomain* domain)
 
 void Node::addValueToDomain(const IValue* value)
 {
-//    std::cout << "\n\nADD VALUE " << (value != nullptr ? value->getValue() : -1) << std::endl;
-//    std::cout << "row: " << row << " col: " << col << std::endl;
-
     domain->addValue(value);
 }
 
 void Node::removeValueFromDomain(const IValue* value)
 {
-//    std::cout << "\n\nREMOVED VALUE " << (value != nullptr ? value->getValue() : -1) << std::endl;
-//    std::cout << "row: " << row << " col: " << col << std::endl;
-
     domain->removeValue(value);
 }
 

@@ -42,22 +42,14 @@ const void HarmoniousGraphConstraintChecker::putConstraintsOff(const IVariable* 
     connectionConstraint->putConstraintsOffVariable(variable);
     neighbourConstraint->putConstraintsOffVariable(variable);
 
+    if (! limitDomains)
+        return;
+
     std::vector<const IValue*> valuesToCheck;
-    valuesToCheck.push_back(variable->getValue());
+    const IDomain* domain = problem->getDomain();
 
-    const IValue* valLeft = ((ConnectionConstraint*) connectionConstraint)->getLeftValueInConnection(variable);
-    const IValue* valUp = ((ConnectionConstraint*) connectionConstraint)->getUpValueInConnection(variable);
-    const IValue* valRight = ((ConnectionConstraint*) connectionConstraint)->getRightValueInConnection(variable);
-    const IValue* valDown = ((ConnectionConstraint*) connectionConstraint)->getDownValueInConnection(variable);
-
-    if (valLeft != nullptr)
-        valuesToCheck.push_back(valLeft);
-    if (valUp != nullptr)
-        valuesToCheck.push_back(valUp);
-    if (valRight != nullptr)
-        valuesToCheck.push_back(valRight);
-    if (valDown != nullptr)
-        valuesToCheck.push_back(valDown);
+    for (int i = 0; i < domain->getSize(); ++i)
+        valuesToCheck.push_back(domain->getValue(i));
 
     int width = problem->getWidth();
     for (int i = 0; i < valuesToCheck.size(); ++i)

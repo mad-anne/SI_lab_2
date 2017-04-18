@@ -2,7 +2,6 @@
 // Created by Anna Siwik on 2017-04-08.
 //
 
-#include <iostream>
 #include <solution/header/Solution.h>
 #include <accessors/header/NextValueGetter.h>
 #include "../header/ForwardChecking.h"
@@ -41,7 +40,7 @@ std::vector<ISolution*>* ForwardChecking::getAllSolutions(IProblemFactory* probl
 {
     clearSolutions();
     setAttributes(problemFactory);
-    recursive();
+    recursiveFindAll();
     return & solutions;
 }
 
@@ -80,10 +79,7 @@ void ForwardChecking::recursiveFindNumberOfAll()
     IVariable* variable = varGetter->getNext();
 
     if (variable == nullptr)
-    {
-        ++totalNumberOfSolutions;
         return;
-    }
 
     NextValueGetter valueGetter(variable);
     const IValue* value;
@@ -92,11 +88,22 @@ void ForwardChecking::recursiveFindNumberOfAll()
     {
         variable->setValue(value);
 
-        constraint->putConstraintsOn(variable, true);
-        recursiveFindNumberOfAll();
+        if (problem->isCompleted())
+        {
+            ++totalNumberOfSolutions;
+            variable->setValue(nullptr);
+            continue;
+        }
+        else
+        {
+            constraint->putConstraintsOn(variable, true);
+            recursiveFindNumberOfAll();
 
-        constraint->putConstraintsOff(variable, true);
-        variable->setValue(nullptr);
+            constraint->putConstraintsOff(variable, true);
+            variable->setValue(nullptr);
+        }
+
+
     }
 }
 
