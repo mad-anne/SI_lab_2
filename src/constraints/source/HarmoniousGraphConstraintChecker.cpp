@@ -28,13 +28,13 @@ bool HarmoniousGraphConstraintChecker::isCorrectAssignment(const IVariable* vari
     return neighbourConstraint->checkVariable(variable) && connectionConstraint->checkVariable(variable);
 }
 
-const void HarmoniousGraphConstraintChecker::putConstraintsOn(const IVariable* variable, bool limitDomains)
+const void HarmoniousGraphConstraintChecker::putConstraintsOn(IVariable* variable, bool limitDomains)
 {
     connectionConstraint->putConstraintsOnVariable(variable, limitDomains);
     neighbourConstraint->putConstraintsOnVariable(variable, limitDomains);
 }
 
-const void HarmoniousGraphConstraintChecker::putConstraintsOff(const IVariable* variable, bool limitDomains)
+const void HarmoniousGraphConstraintChecker::putConstraintsOff(IVariable* variable, bool limitDomains)
 {
     if (variable == nullptr || variable->getValue() == nullptr)
         return;
@@ -45,7 +45,7 @@ const void HarmoniousGraphConstraintChecker::putConstraintsOff(const IVariable* 
     if (! limitDomains)
         return;
 
-    std::vector<const IValue*> valuesToCheck;
+    std::vector<IValue*> valuesToCheck;
     const IDomain* domain = problem->getDomain();
 
     for (int i = 0; i < domain->getSize(); ++i)
@@ -54,7 +54,7 @@ const void HarmoniousGraphConstraintChecker::putConstraintsOff(const IVariable* 
     int width = problem->getWidth();
     for (int i = 0; i < valuesToCheck.size(); ++i)
     {
-        const IValue* checkedValue = valuesToCheck.at(i);
+        IValue* checkedValue = valuesToCheck.at(i);
 
         for (int row = 0; row < width; ++row)
         {

@@ -23,8 +23,8 @@ class HarmoniousGraphConstraintChecker : public IConstraintChecker
 
         bool isCorrectAssignment(const IVariable* variable) const override;
 
-        const void putConstraintsOn(const IVariable* variable, bool limitDomains) override;
-        const void putConstraintsOff(const IVariable* variable, bool limitDomains) override;
+        const void putConstraintsOn(IVariable* variable, bool limitDomains) override;
+        const void putConstraintsOff(IVariable* variable, bool limitDomains) override;
 };
 
 #endif //SI_LAB_2_HARMONIOUSGRAPHCONSTRAINT_H

@@ -34,7 +34,7 @@ class IProblem
             return width;
         }
 
-        virtual const IDomain* getDomain()
+        virtual const IDomain* getDomain() const
         {
             return domain;
         }

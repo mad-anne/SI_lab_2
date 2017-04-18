@@ -5,7 +5,7 @@
 
 #include <constraints/header/Connection.h>
 
-Connection::Connection(const IValue* first, const IValue* second)
+Connection::Connection(IValue* first, IValue* second)
         : first(first),
           second(second)
 {}
@@ -17,12 +17,12 @@ Connection::Connection(const Connection& connection)
 Connection::~Connection()
 {}
 
-const IValue* Connection::getFirstValue() const
+IValue* Connection::getFirstValue() const
 {
     return first;
 }
 
-const IValue* Connection::getSecondValue() const
+IValue* Connection::getSecondValue() const
 {
     return second;
 }

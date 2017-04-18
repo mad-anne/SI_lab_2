@@ -13,9 +13,9 @@ class Domain : public IDomain
         Domain();
         ~Domain();
 
-        void addValue(const IValue* value) override;
+        void addValue(IValue* value) override;
         void removeValue(const IValue*) override;
-        const IValue* getValue(int) const override;
+        IValue* getValue(int) const override;
         const unsigned long int getSize() const override;
 
     private:

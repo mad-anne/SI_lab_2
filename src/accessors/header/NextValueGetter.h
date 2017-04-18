@@ -17,7 +17,7 @@ class NextValueGetter : public IValueGetter
         NextValueGetter(const IVariable*);
         ~NextValueGetter();
 
-        const IValue* getNext() override;
+        IValue* getNext() override;
 
         void setVariable(const IVariable*) override;
         const IVariable* getVariable() const override;

@@ -20,8 +20,8 @@ protected:
     IProblem* problem;
     IConstraint* sut;
 
-    const IValue* zero;
-    const IValue* one;
+    IValue* zero;
+    IValue* one;
 };
 
 PairConstraintTestSuite::PairConstraintTestSuite() :

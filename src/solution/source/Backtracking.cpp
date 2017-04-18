@@ -56,7 +56,7 @@ ISolution* Backtracking::recursive()
         return new Solution(problem);
 
     NextValueGetter valueGetter(variable);
-    const IValue* value;
+    IValue* value;
 
     while ((value = valueGetter.getNext()) != nullptr)
     {
@@ -92,7 +92,7 @@ void Backtracking::recursiveFindAll()
     }
 
     NextValueGetter valueGetter(variable);
-    const IValue* value;
+    IValue* value;
 
     while ((value = valueGetter.getNext()) != nullptr)
     {
@@ -121,7 +121,7 @@ void Backtracking::recursiveFindNumberOfAll()
     }
 
     NextValueGetter valueGetter(variable);
-    const IValue* value;
+    IValue* value;
 
     while ((value = valueGetter.getNext()) != nullptr)
     {

@@ -20,8 +20,8 @@ class ExistingRowConstraintTestSuite : public ::testing::Test
         IProblem* problem;
         IConstraint* sut;
 
-        const IValue* zero;
-        const IValue* one;
+        IValue* zero;
+        IValue* one;
 };
 
 ExistingRowConstraintTestSuite::ExistingRowConstraintTestSuite() :

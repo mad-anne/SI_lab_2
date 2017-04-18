@@ -21,8 +21,8 @@ class BinaryGameConstraintChecker : public IConstraintChecker
 
         bool isCorrectAssignment(const IVariable*) const override;
 
-        const void putConstraintsOn(const IVariable*, bool limitDomains) override;
-        const void putConstraintsOff(const IVariable*, bool limitDomains) override;
+        const void putConstraintsOn(IVariable*, bool limitDomains) override;
+        const void putConstraintsOff(IVariable*, bool limitDomains) override;
 };
 
 

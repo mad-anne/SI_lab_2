@@ -10,16 +10,16 @@
 
 class Connection
 {
-    const IValue* first;
-    const IValue* second;
+    IValue* first;
+    IValue* second;
 
     public:
-        Connection(const IValue*, const IValue*);
+        Connection(IValue*, IValue*);
         Connection(const Connection&);
         ~Connection();
 
-        const IValue* getFirstValue() const;
-        const IValue* getSecondValue() const;
+        IValue* getFirstValue() const;
+        IValue* getSecondValue() const;
 
         bool operator==(const Connection& con);
 };

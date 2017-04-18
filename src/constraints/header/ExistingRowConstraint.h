@@ -21,10 +21,10 @@ class ExistingRowConstraint : public IConstraint
         const bool checkVariable(const IVariable *variable) const override;
         const bool checkAllAndPutConstraints(bool limitDomains) override;
 
-        void putConstraintsOnVariable(const IVariable*, bool limitDomains) override;
-        void putConstraintsOffVariable(const IVariable*) override;
+        void putConstraintsOnVariable(IVariable*, bool limitDomains) override;
+        void putConstraintsOffVariable(IVariable*) override;
 
-        bool canAddValueToDomain(const IVariable* checked, const IValue*, const IVariable* reversed);
+        bool canAddValueToDomain(const IVariable* checked, IValue*, const IVariable* reversed) override;
 
     private:
         bool existsRow(const IVariable*) const;

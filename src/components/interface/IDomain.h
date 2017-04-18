@@ -11,14 +11,14 @@
 class IDomain
 {
     protected:
-        std::vector<const IValue*> values;
+        std::vector<IValue*> values;
 
     public:
         virtual ~IDomain() = default;
 
-        virtual void addValue(const IValue*) = 0;
+        virtual void addValue(IValue*) = 0;
         virtual void removeValue(const IValue*) = 0;
-        virtual const IValue* getValue(int index) const = 0;
+        virtual IValue* getValue(int index) const = 0;
         virtual const unsigned long int getSize() const = 0;
         virtual bool hasValue(const IValue* value) const = 0;
 };

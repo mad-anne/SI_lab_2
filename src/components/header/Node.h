@@ -13,13 +13,13 @@ class Node : public IVariable
         Node(int, int);
         ~Node();
 
-        void setValue(const IValue*) override;
-        const IValue* getValue() const override;
+        void setValue(IValue*) override;
+        IValue* getValue() const override;
         void resetValue() override;
 
         const IDomain* getDomain() const override;
         void addDomain(const IDomain*) override;
-        void addValueToDomain(const IValue*) override;
+        void addValueToDomain(IValue*) override;
         void removeValueFromDomain(const IValue*) override;
 
         const int getRow() const override;

@@ -63,7 +63,7 @@ const bool ConnectionConstraint::checkAllAndPutConstraints(bool limitDomains)
     return isCorrect;
 }
 
-void ConnectionConstraint::putConstraintsOnVariable(const IVariable* variable, bool limitDomains)
+void ConnectionConstraint::putConstraintsOnVariable(IVariable* variable, bool limitDomains)
 {
     if (variable == nullptr || variable->getValue() == nullptr)
         return;
@@ -74,7 +74,7 @@ void ConnectionConstraint::putConstraintsOnVariable(const IVariable* variable, b
         limitDomainsOnVariable(variable);
 }
 
-void ConnectionConstraint::putConstraintsOffVariable(const IVariable* variable)
+void ConnectionConstraint::putConstraintsOffVariable(IVariable* variable)
 {
     removeConnectedConnections(variable);
 }
@@ -93,18 +93,18 @@ const bool ConnectionConstraint::checkConnectionsWithNeighbours(const IVariable*
     if (variable == nullptr || variable->getValue() == nullptr)
         return true;
 
-    const IValue* value = getValueOfVariable(variable);
+    IValue* value = getValueOfVariable(variable);
 
-    const IValue* valLeft = getValueOfVariable(getLeftNeighbour(variable));
-    const IValue* valUp = getValueOfVariable(getUpNeighbour(variable));
-    const IValue* valRight = getValueOfVariable(getRightNeighbour(variable));
-    const IValue* valDown = getValueOfVariable(getDownNeighbour(variable));
+    IValue* valLeft = getValueOfVariable(getLeftNeighbour(variable));
+    IValue* valUp = getValueOfVariable(getUpNeighbour(variable));
+    IValue* valRight = getValueOfVariable(getRightNeighbour(variable));
+    IValue* valDown = getValueOfVariable(getDownNeighbour(variable));
 
     return (! existsConnection(value, valLeft)) && (! existsConnection(value, valUp))
             && (! existsConnection(value, valRight)) && (! existsConnection(value, valDown));
 }
 
-const bool ConnectionConstraint::existsConnection(const IValue* valFirst, const IValue* valSecond) const
+const bool ConnectionConstraint::existsConnection(IValue* valFirst, IValue* valSecond) const
 {
     if (valFirst == nullptr || valSecond == nullptr)
         return false;
@@ -125,9 +125,9 @@ const bool ConnectionConstraint::existsConnection(const IValue* valFirst, const 
     return exists;
 }
 
-void ConnectionConstraint::addConnectedConnections(const IVariable* variable)
+void ConnectionConstraint::addConnectedConnections(IVariable* variable)
 {
-    const IValue* value = getValueOfVariable(variable);
+    IValue* value = getValueOfVariable(variable);
 
     addConnection(value, getValueOfVariable(getLeftNeighbour(variable)));
     addConnection(value, getValueOfVariable(getUpNeighbour(variable)));
@@ -135,15 +135,19 @@ void ConnectionConstraint::addConnectedConnections(const IVariable* variable)
     addConnection(value, getValueOfVariable(getDownNeighbour(variable)));
 }
 
-const bool ConnectionConstraint::addConnection(const IValue* valFirst, const IValue* valSecond)
+const bool ConnectionConstraint::addConnection(IValue* valFirst, IValue* valSecond)
 {
     if (valFirst != nullptr && valSecond != nullptr && ! existsConnection(valFirst, valSecond))
+    {
         connections.push_back(new Connection(valFirst, valSecond));
+        valFirst->incrementConnectedConstraints();
+        valSecond->incrementConnectedConstraints();
+    }
 }
 
-void ConnectionConstraint::removeConnectedConnections(const IVariable* variable)
+void ConnectionConstraint::removeConnectedConnections(IVariable* variable)
 {
-    const IValue* value = getValueOfVariable(variable);
+    IValue* value = getValueOfVariable(variable);
 
     removeConnection(value, getValueOfVariable(getLeftNeighbour(variable)));
     removeConnection(value, getValueOfVariable(getUpNeighbour(variable)));
@@ -151,7 +155,7 @@ void ConnectionConstraint::removeConnectedConnections(const IVariable* variable)
     removeConnection(value, getValueOfVariable(getDownNeighbour(variable)));
 }
 
-void ConnectionConstraint::removeConnection(const IValue* valFirst, const IValue* valSecond)
+void ConnectionConstraint::removeConnection(IValue* valFirst, IValue* valSecond)
 {
     if (valFirst == nullptr || valSecond == nullptr)
         return;
@@ -165,6 +169,8 @@ void ConnectionConstraint::removeConnection(const IValue* valFirst, const IValue
     {
         if ( *(*it) == connection)
         {
+            (*it)->getFirstValue()->decrementConnectedConstraints();
+            (*it)->getSecondValue()->decrementConnectedConstraints();
             found = true;
             delete *it;
             it = connections.erase(it);
@@ -223,12 +229,12 @@ void ConnectionConstraint::removeValueFromDomainIfEmpty(IVariable* variable, con
         variable->removeValueFromDomain(value);
 }
 
-bool ConnectionConstraint::canAddValueToDomain(const IVariable* checked, const IValue* value, const IVariable* reversed)
+bool ConnectionConstraint::canAddValueToDomain(const IVariable* checked, IValue* value, const IVariable* reversed)
 {
     return checkConnectedConnections(checked, value, reversed);
 }
 
-bool ConnectionConstraint::checkConnectedConnections(const IVariable* checked, const IValue* value,
+bool ConnectionConstraint::checkConnectedConnections(const IVariable* checked, IValue* value,
                                                      const IVariable* reversed)
 {
     if (value == reversed->getValue())

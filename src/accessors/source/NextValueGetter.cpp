@@ -15,7 +15,7 @@ NextValueGetter::NextValueGetter(const IVariable* variable)
 NextValueGetter::~NextValueGetter()
 {}
 
-const IValue* NextValueGetter::getNext()
+IValue* NextValueGetter::getNext()
 {
     if (used.size() >= domain->getSize())
         return nullptr;

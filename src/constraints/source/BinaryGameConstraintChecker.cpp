@@ -35,14 +35,14 @@ bool BinaryGameConstraintChecker::isCorrectAssignment(const IVariable* variable)
            && existingRowConstraint->checkVariable(variable);
 }
 
-const void BinaryGameConstraintChecker::putConstraintsOn(const IVariable* variable, bool limitDomains)
+const void BinaryGameConstraintChecker::putConstraintsOn(IVariable* variable, bool limitDomains)
 {
     pairConstraint->putConstraintsOnVariable(variable, limitDomains);
     equalSplitConstraint->putConstraintsOnVariable(variable, limitDomains);
     existingRowConstraint->putConstraintsOnVariable(variable, limitDomains);
 }
 
-const void BinaryGameConstraintChecker::putConstraintsOff(const IVariable* variable, bool limitDomains)
+const void BinaryGameConstraintChecker::putConstraintsOff(IVariable* variable, bool limitDomains)
 {
     pairConstraint->putConstraintsOffVariable(variable);
     equalSplitConstraint->putConstraintsOffVariable(variable);
@@ -51,8 +51,8 @@ const void BinaryGameConstraintChecker::putConstraintsOff(const IVariable* varia
     if (! limitDomains)
         return;
 
-    const IValue* zero = problem->getDomain()->getValue(0);
-    const IValue* one = problem->getDomain()->getValue(1);
+    IValue* zero = problem->getDomain()->getValue(0);
+    IValue* one = problem->getDomain()->getValue(1);
 
     int width = problem->getWidth();
     for (int row = 0; row < width; ++row)

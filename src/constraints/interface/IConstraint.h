@@ -22,10 +22,10 @@ class IConstraint
         virtual const bool checkVariable(const IVariable*) const = 0;
         virtual const bool checkAllAndPutConstraints(bool limitDomains) = 0;
 
-        virtual void putConstraintsOnVariable(const IVariable*, bool limitDomains) = 0;
-        virtual void putConstraintsOffVariable(const IVariable*) = 0;
+        virtual void putConstraintsOnVariable(IVariable*, bool limitDomains) = 0;
+        virtual void putConstraintsOffVariable(IVariable*) = 0;
 
-        virtual bool canAddValueToDomain(const IVariable* checked, const IValue*, const IVariable* reversed) = 0;
+        virtual bool canAddValueToDomain(const IVariable* checked, IValue*, const IVariable* reversed) = 0;
 
     protected:
         virtual IVariable* getLeftNeighbour(const IVariable* variable) const
@@ -53,7 +53,7 @@ class IConstraint
                     : problem->getVariable(variable->getRow() + 1, variable->getColumn());
         }
 
-        virtual const IValue* getValueOfVariable(const IVariable* variable) const
+        virtual IValue* getValueOfVariable(const IVariable* variable) const
         {
             return variable == nullptr ? nullptr : variable->getValue();
         }

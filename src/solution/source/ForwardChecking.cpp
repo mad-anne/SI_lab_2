@@ -54,29 +54,17 @@ ISolution* ForwardChecking::recursive()
         return new Solution(problem);
 
     NextValueGetter valueGetter(variable);
-    const IValue* value;
+     IValue* value;
 
     while ((value = valueGetter.getNext()) != nullptr)
     {
         variable->setValue(value);
 
-        std::cout << "\nVARIABLE" << std::endl;
-        std::cout << "row: " << variable->getRow() << " col: " << variable->getColumn() << std::endl;
-        std::cout<< "assigned value: " << value->getValue() << std::endl;
-
         constraint->putConstraintsOn(variable, true);
 
         if ((solution = recursive()) == nullptr)
         {
-            if (variable->getRow() == 1 && variable->getColumn() == 1 && variable->getValue()->getValue() == 0)
-                std::cout << "COS" << std::endl;
-
             constraint->putConstraintsOff(variable, true);
-
-            std::cout << "\nVARIABLE" << std::endl;
-            std::cout << "row: " << variable->getRow() << " col: " << variable->getColumn() << std::endl;
-            std::cout<< "REMOVED value: " << value->getValue() << std::endl;
-
             variable->setValue(nullptr);
         }
         else
@@ -95,7 +83,7 @@ void ForwardChecking::recursiveFindNumberOfAll()
         return;
 
     NextValueGetter valueGetter(variable);
-    const IValue* value;
+    IValue* value;
 
     while ((value = valueGetter.getNext()) != nullptr)
     {
@@ -129,7 +117,7 @@ void ForwardChecking::recursiveFindAll()
     }
 
     NextValueGetter valueGetter(variable);
-    const IValue* value;
+    IValue* value;
 
     while ((value = valueGetter.getNext()) != nullptr)
     {

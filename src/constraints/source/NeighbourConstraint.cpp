@@ -55,7 +55,7 @@ const bool NeighbourConstraint::checkAllAndPutConstraints(bool limitDomains)
     return isCorrect;
 }
 
-void NeighbourConstraint::putConstraintsOnVariable(const IVariable* variable, bool limitDomains)
+void NeighbourConstraint::putConstraintsOnVariable(IVariable* variable, bool limitDomains)
 {
     if (variable == nullptr || variable->getValue() == nullptr)
         return;
@@ -64,12 +64,12 @@ void NeighbourConstraint::putConstraintsOnVariable(const IVariable* variable, bo
         limitDomainsOnVariable(variable);
 }
 
-void NeighbourConstraint::putConstraintsOffVariable(const IVariable*)
+void NeighbourConstraint::putConstraintsOffVariable(IVariable*)
 {
     return;
 }
 
-bool NeighbourConstraint::canAddValueToDomain(const IVariable* checked, const IValue* value, const IVariable* reversed)
+bool NeighbourConstraint::canAddValueToDomain(const IVariable* checked, IValue* value, const IVariable* reversed)
 {
     return ! hasNeighbourWithValue(checked, value, reversed);
 }

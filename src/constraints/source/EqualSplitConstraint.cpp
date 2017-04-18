@@ -26,7 +26,7 @@ const bool EqualSplitConstraint::checkAllAndPutConstraints(bool limitDomains)
     return 0;
 }
 
-void EqualSplitConstraint::putConstraintsOnVariable(const IVariable* variable, bool limitDomains)
+void EqualSplitConstraint::putConstraintsOnVariable(IVariable* variable, bool limitDomains)
 {
     if (variable == nullptr || variable->getValue() == nullptr)
         return;
@@ -35,7 +35,7 @@ void EqualSplitConstraint::putConstraintsOnVariable(const IVariable* variable, b
         limitDomainsOnVariable(variable);
 }
 
-bool EqualSplitConstraint::canAddValueToDomain(const IVariable* checked, const IValue* value, const IVariable* reversed)
+bool EqualSplitConstraint::canAddValueToDomain(const IVariable* checked, IValue* value, const IVariable* reversed)
 {
     return canAddValueToRow(checked, value, reversed)
            && canAddValueToColumn(checked, value, reversed);
@@ -121,7 +121,7 @@ void EqualSplitConstraint::limitDomainsInColumnByValue(const IVariable* variable
     }
 }
 
-void EqualSplitConstraint::putConstraintsOffVariable(const IVariable*)
+void EqualSplitConstraint::putConstraintsOffVariable(IVariable*)
 {
     return;
 }

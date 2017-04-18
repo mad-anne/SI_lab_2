@@ -26,7 +26,7 @@ const bool PairConstraint::checkAllAndPutConstraints(bool limitDomains)
     return 0;
 }
 
-void PairConstraint::putConstraintsOnVariable(const IVariable* variable, bool limitDomains)
+void PairConstraint::putConstraintsOnVariable(IVariable* variable, bool limitDomains)
 {
     if (variable == nullptr || variable->getValue() == nullptr)
         return;
@@ -35,12 +35,12 @@ void PairConstraint::putConstraintsOnVariable(const IVariable* variable, bool li
         limitDomainsOnVariable(variable);
 }
 
-void PairConstraint::putConstraintsOffVariable(const IVariable*)
+void PairConstraint::putConstraintsOffVariable(IVariable*)
 {
     return;
 }
 
-bool PairConstraint::canAddValueToDomain(const IVariable* checked, const IValue* value, const IVariable* reversed)
+bool PairConstraint::canAddValueToDomain(const IVariable* checked, IValue* value, const IVariable* reversed)
 {
     return canAddValueToRow(checked, value, reversed)
            && canAddValueToColumn(checked, value, reversed);

@@ -11,7 +11,7 @@ Domain::Domain()
 Domain::~Domain()
 {}
 
-void Domain::addValue(const IValue* value)
+void Domain::addValue(IValue* value)
 {
     if (! hasValue(value))
         values.push_back(value);
@@ -19,13 +19,13 @@ void Domain::addValue(const IValue* value)
 
 void Domain::removeValue(const IValue* value)
 {
-    std::vector<const IValue*>::const_iterator it = std::find(values.begin(), values.end(), value);
+    std::vector<IValue*>::const_iterator it = std::find(values.begin(), values.end(), value);
 
     if (it != values.end())
         values.erase(it);
 }
 
-const IValue* Domain::getValue(int index) const
+IValue* Domain::getValue(int index) const
 {
     return index < values.size()
            ? values[index]

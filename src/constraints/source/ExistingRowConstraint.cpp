@@ -26,7 +26,7 @@ const bool ExistingRowConstraint::checkAllAndPutConstraints(bool limitDomains)
     return 0;
 }
 
-void ExistingRowConstraint::putConstraintsOnVariable(const IVariable* variable, bool limitDomains)
+void ExistingRowConstraint::putConstraintsOnVariable(IVariable* variable, bool limitDomains)
 {
     IRow* row = new Row(problem, variable);
     IRow* col = new Column(problem, variable);
@@ -48,7 +48,7 @@ void ExistingRowConstraint::putConstraintsOnVariable(const IVariable* variable, 
         delete col;
 }
 
-bool ExistingRowConstraint::canAddValueToDomain(const IVariable* checked, const IValue* value, const IVariable* reversed)
+bool ExistingRowConstraint::canAddValueToDomain(const IVariable* checked, IValue* value, const IVariable* reversed)
 {
     return canAddValueToRow(checked, value, reversed)
            && canAddValueToColumn(checked, value, reversed);
@@ -74,7 +74,7 @@ bool ExistingRowConstraint::existsRow(const IVariable* variable) const
     return exists;
 }
 
-void ExistingRowConstraint::putConstraintsOffVariable(const IVariable* variable)
+void ExistingRowConstraint::putConstraintsOffVariable(IVariable* variable)
 {
     IRow* row = new Row(problem, variable);
     IRow* col = new Column(problem, variable);

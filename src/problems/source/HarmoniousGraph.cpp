@@ -87,7 +87,7 @@ IProblem* HarmoniousGraph::deepCopy() const
             if (nodes[row][col]->getValue() != nullptr)
             {
                 int index = nodes[row][col]->getValue()->getValue();
-                const IValue* value = copiedDomain->getValue(index);
+                IValue* value = copiedDomain->getValue(index);
                 copy->getVariable(row, col)->setValue(value);
             }
         }

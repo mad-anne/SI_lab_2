@@ -19,9 +19,9 @@ class HarmoniousGraphConstraintTestSuite : public ::testing::Test
         IProblem* problem;
         IConstraintChecker* sut;
 
-        const IValue* value1;
-        const IValue* value2;
-        const IValue* value3;
+        IValue* value1;
+        IValue* value2;
+        IValue* value3;
 
         IVariable* var_0_0;
         IVariable* var_0_1;

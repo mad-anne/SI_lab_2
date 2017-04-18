@@ -22,8 +22,8 @@ class IConstraintChecker
 
         virtual bool isCorrectAssignment(const IVariable*) const = 0;
 
-        virtual const void putConstraintsOn(const IVariable*, bool limitDomains) = 0;
-        virtual const void putConstraintsOff(const IVariable*, bool limitDomains) = 0;
+        virtual const void putConstraintsOn(IVariable*, bool limitDomains) = 0;
+        virtual const void putConstraintsOff(IVariable*, bool limitDomains) = 0;
 };
 
 #endif //SI_LAB_2_ICONSTRAINTCHECKER_H

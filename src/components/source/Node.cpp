@@ -14,12 +14,12 @@ Node::Node(int row, int col) :
 Node::~Node()
 {}
 
-void Node::setValue(const IValue* value)
+void Node::setValue(IValue* value)
 {
     this->value = value;
 }
 
-const IValue* Node::getValue() const
+IValue* Node::getValue() const
 {
     return value;
 }
@@ -40,7 +40,7 @@ void Node::addDomain(const IDomain* domain)
         this->domain->addValue(domain->getValue(i));
 }
 
-void Node::addValueToDomain(const IValue* value)
+void Node::addValueToDomain(IValue* value)
 {
     domain->addValue(value);
 }

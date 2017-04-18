@@ -14,7 +14,7 @@ class IVariable
     protected:
         int row;
         int col;
-        const IValue* value;
+        IValue* value;
         IDomain* domain;
 
     public:
@@ -30,13 +30,13 @@ class IVariable
             delete domain;
         }
 
-        virtual void setValue(const IValue*) = 0;
-        virtual const IValue* getValue() const = 0;
+        virtual void setValue(IValue*) = 0;
+        virtual IValue* getValue() const = 0;
         virtual void resetValue() = 0;
 
         virtual const IDomain* getDomain() const = 0;
         virtual void addDomain(const IDomain*) = 0;
-        virtual void addValueToDomain(const IValue*) = 0;
+        virtual void addValueToDomain(IValue*) = 0;
         virtual void removeValueFromDomain(const IValue*) = 0;
 
         virtual const int getRow() const = 0;
