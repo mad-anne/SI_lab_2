@@ -24,6 +24,8 @@ class NextValueGetter : public IValueGetter
 
     IValueGetter *instantiate(const IVariable *variable) const override;
 
+    void setProblem(const IProblem *problem) override;
+
 private:
         bool hasBeenUsed(const IValue *pValue);
 };

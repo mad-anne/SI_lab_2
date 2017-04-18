@@ -25,6 +25,8 @@ class LeastCrossingOccurrenceValueGetter : public IValueGetter
         void setVariable(const IVariable *variable) override;
         const IVariable* getVariable() const override;
 
+    void setProblem(const IProblem *problem) override;
+
 private:
         bool hasBeenUsed(IValue *pValue);
         int countValueOnCrossing(IValue* value);

@@ -4,6 +4,7 @@
 
 #include "accessors/header/NextValueGetter.h"
 #include <algorithm>
+#include <problems/interface/IProblem.h>
 
 NextValueGetter::NextValueGetter(const IVariable* variable)
         : IValueGetter(variable)
@@ -50,3 +51,6 @@ IValueGetter* NextValueGetter::instantiate(const IVariable* variable) const
 {
     return new NextValueGetter(variable);
 }
+
+void NextValueGetter::setProblem(const IProblem*)
+{}

@@ -3,6 +3,7 @@
 //
 
 #include <algorithm>
+#include <problems/interface/IProblem.h>
 #include "accessors/header/LeastUsedValueGetter.h"
 
 LeastUsedValueGetter::LeastUsedValueGetter(const IVariable* variable) :
@@ -20,6 +21,7 @@ IValue* LeastUsedValueGetter::getNext()
     if (variable == nullptr || used.size() >= domain->getSize())
         return nullptr;
 
+    int index;
     int minUsages = -1;
     IValue* leastUsed = nullptr;
 
@@ -30,11 +32,14 @@ IValue* LeastUsedValueGetter::getNext()
         if ( ! hasBeenUsed(value)
              && (minUsages == -1 || value->getNumberOfAssignments() < minUsages))
         {
+            index = i;
             leastUsed = value;
-            used.push_back(domain->getValue(i));
             minUsages = value->getNumberOfAssignments();
         }
     }
+
+    if (leastUsed != nullptr)
+        used.push_back(domain->getValue(index));
 
     return leastUsed;
 }
@@ -61,3 +66,6 @@ IValueGetter* LeastUsedValueGetter::instantiate(const IVariable* variable) const
 {
     return new LeastUsedValueGetter(variable);
 }
+
+void LeastUsedValueGetter::setProblem(const IProblem*)
+{}

@@ -19,7 +19,7 @@ class MostConstrainedVariableGetter : public IVariableGetter
         void setProblem(const IProblem*) override;
         const IProblem* getProblem() const override;
 
-    int getNumberOfNeighboursConstraints(IVariable *pVariable);
+        int getNumberOfNeighboursConstraints(IVariable *pVariable);
 };
 
 

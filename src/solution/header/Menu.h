@@ -23,12 +23,15 @@ class Menu : public IMenu
         void printMainOptions() const;
         void printSolvingOptions() const;
         void printResultTypeOptions() const;
-        void printVariableGetters() const;
-        void printValueGetters() const;
+        void printVariableGettersForHarmoniousGraph() const;
+        void printValueGettersForHarmoniousGraph() const;
+        void printVariableGettersForBinaryGame() const;
+        void printValueGettersForBinaryGame() const;
 
         void printGreeting() const;
         void printFarewell() const;
 
+        int getNumberFromRange(int min, int max) const;
         int getPositiveNumberInput() const;
         bool processChoice(int choice) const;
 
@@ -44,8 +47,11 @@ class Menu : public IMenu
 
         int getSolvingMethod() const;
         int getResultTypeOptions() const;
-        IVariableGetter* getVariableGetter() const;
-        IValueGetter* getValueGetter() const;
+
+        IVariableGetter* getVariableGetterForHarmoniousGraph() const;
+        IValueGetter* getValueGetterForHarmoniousGraph() const;
+        IVariableGetter* getVariableGetterForBinaryGame() const;
+        IValueGetter* getValueGetterForBinaryGame() const;
 
         void performHarmoniousGraphColoring(int method, int type) const;
         void performBinaryGameSolving(int method, int type) const;

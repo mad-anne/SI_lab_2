@@ -4,6 +4,7 @@
 
 
 #include <components/interface/IVariable.h>
+#include <problems/interface/IProblem.h>
 
 #ifndef SI_LAB_2_IVALUEGETTER_H
 #define SI_LAB_2_IVALUEGETTER_H
@@ -30,6 +31,7 @@ class IValueGetter
         virtual void setVariable(const IVariable*) = 0;
         virtual const IVariable* getVariable() const = 0;
 
+        virtual void setProblem(const IProblem*) = 0;
 };
 
 #endif //SI_LAB_2_IVALUEGETTER_H

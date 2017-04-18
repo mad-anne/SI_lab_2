@@ -7,6 +7,7 @@
 
 
 #include <accessors/interface/IValueGetter.h>
+#include <problems/interface/IProblem.h>
 
 class LeastUsedValueGetter : public IValueGetter
 {
@@ -22,9 +23,11 @@ class LeastUsedValueGetter : public IValueGetter
         void setVariable(const IVariable*) override;
         const IVariable* getVariable() const override;
 
-    IValueGetter *instantiate(const IVariable *variable) const override;
+        IValueGetter* instantiate(const IVariable*) const override;
 
-private:
+        void setProblem(const IProblem*) override;
+
+    private:
         bool hasBeenUsed(IValue *pValue);
 };
 

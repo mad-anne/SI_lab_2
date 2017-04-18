@@ -8,6 +8,10 @@
 #include <factories/header/HarmoniousGraphFactory.h>
 #include "solution/header/Menu.h"
 #include <factories/header/BinaryGameFactory.h>
+#include <accessors/header/MostConstrainedVariableGetter.h>
+#include <accessors/header/LeastUsedValueGetter.h>
+#include <accessors/header/LeastCrossingOccurrenceValueGetter.h>
+#include <accessors/header/MostFilledCrossingVariableGetter.h>
 
 Menu::Menu()
     : cspFactory(std::make_shared<CSPFactory>())
@@ -47,6 +51,30 @@ void Menu::printMainOptions() const
     std::cout << "0. Exit Program." << std::endl;
     std::cout << "1. Solve Harmonious Graph Coloring." << std::endl;
     std::cout << "2. Solve Binary Game.\n" << std::endl;
+}
+
+int Menu::getNumberFromRange(int min, int max) const
+{
+    int numberChoice = 0;
+    bool isCorrect = false;
+
+    while (!isCorrect)
+    {
+        std::string choice = "";
+        getline(std::cin, choice);
+
+        std::stringstream myStream(choice);
+
+        if (myStream >> numberChoice && numberChoice >= min && numberChoice <= max)
+            isCorrect = true;
+        else
+        {
+            std::cout << "\nOoops! Number wasn't correct. Try again.";
+            std::cout << " Choose between " << min << " and " << max << "." << std::endl << std::endl;
+        }
+    }
+
+    return numberChoice;
 }
 
 int Menu::getPositiveNumberInput() const
@@ -192,120 +220,104 @@ void Menu::printResultTypeOptions() const
 
     std::cout << "1. Print first found solution." << std::endl;
     std::cout << "2. Print number of all found solutions." << std::endl;
-    std::cout << "3. Find all solutions and print first 10." << std::endl;
 }
 
-void Menu::printVariableGetters() const
+void Menu::printVariableGettersForHarmoniousGraph() const
 {
     std::cout << "\nHow should be done getting next variable to evaluate?" << std::endl;
 
     std::cout << "1. Standard in-order." << std::endl;
-    std::cout << "2. Get variable with most constraints." << std::endl;
+    std::cout << "2. Get variable with neighbours with the most constraints." << std::endl;
 }
 
-void Menu::printValueGetters() const
+void Menu::printValueGettersForHarmoniousGraph() const
 {
-    std::cout << "\nHow should be done getting next variable to evaluate?" << std::endl;
+    std::cout << "\nHow should be done getting next value to evaluate?" << std::endl;
 
     std::cout << "1. Standard in-order." << std::endl;
     std::cout << "2. Get value with the least occurrence." << std::endl;
 }
 
+void Menu::printVariableGettersForBinaryGame() const
+{
+    std::cout << "\nHow should be done getting next variable to evaluate?" << std::endl;
+
+    std::cout << "1. Standard in-order." << std::endl;
+    std::cout << "2. Get variable with the least nulls on crossing." << std::endl;
+}
+
+void Menu::printValueGettersForBinaryGame() const
+{
+    std::cout << "\nHow should be done getting next value to evaluate?" << std::endl;
+
+    std::cout << "1. Standard in-order." << std::endl;
+    std::cout << "2. Get value with the least occurrence on crossing." << std::endl;
+}
+
 int Menu::getSolvingMethod() const
 {
-    std::string choice = "";
-    int method;
-    bool isCorrect = false;
-
-    do
-    {
-        printSolvingOptions();
-
-        method = getPositiveNumberInput();
-
-        if (method <= 0 || method >= 3)
-            std::cout << "\nOoops! Number wasn't correct. Try again." << std::endl;
-        else
-            isCorrect = true;
-    } while (! isCorrect);
-
-    return method;
+    printSolvingOptions();
+    return getNumberFromRange(1, 2);
 }
 
 int Menu::getResultTypeOptions() const
 {
-    std::string choice = "";
-    int resultType;
-    bool isCorrect = false;
-
-    do
-    {
-        printResultTypeOptions();
-
-        resultType = getPositiveNumberInput();
-
-        if (resultType <= 0 || resultType >= 4)
-            std::cout << "\nOoops! Number wasn't correct. Try again." << std::endl;
-        else
-            isCorrect = true;
-    } while (! isCorrect);
-
-    return resultType;
+    printResultTypeOptions();
+    return getNumberFromRange(1, 2);
 }
 
-IVariableGetter* Menu::getVariableGetter() const
+IVariableGetter* Menu::getVariableGetterForHarmoniousGraph() const
 {
-    std::string choice = "";
-    int varGetter;
-    bool isCorrect = false;
+    printVariableGettersForHarmoniousGraph();
+    int varGetter = getNumberFromRange(1, 2);
 
-    do
-    {
-        printVariableGetters();
+    if (varGetter == 2)
+        return new MostConstrainedVariableGetter(nullptr);
 
-        varGetter = getPositiveNumberInput();
-
-        if (varGetter <= 0 || varGetter >= 3)
-            std::cout << "\nOoops! Number wasn't correct. Try again." << std::endl;
-        else
-            isCorrect = true;
-    } while (! isCorrect);
-
-    if (varGetter == 1)
-        return new NextVariableGetter(nullptr);
-
-    return nullptr;
+    return new NextVariableGetter(nullptr);
 }
 
-IValueGetter* Menu::getValueGetter() const
+IValueGetter* Menu::getValueGetterForHarmoniousGraph() const
 {
-    std::string choice = "";
-    int valGetter;
-    bool isCorrect = false;
+    printValueGettersForHarmoniousGraph();
+    int valGetter = getNumberFromRange(1, 2);
 
-    do
-    {
-        printValueGetters();
+    if (valGetter == 2)
+        return new LeastUsedValueGetter(nullptr);
 
-        valGetter = getPositiveNumberInput();
+    return new NextValueGetter(nullptr);
+}
 
-        if (valGetter <= 0 || valGetter >= 3)
-            std::cout << "\nOoops! Number wasn't correct. Try again." << std::endl;
-        else
-            isCorrect = true;
-    } while (! isCorrect);
+IVariableGetter* Menu::getVariableGetterForBinaryGame() const
+{
+    printVariableGettersForBinaryGame();
+    int varGetter = getNumberFromRange(1, 2);
 
-    if (valGetter == 1)
-        return new NextValueGetter(nullptr);
+    if (varGetter == 2)
+        return new MostFilledCrossingVariableGetter(nullptr);
 
-    return nullptr;
+    return new NextVariableGetter(nullptr);
+}
+
+IValueGetter* Menu::getValueGetterForBinaryGame() const
+{
+    printValueGettersForBinaryGame();
+    int valGetter = getNumberFromRange(1, 2);
+
+    if (valGetter == 2)
+        return new LeastCrossingOccurrenceValueGetter(nullptr, nullptr);
+
+    return new NextValueGetter(nullptr);
 }
 
 void Menu::performHarmoniousGraphColoring(int method, int type) const
 {
     clock_t startTime = 0;
     clock_t endTime = 0;
-    IProblemFactory* hgFactory = new HarmoniousGraphFactory(getGraphSize(), getVariableGetter(), getValueGetter());
+    IVariableGetter* varGetter = getVariableGetterForHarmoniousGraph();
+    IValueGetter* valGetter = getValueGetterForHarmoniousGraph();
+
+    IProblemFactory* hgFactory = new HarmoniousGraphFactory(getGraphSize(), varGetter, valGetter);
 
     switch (method)
     {
@@ -318,7 +330,12 @@ void Menu::performHarmoniousGraphColoring(int method, int type) const
                     startTime = clock();
                     const ISolution* solution = cspFactory->getFirstSolutionByBacktracking(hgFactory);
                     endTime = clock();
-                    solution->print();
+
+                    if (solution != nullptr)
+                        solution->print();
+                    else
+                        std::cout << "\nSolution was not found." << std::endl;
+
                     break;
                 }
                 case 2:
@@ -327,15 +344,6 @@ void Menu::performHarmoniousGraphColoring(int method, int type) const
                     long long int numberOfSolutions = cspFactory->getNumberOfSolutionsByBacktracking(hgFactory);
                     endTime = clock();
                     std::cout << "Number of solutions is " << numberOfSolutions << "." << std::endl;
-                    break;
-                }
-                case 3:
-                {
-                    startTime = clock();
-                    std::vector<ISolution*>* solutions = cspFactory->getAllSolutionsByBacktracking(hgFactory);
-                    endTime = clock();
-                    std::cout << "Printing first ten solutions:" << std::endl;
-                    printFirstTenSolutions(solutions);
                     break;
                 }
                 default:
@@ -355,7 +363,12 @@ void Menu::performHarmoniousGraphColoring(int method, int type) const
                     startTime = clock();
                     const ISolution* solution = cspFactory->getFirstSolutionByForwardChecking(hgFactory);
                     endTime = clock();
-                    solution->print();
+
+                    if (solution != nullptr)
+                        solution->print();
+                    else
+                        std::cout << "\nSolution was not found." << std::endl;
+
                     break;
                 }
                 case 2:
@@ -364,15 +377,6 @@ void Menu::performHarmoniousGraphColoring(int method, int type) const
                     long long int numberOfSolutions = cspFactory->getNumberOfSolutionsByForwardChecking(hgFactory);
                     endTime = clock();
                     std::cout << "Number of solutions is " << numberOfSolutions << "." << std::endl;
-                    break;
-                }
-                case 3:
-                {
-                    startTime = clock();
-                    std::vector<ISolution *> *solutions = cspFactory->getAllSolutionsByForwardChecking(hgFactory);
-                    endTime = clock();
-                    std::cout << "Printing first ten solutions:" << std::endl;
-                    printFirstTenSolutions(solutions);
                     break;
                 }
                 default:
@@ -401,9 +405,13 @@ void Menu::performBinaryGameSolving(int method, int type) const
     clock_t startTime = 0;
     clock_t endTime = 0;
 
+    IVariableGetter* varGetter = getVariableGetterForBinaryGame();
+    IValueGetter* valGetter = getValueGetterForBinaryGame();
+
     int size = getBinarySize();
     int filledFields = getNumberOfFilledFields(size);
-    IProblemFactory* bgFactory = new BinaryGameFactory(size, filledFields, getVariableGetter(), getValueGetter());
+    IProblemFactory* bgFactory = new BinaryGameFactory(size, filledFields, varGetter, valGetter);
+    valGetter->setProblem(bgFactory->getProblem());
 
     switch (method)
     {
@@ -416,7 +424,12 @@ void Menu::performBinaryGameSolving(int method, int type) const
                     startTime = clock();
                     const ISolution* solution = cspFactory->getFirstSolutionByBacktracking(bgFactory);
                     endTime = clock();
-                    solution->print();
+
+                    if (solution != nullptr)
+                        solution->print();
+                    else
+                        std::cout << "\nSolution was not found." << std::endl;
+
                     break;
                 }
                 case 2:
@@ -427,21 +440,11 @@ void Menu::performBinaryGameSolving(int method, int type) const
                     std::cout << "Number of solutions is " << numberOfSolutions << "." << std::endl;
                     break;
                 }
-                case 3:
-                {
-                    startTime = clock();
-                    std::vector<ISolution*>* solutions = cspFactory->getAllSolutionsByBacktracking(bgFactory);
-                    endTime = clock();
-                    std::cout << "Printing first ten solutions:" << std::endl;
-                    printFirstTenSolutions(solutions);
-                    break;
-                }
                 default:
                 {
                     std::cout << "Ooops! Something went wrong." << std::endl;
                     break;
                 }
-
             }
             break;
         }
@@ -466,15 +469,6 @@ void Menu::performBinaryGameSolving(int method, int type) const
                     long long int numberOfSolutions = cspFactory->getNumberOfSolutionsByForwardChecking(bgFactory);
                     endTime = clock();
                     std::cout << "Number of solutions is " << numberOfSolutions << "." << std::endl;
-                    break;
-                }
-                case 3:
-                {
-                    startTime = clock();
-                    std::vector<ISolution *> *solutions = cspFactory->getAllSolutionsByForwardChecking(bgFactory);
-                    endTime = clock();
-                    std::cout << "Printing first ten solutions:" << std::endl;
-                    printFirstTenSolutions(solutions);
                     break;
                 }
                 default:

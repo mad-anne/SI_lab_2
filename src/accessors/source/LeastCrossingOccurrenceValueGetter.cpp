@@ -23,6 +23,7 @@ IValue* LeastCrossingOccurrenceValueGetter::getNext()
     if (variable == nullptr || used.size() >= domain->getSize())
         return nullptr;
 
+    int index = -1;
     int tempOccurrences = -1;
     int minOccurrences = -1;
     IValue* leastOccurrence = nullptr;
@@ -34,10 +35,14 @@ IValue* LeastCrossingOccurrenceValueGetter::getNext()
         if ( ! hasBeenUsed(value)
              && (minOccurrences == -1 || (tempOccurrences = countValueOnCrossing(value)) < minOccurrences))
         {
+            index = i;
             leastOccurrence = value;
             minOccurrences = (tempOccurrences == -1 ? countValueOnCrossing(value) : tempOccurrences);
         }
     }
+
+    if (leastOccurrence != nullptr)
+        used.push_back(domain->getValue(index));
 
     return leastOccurrence;
 }
@@ -72,4 +77,9 @@ int LeastCrossingOccurrenceValueGetter::countValueOnCrossing(IValue* value)
 IValueGetter* LeastCrossingOccurrenceValueGetter::instantiate(const IVariable* variable) const
 {
     return new LeastCrossingOccurrenceValueGetter(variable, problem);
+}
+
+void LeastCrossingOccurrenceValueGetter::setProblem(const IProblem* problem)
+{
+    this->problem = problem;
 }
