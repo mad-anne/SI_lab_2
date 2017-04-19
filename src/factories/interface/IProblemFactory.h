@@ -9,6 +9,7 @@
 #include <constraints/interface/IConstraintChecker.h>
 #include <accessors/interface/IValueGetter.h>
 #include <accessors/interface/IVariableGetter.h>
+#include <solution/interface/ISolution.h>
 
 class IProblemFactory
 {
@@ -26,6 +27,8 @@ class IProblemFactory
         virtual IConstraintChecker* getConstraint() const = 0;
         virtual IVariableGetter* getVariableGetter() const = 0;
         virtual IValueGetter* getValueGetter() const = 0;
+
+        virtual void readPartialSolution(const ISolution*, bool limitDomains) = 0;
 };
 
 #endif //SI_LAB_2_IPROBLEMFACTORY_H

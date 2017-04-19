@@ -7,6 +7,7 @@
 
 
 #include <factories/interface/IProblemFactory.h>
+#include <solution/interface/ISolution.h>
 
 class BinaryGameFactory : public IProblemFactory
 {
@@ -18,6 +19,8 @@ class BinaryGameFactory : public IProblemFactory
         IConstraintChecker* getConstraint() const override;
         IVariableGetter* getVariableGetter() const override;
         IValueGetter* getValueGetter() const override;
+
+        void readPartialSolution(const ISolution*, bool limitDomains) override;
 
     private:
         void clearProblem();

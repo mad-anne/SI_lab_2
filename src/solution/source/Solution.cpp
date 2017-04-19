@@ -6,6 +6,12 @@
 #include "../header/Solution.h"
 #include "../../problems/header/HarmoniousGraph.h"
 
+Solution::Solution(int width) :
+    ISolution(width)
+{
+    generateEmptySolution();
+}
+
 Solution::Solution(IProblem* solution)
 {
     readProblem(solution);
@@ -22,7 +28,12 @@ void Solution::print() const
     for (int row = 0; row < width; ++row)
     {
         for (int col = 0; col < width; ++col)
-            printf( "| %3d ", solution[row][col]);
+        {
+            if (solution[row][col] != -1)
+                printf( "| %3d ", solution[row][col]);
+            else
+                printf( "|     ");
+        }
 
         std::cout << "|" << std::endl;
     }
@@ -33,6 +44,9 @@ void Solution::print() const
 
 void Solution::readProblem(IProblem* problem)
 {
+    if (problem == nullptr)
+        return;
+
     width = problem->getWidth();
     solution = new int*[width];
 
@@ -45,5 +59,18 @@ void Solution::readProblem(IProblem* problem)
             int value = problem->getVariable(row, col)->getValue()->getValue();
             solution[row][col] = value;
         }
+    }
+}
+
+void Solution::generateEmptySolution()
+{
+    solution = new int*[width];
+
+    for (int row = 0; row < width; ++row)
+    {
+        solution[row] = new int[width];
+
+        for (int col = 0; col < width; ++col)
+            solution[row][col] = -1;
     }
 }

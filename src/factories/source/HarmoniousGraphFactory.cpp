@@ -74,3 +74,8 @@ void HarmoniousGraphFactory::clearValueGetter()
 {
     delete valGetter;
 }
+
+void HarmoniousGraphFactory::readPartialSolution(const ISolution*, bool limitDomains)
+{
+    return;
+}

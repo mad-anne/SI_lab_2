@@ -10,6 +10,7 @@
 class Solution : public ISolution
 {
     public:
+        Solution(int width);
         Solution(IProblem*);
         ~Solution();
 
@@ -17,6 +18,7 @@ class Solution : public ISolution
 
     private:
         void readProblem(IProblem*);
+        void generateEmptySolution();
 };
 
 #endif //SI_LAB_2_SOLUTION_H

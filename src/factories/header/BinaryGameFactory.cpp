@@ -75,3 +75,24 @@ void BinaryGameFactory::clearValueGetter()
 {
     delete valGetter;
 }
+
+void BinaryGameFactory::readPartialSolution(const ISolution* solution, bool limitDomains)
+{
+    int width = solution->getWidth();
+
+    for (int row = 0; row < width; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            int index = solution->getValue(row, col);
+            if (index != -1)
+            {
+                IVariable* variable = problem->getVariable(row, col);
+                IValue* value = problem->getDomain()->getValue(index);
+
+                variable->setValue(value);
+                constraint->putConstraintsOn(variable, limitDomains);
+            }
+        }
+    }
+}

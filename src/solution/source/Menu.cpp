@@ -12,6 +12,7 @@
 #include <accessors/header/LeastUsedValueGetter.h>
 #include <accessors/header/LeastCrossingOccurrenceValueGetter.h>
 #include <accessors/header/MostFilledCrossingVariableGetter.h>
+#include <solution/header/Solution.h>
 
 Menu::Menu()
     : cspFactory(std::make_shared<CSPFactory>())
@@ -131,10 +132,9 @@ int Menu::getBinarySize() const
 {
     int size;
 
-    while ((size = getSizeFor("binary")) % 2 == 1)
-    {
-        std::cout << "Binary size must be even number." << std::endl;
-    }
+    while ((size = getSizeFor("binary (6, 8, 10, 12 or 14)")) % 2 == 1
+           && size != 6 && size != 8 && size != 10 && size != 12 && size != 14)
+        std::cout << "\nBinary size must be one of the numbers: 6, 8, 10, 12, 14. Try again." << std::endl;
 
     return size;
 }
@@ -410,8 +410,16 @@ void Menu::performBinaryGameSolving(int method, int type) const
 
     int size = getBinarySize();
     int filledFields = getNumberOfFilledFields(size);
+
     IProblemFactory* bgFactory = new BinaryGameFactory(size, filledFields, varGetter, valGetter);
     valGetter->setProblem(bgFactory->getProblem());
+
+    const ISolution* partialSolution = getSolutionFromPuzzles(size, filledFields);
+    bgFactory->readPartialSolution(partialSolution, method == 2);
+
+    std::cout << "Algorithm solves puzzles:" << std::endl;
+    partialSolution->print();
+    std::cout << std::endl;
 
     switch (method)
     {
@@ -489,5 +497,96 @@ void Menu::performBinaryGameSolving(int method, int type) const
 
     std::cout<< "Time taken: " << (endTime - startTime) << " clocks per second"<< std::endl;
 
+    delete partialSolution;
     delete bgFactory;
+}
+
+const ISolution* Menu::getSolutionFromPuzzles(int size, int filledFields) const
+{
+    ISolution* solution;
+
+    switch(size)
+    {
+        case 6:
+            solution = getSolutionFromPuzzles_6_6();
+            break;
+        case 8:
+            solution = getSolutionFromPuzzles_8_8();
+            break;
+        case 10:
+            solution = getSolutionFromPuzzles_10_10();
+            break;
+        case 12:
+            solution = getSolutionFromPuzzles_12_12();
+            break;
+        case 14:
+            solution = getSolutionFromPuzzles_14_14();
+            break;
+        default: return nullptr;
+    }
+
+    int emptyFields = size * size - filledFields;
+    solution->resetRandomValues(emptyFields);
+
+    return solution;
+}
+
+ISolution* Menu::getSolutionFromPuzzles_6_6() const
+{
+    int size = 6;
+    ISolution* solution = new Solution(size);
+
+    for (int row = 0; row < size; ++row)
+        for (int col = 0; col < size; ++col)
+            solution->setValue(row, col, binaryPuzzles_6_6[row][col]);
+
+    return solution;
+}
+
+ISolution* Menu::getSolutionFromPuzzles_8_8() const
+{
+    int size = 8;
+    ISolution* solution = new Solution(size);
+
+    for (int row = 0; row < size; ++row)
+        for (int col = 0; col < size; ++col)
+            solution->setValue(row, col, binaryPuzzles_8_8[row][col]);
+
+    return solution;
+}
+
+ISolution* Menu::getSolutionFromPuzzles_10_10() const
+{
+    int size = 10;
+    ISolution* solution = new Solution(size);
+
+    for (int row = 0; row < size; ++row)
+        for (int col = 0; col < size; ++col)
+            solution->setValue(row, col, binaryPuzzles_10_10[row][col]);
+
+    return solution;
+}
+
+ISolution* Menu::getSolutionFromPuzzles_12_12() const
+{
+    int size = 12;
+    ISolution* solution = new Solution(size);
+
+    for (int row = 0; row < size; ++row)
+        for (int col = 0; col < size; ++col)
+            solution->setValue(row, col, binaryPuzzles_12_12[row][col]);
+
+    return solution;
+}
+
+ISolution* Menu::getSolutionFromPuzzles_14_14() const
+{
+    int size = 14;
+    ISolution* solution = new Solution(size);
+
+    for (int row = 0; row < size; ++row)
+        for (int col = 0; col < size; ++col)
+            solution->setValue(row, col, binaryPuzzles_14_14[row][col]);
+
+    return solution;
 }
